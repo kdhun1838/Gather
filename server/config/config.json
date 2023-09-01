@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "root",
+    "password": "edurootroot",
+    "database": "Mo2Da",
+    "host": "docs.yi.or.kr",
+    "port": "9086",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "edurootroot",
+    "database": "Mo2Da",
+    "host": "docs.yi.or.kr",
+    "port": "9086",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "edurootroot",
+    "database": "Mo2Da",
+    "host": "docs.yi.or.kr",
+    "port": "9086",
+    "dialect": "mysql"
+  }
+}
