@@ -11,11 +11,11 @@ const usersRouter = require("./routes/users");
 const { sequelize } = require("./models");
 
 const app = express();
-app.set("port", process.env.PORT || 3001);
+app.set("port", 3003);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,9 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-    ],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
@@ -51,8 +49,8 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(app.get('port'), () => {
-  console.log(app.get('port'), '번 포트에서 대기 중');
+app.listen(app.get("port"), () => {
+  console.log(app.get("port"), "번 포트에서 대기 중");
 });
 
 module.exports = app;
