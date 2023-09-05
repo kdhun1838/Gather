@@ -14,16 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-const models_1 = __importDefault(require("../models"));
+const models_1 = __importDefault(require("../models")); // 수정된 부분: Users 클래스를 가져옴
 /* GET users listing. */
-router.get("/", (req, res, next) => {
-    res.send("respond with a resource");
-});
-router.get("/user", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("하이");
     try {
-        const user = yield models_1.default.findAll({});
-        res.status(200).json(user);
-        console.log(user);
+        const usersData = yield models_1.default.users.findAll({}); // Users 클래스를 사용
+        res.status(200).json(usersData);
+        console.log(usersData);
     }
     catch (err) {
         console.error(err);

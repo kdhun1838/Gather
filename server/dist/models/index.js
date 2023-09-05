@@ -14,4 +14,5 @@ const config = require("../config/config.json")[env];
 const sequelize = new sequelize_1.Sequelize(config.database, config.username, config.password, config);
 // 모델과 테이블간의 관계가 맺어진다.
 const models = (0, init_models_1.default)(sequelize);
+// export { Users } from "./users";
 exports.default = models;

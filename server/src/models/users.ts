@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 
-export interface UserAttributes {
+export interface UsersAttributes {
   userNum: number;
   id: string;
   password: string;
@@ -14,12 +14,12 @@ export interface UserAttributes {
   skill: string | null;
 }
 
-export interface UserCreationAttributes
-  extends Omit<UserAttributes, "userNum"> {}
+export interface UsersCreationAttributes
+  extends Omit<UsersAttributes, "userNum"> {}
 
-export class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
+export class Users
+  extends Model<UsersAttributes, UsersCreationAttributes>
+  implements UsersAttributes
 {
   public userNum!: number;
   public id!: string;
@@ -37,8 +37,8 @@ export class User
   public readonly updatedAt!: Date;
 }
 
-export function UserModel(sequelize: Sequelize): typeof User {
-  User.init(
+export function usersModel(sequelize: Sequelize): typeof Users {
+  Users.init(
     {
       userNum: {
         autoIncrement: true,
@@ -89,8 +89,8 @@ export function UserModel(sequelize: Sequelize): typeof User {
     },
     {
       sequelize,
-      modelName: "User",
-      tableName: "user",
+      modelName: "Users",
+      tableName: "users",
       timestamps: true,
       indexes: [
         {
@@ -109,5 +109,5 @@ export function UserModel(sequelize: Sequelize): typeof User {
     }
   );
 
-  return User;
+  return Users;
 }

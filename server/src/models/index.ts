@@ -17,5 +17,5 @@ const sequelize: Sequelize = new Sequelize(
 
 // 모델과 테이블간의 관계가 맺어진다.
 const models: any = initModels(sequelize);
-
+// export { Users } from "./users";
 export default models;

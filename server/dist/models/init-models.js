@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initModels = void 0;
-const board_1 = require("./board");
-const user_1 = require("./user");
+const boards_1 = require("./boards"); // 소문자 모델명 사용
+const users_1 = require("./users"); // 소문자 모델명 사용
 function initModels(sequelize) {
-    const board = (0, board_1.BoardModel)(sequelize);
-    const user = (0, user_1.UserModel)(sequelize);
+    const board = (0, boards_1.boardsModel)(sequelize); // 소문자 모델명 사용
+    const users = (0, users_1.usersModel)(sequelize); // 소문자 모델명 사용
     return {
         board,
-        user,
+        users,
     };
 }
 exports.initModels = initModels;

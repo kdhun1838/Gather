@@ -37,7 +37,7 @@ export class Board
   public readonly updatedAt!: Date;
 }
 
-export function BoardModel(sequelize: Sequelize): typeof Board {
+export function boardsModel(sequelize: Sequelize): typeof Board {
   Board.init(
     {
       boardNum: {
@@ -89,8 +89,8 @@ export function BoardModel(sequelize: Sequelize): typeof Board {
     },
     {
       sequelize,
-      modelName: "Board",
-      tableName: "board",
+      modelName: "Boards",
+      tableName: "boards",
       timestamps: true,
       indexes: [
         {

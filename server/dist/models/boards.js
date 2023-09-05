@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BoardModel = exports.Board = void 0;
+exports.boardsModel = exports.Board = void 0;
 const sequelize_1 = require("sequelize");
 class Board extends sequelize_1.Model {
 }
 exports.Board = Board;
-function BoardModel(sequelize) {
+function boardsModel(sequelize) {
     Board.init({
         boardNum: {
             autoIncrement: true,
@@ -69,4 +69,4 @@ function BoardModel(sequelize) {
     });
     return Board;
 }
-exports.BoardModel = BoardModel;
+exports.boardsModel = boardsModel;
