@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.boardsModel = exports.Board = void 0;
+exports.boardsModel = exports.Boards = void 0;
 const sequelize_1 = require("sequelize");
-class Board extends sequelize_1.Model {
+class Boards extends sequelize_1.Model {
 }
-exports.Board = Board;
+exports.Boards = Boards;
 function boardsModel(sequelize) {
-    Board.init({
+    Boards.init({
         boardNum: {
             autoIncrement: true,
             type: sequelize_1.DataTypes.INTEGER,
@@ -55,8 +55,8 @@ function boardsModel(sequelize) {
         },
     }, {
         sequelize,
-        modelName: "Board",
-        tableName: "board",
+        modelName: "Boards",
+        tableName: "boards",
         timestamps: true,
         indexes: [
             {
@@ -67,6 +67,6 @@ function boardsModel(sequelize) {
             },
         ],
     });
-    return Board;
+    return Boards;
 }
 exports.boardsModel = boardsModel;

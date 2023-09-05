@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 
-export interface BoardAttributes {
+export interface BoardsAttributes {
   boardNum: number;
   user_name: string;
   title: string;
@@ -14,12 +14,12 @@ export interface BoardAttributes {
   content: string;
 }
 
-export interface BoardCreationAttributes
-  extends Omit<BoardAttributes, "boardNum"> {}
+export interface BoardsCreationAttributes
+  extends Omit<BoardsAttributes, "boardNum"> {}
 
-export class Board
-  extends Model<BoardAttributes, BoardCreationAttributes>
-  implements BoardAttributes
+export class Boards
+  extends Model<BoardsAttributes, BoardsCreationAttributes>
+  implements BoardsAttributes
 {
   public boardNum!: number;
   public user_name!: string;
@@ -37,8 +37,8 @@ export class Board
   public readonly updatedAt!: Date;
 }
 
-export function boardsModel(sequelize: Sequelize): typeof Board {
-  Board.init(
+export function boardsModel(sequelize: Sequelize): typeof Boards {
+  Boards.init(
     {
       boardNum: {
         autoIncrement: true,
@@ -103,5 +103,5 @@ export function boardsModel(sequelize: Sequelize): typeof Board {
     }
   );
 
-  return Board;
+  return Boards;
 }

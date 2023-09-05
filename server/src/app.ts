@@ -10,6 +10,7 @@ const env = process.env;
 
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
+import boardsRouter from "./routes/boards";
 
 // import { sequelize } from "../dist/models";
 
@@ -32,6 +33,7 @@ app.use(
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/boards", boardsRouter);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
