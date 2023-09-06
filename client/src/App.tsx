@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import { boards } from "./lib/api/board";
 import { users } from "./lib/api/user";
+import Register from "./pages/Register";
 
 const App: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
@@ -24,6 +26,9 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>안녕하세요</h1>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+      </Routes>
       {userData && (
         <div>
           <h2>사용자 정보</h2>
