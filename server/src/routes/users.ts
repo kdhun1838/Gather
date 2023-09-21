@@ -8,7 +8,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const usersData = await models.users.findAll({}); // Users 클래스를 사용
     res.status(200).json(usersData);
-    console.log(usersData);
+    // console.log(usersData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred" });

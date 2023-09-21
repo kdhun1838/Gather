@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const usersData = yield models_1.default.users.findAll({}); // Users 클래스를 사용
         res.status(200).json(usersData);
-        console.log(usersData);
+        // console.log(usersData);
     }
     catch (err) {
         console.error(err);
