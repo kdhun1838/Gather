@@ -1,6 +1,5 @@
 import { RegisterState, RegisterAction } from "../types/registerType";
-import {CHANGE_FORM, POST_FORM} from "../actions/registerAction"
-
+import { CHANGE_FORM, POST_FORM, UNLOAD_FORM } from "../actions/registerAction";
 
 const initialState: RegisterState = {
   form: {
@@ -14,12 +13,13 @@ const initialState: RegisterState = {
   },
 };
 
-
 const register = (
   state: RegisterState = initialState,
   action: RegisterAction
 ): RegisterState => {
   switch (action.type) {
+    case UNLOAD_FORM:
+      return initialState;
     case CHANGE_FORM:
       return {
         ...state,
@@ -29,15 +29,10 @@ const register = (
         },
       };
     case POST_FORM:
-      return {
-        ...state,
-        form: {
-          ...state.form,
-        },
-      };
+      return state;
     default:
       return state;
   }
-}
+};
 
 export default register;
