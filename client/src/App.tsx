@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { boards } from "./lib/api/board";
 import { users } from "./lib/api/user";
-import Register from "./pages/Register";
+import RegisterPage from "./pages/RegisterPage";
 
 const App: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
@@ -25,17 +25,9 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <h1>안녕하세요</h1>
       <Routes>
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
-      {userData && (
-        <div>
-          <h2>사용자 정보</h2>
-          <pre>{JSON.stringify(userData, null, 2)}</pre>
-          <pre>{JSON.stringify(boardData, null, 2)}</pre>
-        </div>
-      )}
     </div>
   );
 };
