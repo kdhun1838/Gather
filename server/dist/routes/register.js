@@ -40,7 +40,7 @@ router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             contact,
             content,
         });
-        res.status(200);
+        res.status(200).json(newRegister);
     }
     catch (error) {
         res.status(500).json(error);

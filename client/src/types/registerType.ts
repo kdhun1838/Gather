@@ -1,4 +1,4 @@
-import { changeForm, postForm } from "../actions/registerAction";
+import { changeForm, postForm, unloadForm } from "../actions/registerAction";
 
 export type RegisterState = {
   form: {
@@ -10,7 +10,9 @@ export type RegisterState = {
     contact: string;
     content: string;
   };
+  register: any;
 };
 export type RegisterAction =
   | ReturnType<typeof changeForm>
-  | ReturnType<typeof postForm>;
+  | ReturnType<typeof postForm>
+  | ReturnType<typeof unloadForm>;

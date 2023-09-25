@@ -11,6 +11,7 @@ const initialState: RegisterState = {
     contact: "",
     content: "",
   },
+  register: null,
 };
 
 const register = (
@@ -28,7 +29,14 @@ const register = (
           [action.payload.key]: action.payload.value,
         },
       };
-    case POST_FORM:
+    case `${POST_FORM}_SUCCESS`:
+      console.log("ssss", action.payload);
+      return {
+        ...state,
+        register: action.payload,
+      };
+    case `${POST_FORM}_FAILURE`:
+      console.log("실패");
       return state;
     default:
       return state;

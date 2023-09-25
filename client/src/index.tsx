@@ -16,6 +16,7 @@ const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
+sagaMiddleware.run(rootSaga);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -28,4 +29,4 @@ root.render(
   </Provider>
 );
 
-sagaMiddleware.run(rootSaga);
+// sagaMiddleware.run(rootSaga);

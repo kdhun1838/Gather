@@ -39,7 +39,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       contact,
       content,
     });
-    res.status(200);
+    res.status(200).json(newRegister);
   } catch (error) {
     res.status(500).json(error);
     next(error);
