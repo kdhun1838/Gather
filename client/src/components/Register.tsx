@@ -1,7 +1,7 @@
 import e from "express";
 import React from "react";
 import styled from "styled-components";
-import { RegisterState } from "../modules/types/registerType";
+import { RegisterState } from "../modules/register/type";
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -66,21 +66,21 @@ const ButtonForm = styled.div`
   justify-content: center;
   width: 100%;
 
-  button{
-      width: 200px;
-      font-size: 20px;
-      font-weight: bold;
-      background: #fff;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      padding: 10px;
-      cursor: pointer;
+  button {
+    width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
 
-      &:first-child{
-          margin-right: 20px;  
-          border: 2px solid #59d5f0;
-          color: #59d5f0;
-      }
+    &:first-child {
+      margin-right: 20px;
+      border: 2px solid #59d5f0;
+      color: #59d5f0;
+    }
   }
 `;
 
@@ -92,7 +92,11 @@ type RegisterProp = {
 
 const personner = Array.from({ length: 10 }, (_, index) => index + 1);
 
-const Register: React.FC<RegisterProp> = ({ onChangeForm, onPostForm, form }) => {
+const Register: React.FC<RegisterProp> = ({
+  onChangeForm,
+  onPostForm,
+  form,
+}) => {
   return (
     <>
       <StyleForm>
