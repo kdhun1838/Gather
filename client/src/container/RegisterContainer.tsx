@@ -1,10 +1,10 @@
 import React, { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeForm, postForm } from "../actions/registerAction";
+import { changeForm, postForm } from "../modules/actions/registerAction";
 import Register from "../components/Register";
-import { RootState } from "../modules";
-import { RegisterState } from "../types/registerType";
+import { RootState } from "../modules/reducer";
+import { RegisterState } from "../modules/types/registerType";
 
 const RegisterContainer = () => {
   const form = useSelector((state: RootState) => state.register);
@@ -17,7 +17,7 @@ const RegisterContainer = () => {
     [dispatch]
   );
   const onPostForm = useCallback((form: RegisterState) => {
-    dispatch(postForm(form));
+    dispatch(postForm({form}));
     console.log(form);
   }, [dispatch])
 

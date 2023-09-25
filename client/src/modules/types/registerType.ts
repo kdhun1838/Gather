@@ -1,3 +1,4 @@
+import { ActionType } from "typesafe-actions";
 import {changeForm, postForm} from "../actions/registerAction";
 
 
@@ -13,6 +14,10 @@ export type RegisterState = {
     };
   };
 
+export type PostFormSuccess = {
+  form: RegisterState;
+};
+
 export type RegisterAction =
-  | ReturnType<typeof changeForm>
-  | ReturnType<typeof postForm>;
+  | ActionType<typeof changeForm>
+  | ActionType<typeof postForm>;

@@ -1,7 +1,7 @@
 import e from "express";
 import React from "react";
 import styled from "styled-components";
-import { RegisterState } from "../types/registerType";
+import { RegisterState } from "../modules/types/registerType";
 
 const H1 = styled.h1`
   font-size: 34px;
