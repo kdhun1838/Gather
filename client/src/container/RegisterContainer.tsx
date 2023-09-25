@@ -16,14 +16,21 @@ const RegisterContainer = () => {
     },
     [dispatch]
   );
-  const onPostForm = useCallback((form: RegisterState) => {
-    dispatch(postForm({form}));
-    console.log(form);
-  }, [dispatch])
+  const onPostForm = useCallback(
+    (form: RegisterState) => {
+      dispatch(postForm(form));
+      console.log(form);
+    },
+    [dispatch]
+  );
 
   return (
     <div>
-      <Register onChangeForm={onChangeForm} onPostForm={onPostForm} form={form}/>
+      <Register
+        onChangeForm={onChangeForm}
+        onPostForm={onPostForm}
+        form={form}
+      />
     </div>
   );
 };

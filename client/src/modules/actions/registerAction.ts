@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { createAction } from "typesafe-actions";
+import { createAction, createAsyncAction } from "typesafe-actions";
 import { PostFormSuccess, RegisterState } from "../types/registerType";
 
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
@@ -24,11 +24,13 @@ export const POST_FORM_FAILURE = "register/POST_FORM_FAILURE";
 // });
 
 // typesafe-actions 액션
-export const changeForm =
-  createAction(CHANGE_FORM)<{ key: string; value: string }>();
+export const changeForm = createAction(CHANGE_FORM)<{
+  key: string;
+  value: string;
+}>();
 
-  export const postForm = createAction(
+export const postForm = createAsyncAction(
   POST_FORM,
   POST_FORM_SUCCESS,
-  POST_FORM_FAILURE,
-)<string, PostFormSuccess, AxiosError>();
+  POST_FORM_FAILURE
+)<RegisterState, PostFormSuccess, AxiosError>();
