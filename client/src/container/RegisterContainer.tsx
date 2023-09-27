@@ -1,14 +1,16 @@
 import React, { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeForm, postForm } from "../actions/registerAction";
 import Register from "../components/Register";
 import { RootState } from "../modules";
-import { RegisterState } from "../types/registerType";
+import { RegisterState } from "../modules/register/type";
+import { changeForm, postForm, unloadForm } from "./../modules/register/action";
+import { useNavigate } from "react-router";
 
 const RegisterContainer = () => {
   const form = useSelector((state: RootState) => state.register);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {
@@ -16,14 +18,28 @@ const RegisterContainer = () => {
     },
     [dispatch]
   );
-  const onPostForm = useCallback((form: RegisterState) => {
-    dispatch(postForm(form));
-    console.log(form);
-  }, [dispatch])
+  const onPostForm = useCallback(
+    (form: RegisterState) => {
+      dispatch(postForm(form));
+      console.log("form===", form);
+      navigate("/");
+    },
+    [dispatch]
+  );
+  React.useEffect(() => {
+    console.log("formmmmmmmmmmmmmmmmmm", form);
+    return () => {
+      dispatch(unloadForm());
+    };
+  }, [dispatch]);
 
   return (
     <div>
-      <Register onChangeForm={onChangeForm} onPostForm={onPostForm} form={form}/>
+      <Register
+        onChangeForm={onChangeForm}
+        onPostForm={onPostForm}
+        form={form}
+      />
     </div>
   );
 };

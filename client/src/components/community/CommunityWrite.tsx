@@ -1,104 +1,77 @@
-import React, { useState, useCallback } from "react";
-import ReactQuill from "react-quill";
+import React from "react";
 import "react-quill/dist/quill.snow.css";
-import styled from "styled-components";
+import {
+  ContainerBox,
+  NameTagBox,
+  TitleBox,
+  SelectBox,
+  EditorBox,
+  ButtonBox,
+  Button,
+} from "../../styled/community";
+import MyQuillEditor from "../../lib/editor/Editor";
 
-const ContainerBox = styled.div`
-  width: 60%;
-  margin: 0 auto;
+// 전달 받을 props를 타입에 지정해주기(미지정시 타입오류)
+type CommunityPropType = {
+  onChangeForm: (data: { key: string; value: string }) => void;
+  category: string;
+  title: string;
+  content: string;
+  onCancel: () => void;
+  onSubmit: () => void;
+};
 
-  div + div {
-    margin-top: 1rem;
-  }
-`;
-
-const TitleBox = styled.div`
-  margin-top: 3rem;
-  padding: 10px;
-  border-bottom: 2px solid gray;
-  font-weight: bold;
-  font-size: 25px;
-  letter-spacing: -3px;
-`;
-
-const SelectBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-
-  select {
-    width: 100%;
-    padding: 10px;
-  }
-`;
-
-const EditorBox = styled.div`
-  .ql-container {
-    height: auto;
-    min-height: 400px;
-  }
-
-  div + div {
-    margin-top: 0rem;
-  }
-
-  input {
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 10px;
-  }
-`;
-
-const ButtonBox = styled.div`
-  float: right;
-
-  button + button {
-    margin-left: 1rem;
-  }
-`;
-
-const Button = styled.button`
-  border: none;
-  border-radius: 5px;
-  background-color: red;
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: blue;
-  }
-`;
-
-const CommunityWrite = () => {
+const CommunityWrite: React.FC<CommunityPropType> = ({
+  onChangeForm,
+  category,
+  title,
+  content,
+  onCancel,
+  onSubmit,
+}) => {
   const options: string[] = ["선택사항", "후기", "질문", "잡담"];
 
   // 나중 db에서 가져와 유저가 참여한 프로젝트를 배열로 나열예정
   const enterProjects: string[] = ["야구", "사이트 개발"];
-
-  const [selectOption, setSelectOption] = useState<string>(options[0]);
-
-  const onChange = useCallback((e: any) => {
-    setSelectOption(e.target.value);
-  }, []);
 
   return (
     <ContainerBox>
       <TitleBox>글쓰기 기본정보를 입력해주세요 .</TitleBox>
 
       <SelectBox>
-        <select onChange={onChange}>
-          {options.map((option, index) => {
-            return <option key={index}>{option}</option>;
-          })}
-        </select>
-        {selectOption === "후기" && (
+        <div>
+          <NameTagBox>유형</NameTagBox>
+          <select
+            name="category"
+            onChange={(e) =>
+              onChangeForm({ key: e.target.name, value: e.target.value })
+            }
+          >
+            {options.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        {category === "후기" && (
           <>
-            <select>
-              {enterProjects.map((enterProject, index) => {
-                return <option key={index}>{enterProject}</option>;
-              })}
-            </select>
+            <div>
+              <NameTagBox>참여한 프로젝트</NameTagBox>
+              <select
+                name="detail"
+                onChange={(e) =>
+                  onChangeForm({ key: e.target.name, value: e.target.value })
+                }
+              >
+                {enterProjects.map((enterProject, index) => {
+                  return <option key={index}>{enterProject}</option>;
+                })}
+              </select>
+            </div>
           </>
         )}
       </SelectBox>
@@ -106,14 +79,21 @@ const CommunityWrite = () => {
       <TitleBox>글쓰기 내용를 입력해주세요 .</TitleBox>
 
       <EditorBox>
-        <p>제목</p>
-        <input placeholder="글제목을 입력해주세요." />
-        <ReactQuill />
+        <NameTagBox>제목</NameTagBox>
+        <input
+          name="title"
+          value={title}
+          placeholder="글제목을 입력해주세요."
+          onChange={(e) =>
+            onChangeForm({ key: e.target.name, value: e.target.value })
+          }
+        />
+        <MyQuillEditor onChangeForm={onChangeForm} content={content} />
       </EditorBox>
 
       <ButtonBox>
-        <Button>글등록버튼</Button>
-        <Button>취소버튼</Button>
+        <Button onClick={onSubmit}>글등록버튼</Button>
+        <Button onClick={onCancel}>취소버튼</Button>
       </ButtonBox>
     </ContainerBox>
   );
