@@ -1,4 +1,4 @@
-import './index.css'
+import "./index.css";
 import { devToolsEnhancer } from "@redux-devtools/extension";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { legacy_createStore } from "redux";
 import App from "./App";
 import rootReducer from "./modules";
-import createSagaMiddleware from '@redux-saga/core';
+import createSagaMiddleware from "@redux-saga/core";
 
 const sagaMiddleWare = createSagaMiddleware();
 const store = legacy_createStore(rootReducer, devToolsEnhancer());
