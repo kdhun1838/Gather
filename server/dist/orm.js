@@ -1,8 +1,8 @@
 "use strict";
 const SequelizeAuto = require("sequelize-auto");
 const auto = new SequelizeAuto("Mo2Da", "root", "edurootroot", {
-    host: "docs.yi.or.kr",
-    port: "9086",
+    host: process.env.HOST,
+    port: process.env.PORT,
     dialect: "mysql",
 });
 auto.run();

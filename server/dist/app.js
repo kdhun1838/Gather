@@ -39,6 +39,7 @@ const index_1 = __importDefault(require("./routes/index"));
 const users_1 = __importDefault(require("./routes/users"));
 const boards_1 = __importDefault(require("./routes/boards"));
 const register_1 = __importDefault(require("./routes/register"));
+const community_1 = __importDefault(require("./routes/community"));
 // import { sequelize } from "../dist/models";
 const app = (0, express_1.default)();
 app.set("port", 3003);
@@ -56,6 +57,7 @@ app.use("/", index_1.default);
 app.use("/users", users_1.default);
 app.use("/boards", boards_1.default);
 app.use("/register", register_1.default);
+app.use("/community", community_1.default);
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
     next((0, http_errors_1.default)(404));
