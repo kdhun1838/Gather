@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect } from "react";
+import React, { FormEvent, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommunityWrite from "../../components/community/CommunityWrite";
-import { changeForm, initForm } from "../../modules/community/action";
+import { changeForm, initForm, saveForm } from "../../modules/community/action";
 import { RootState } from "../../modules";
 import { useNavigate } from "react-router";
+import { CommunityState } from "../../modules/community/type";
 
 const CommunityWriteContainer = () => {
   const dispatch = useDispatch();
-  const navicate = useNavigate();
+  const navigate = useNavigate();
 
-  const { category, title, content } = useSelector(
-    (state: RootState) => state.community.form
-  );
+  const form = useSelector((state: RootState) => state.community);
+
+  const { category, title, content } = form.form || "";
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string }) => {
@@ -26,34 +27,40 @@ const CommunityWriteContainer = () => {
       console.log("아직 입력된 값이 있습니다. 정말 취소하겠습니까?");
     } else {
       console.log("이전화면으로");
-      navicate(-1);
+      navigate(-1);
     }
-  }, [content, title, navicate]);
+  }, [content, title, navigate]);
 
-  const onSubmit = useCallback(() => {
-    console.log("클릭");
-    if (category === "선택사항") {
-      console.log("유형을 선택주세요.");
-    } else if (title === "") {
-      console.log("제목을 적어주세요.");
-    } else if (content === "" || content === "<p><br></p>") {
-      console.log("내용을 적어주세요.");
-    } else {
-      console.log("제출가능");
-    }
-  }, [category, title, content]);
+  const onSubmit = useCallback(
+    (e: FormEvent, form: CommunityState) => {
+      //새로고침 로직삭제
+      e.preventDefault();
 
-  useEffect(() => {
+      console.log("클릭");
+      if (category === "선택사항") {
+        console.log("유형을 선택주세요.");
+      } else if (title === "") {
+        console.log("제목을 적어주세요.");
+      } else if (content === "" || content === "<p><br></p>") {
+        console.log("내용을 적어주세요.");
+      } else {
+        console.log("제출가능");
+        dispatch(saveForm(form));
+        navigate("/community");
+      }
+    },
+    [category, title, content, dispatch, navigate]
+  );
+
+  React.useEffect(() => {
     dispatch(initForm());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
       <CommunityWrite
         onChangeForm={onChangeForm}
-        category={category}
-        title={title}
-        content={content}
+        form={form}
         onCancel={onCancel}
         onSubmit={onSubmit}
       />

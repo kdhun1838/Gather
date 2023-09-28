@@ -2,8 +2,9 @@ import { combineReducers } from "redux";
 
 import { all } from "redux-saga/effects";
 import register from "./register/reducer";
-import community from "./community/reducer";
 import { registerSaga } from "./register/saga";
+import community from "./community/reducer";
+import { CommunitySaga } from "./community/saga";
 
 const rootReducer = combineReducers({
   register,
@@ -11,7 +12,7 @@ const rootReducer = combineReducers({
 });
 
 export function* rootSaga() {
-  yield all([registerSaga()]);
+  yield all([registerSaga(), CommunitySaga()]);
 }
 export default rootReducer;
 

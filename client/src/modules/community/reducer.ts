@@ -1,5 +1,5 @@
 import { CommunityState, CommunityAction } from "./type";
-import { CHANGE_FORM, INIT_FORM } from "./action";
+import { CHANGE_FORM, GET_POSTS, INIT_FORM, SAVE_FORM } from "./action";
 
 const initialState: CommunityState = {
   form: {
@@ -8,6 +8,7 @@ const initialState: CommunityState = {
     title: "",
     content: "",
   },
+  posts: null,
 };
 
 const community = (
@@ -17,7 +18,6 @@ const community = (
   switch (action.type) {
     case INIT_FORM:
       return initialState;
-
     case CHANGE_FORM:
       // action.payload 객체 안에 key와 value 둘 다 존재할 경우
       if ("key" in action.payload && "value" in action.payload) {
@@ -31,15 +31,32 @@ const community = (
         };
       }
       return state;
-    // case `${POST_FORM}_SUCCESS`:
-    //   console.log("ssss", action.payload);
-    //   return {
-    //     ...state,
-    //     register: action.payload,
-    //   };
-    // case `${POST_FORM}_FAILURE`:
-    //   console.log("실패");
-    //   return state;
+
+    // 게시물 저장하기
+    case `${SAVE_FORM}_SUCCESS`:
+      console.log("저장성공", action.payload);
+      return {
+        ...state,
+      };
+    case `${SAVE_FORM}_FAILURE`:
+      console.log("저장실패", action.payload);
+      return {
+        ...state,
+      };
+
+    // 게시물 불러오기
+    case `${GET_POSTS}_SUCCESS`:
+      console.log("불러오기 성공", action.payload);
+      return {
+        ...state,
+        posts: action.payload,
+      };
+    case `${GET_POSTS}_FAILURE`:
+      console.log("불러오기 실패", action.payload);
+      return {
+        ...state,
+        posts: null,
+      };
     default:
       return state;
   }
