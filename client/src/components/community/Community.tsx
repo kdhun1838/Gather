@@ -106,6 +106,14 @@ const Community: React.FC<CommunityPropType> = ({ posts }) => {
     }
   };
 
+  if (posts?.length === 0) {
+    return (
+      <CommunityBox>
+        <PostsBox>글이 없습니다.</PostsBox>
+      </CommunityBox>
+    );
+  }
+
   return (
     <CommunityBox>
       <PostsBox>

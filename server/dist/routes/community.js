@@ -1,4 +1,7 @@
 "use strict";
+
+const { Op } = require("sequelize");
+
 var __awaiter =
   (this && this.__awaiter) ||
   function (thisArg, _arguments, P, generator) {
@@ -47,7 +50,26 @@ const models_1 = __importDefault(require("../models"));
 router.get("/list", (req, res, next) =>
   __awaiter(void 0, void 0, void 0, function* () {
     try {
-      const getCommunityPosts = yield models_1.default.community.findAll({});
+      console.log(req.query.data);
+      const { mainSort, search } = req.query.data || "";
+      let whereCondition = {};
+
+      if (mainSort && mainSort !== "전체") {
+        whereCondition.category = mainSort;
+      }
+
+      if (search) {
+        // $or 연산자를 사용하여 title 또는 content 중 하나에 포함된 경우를 검사
+        whereCondition[Op.or] = [
+          { title: { [Op.like]: `%${search}%` } },
+          { content: { [Op.like]: `%${search}%` } },
+        ];
+      }
+
+      const getCommunityPosts = yield models_1.default.community.findAll({
+        where: whereCondition,
+        order: [["createdAt", "DESC"]],
+      });
       res.status(200).json(getCommunityPosts);
     } catch (e) {
       res.status(500).json(e);

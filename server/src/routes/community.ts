@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+const { Op } = require("sequelize");
 const router = express.Router();
 import models from "../models";
 
@@ -6,6 +7,23 @@ import models from "../models";
 
 router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const mainSort: string = (req.query.data as { mainSort: string }).mainSort;
+    const search: string = (req.query.data as { search: string }).search;
+
+    const whereCondition: any = {};
+
+    if (mainSort && mainSort !== "전체") {
+      whereCondition.category = mainSort;
+    }
+
+    if (search) {
+      // $or 연산자를 사용하여 title 또는 content 중 하나에 포함된 경우를 검사
+      whereCondition[Op.or] = [
+        { title: { [Op.like]: `%${search}%` } },
+        { content: { [Op.like]: `%${search}%` } },
+      ];
+    }
+
     const getCommunityPosts = await models.community.findAll({});
     res.status(200).json(getCommunityPosts);
   } catch (e) {

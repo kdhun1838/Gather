@@ -5,13 +5,16 @@ import { RootState } from "../../modules";
 import { getPosts } from "../../modules/community/action";
 
 const CommunityContainer = () => {
-  const posts = useSelector((state: RootState) => state.community.posts);
+  const { posts, mainSort } = useSelector((state: RootState) => ({
+    posts: state.community.main.mainPosts,
+    mainSort: state.community.main.sort.mainSort,
+  }));
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     console.log("디스패치 실행");
-    dispatch(getPosts());
-  }, [dispatch]);
+    dispatch(getPosts({ mainSort }));
+  }, []);
 
   return (
     <div>

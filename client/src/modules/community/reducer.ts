@@ -1,5 +1,11 @@
 import { CommunityState, CommunityAction } from "./type";
-import { CHANGE_FORM, GET_POSTS, INIT_FORM, SAVE_FORM } from "./action";
+import {
+  CHANGE_FORM,
+  CHANGE_SORT,
+  GET_POSTS,
+  INIT_FORM,
+  SAVE_FORM,
+} from "./action";
 
 const initialState: CommunityState = {
   form: {
@@ -8,7 +14,19 @@ const initialState: CommunityState = {
     title: "",
     content: "",
   },
-  posts: null,
+  main: {
+    popularPosts: null,
+    sort: {
+      mainSort: "전체",
+      detailSort: {
+        sort: "",
+        category: "",
+        online: "",
+      },
+      search: "",
+    },
+    mainPosts: null,
+  },
 };
 
 const community = (
@@ -16,8 +34,10 @@ const community = (
   action: CommunityAction
 ): CommunityState => {
   switch (action.type) {
+    //초기화
     case INIT_FORM:
       return initialState;
+    //입력값 변경
     case CHANGE_FORM:
       // action.payload 객체 안에 key와 value 둘 다 존재할 경우
       if ("key" in action.payload && "value" in action.payload) {
@@ -27,6 +47,22 @@ const community = (
           form: {
             ...state.form,
             [action.payload.key]: action.payload.value,
+          },
+        };
+      }
+      return state;
+
+    // 정렬 버튼클릭
+    case CHANGE_SORT:
+      if ("key" in action.payload && "value" in action.payload) {
+        return {
+          ...state,
+          main: {
+            ...state.main,
+            sort: {
+              ...state.main.sort,
+              [action.payload.key]: action.payload.value,
+            },
           },
         };
       }
@@ -49,14 +85,21 @@ const community = (
       console.log("불러오기 성공", action.payload);
       return {
         ...state,
-        posts: action.payload,
+        main: {
+          ...state.main,
+          mainPosts: action.payload,
+        },
       };
     case `${GET_POSTS}_FAILURE`:
       console.log("불러오기 실패", action.payload);
       return {
         ...state,
-        posts: null,
+        main: {
+          ...state.main,
+          mainPosts: null,
+        },
       };
+
     default:
       return state;
   }

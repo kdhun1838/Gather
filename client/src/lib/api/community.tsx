@@ -1,10 +1,12 @@
 import client from "./client";
-import { CommunityState } from "../../modules/community/type";
+import { CommunityState, GetPostType } from "../../modules/community/type";
 import { AxiosResponse } from "axios";
 
-export const getCommunityPosts = (): Promise<AxiosResponse> => {
+export const getCommunityPosts = (
+  data: GetPostType
+): Promise<AxiosResponse> => {
   console.log("커뮤니티 글을 불러옵니다.");
-  return client.get("/community/list");
+  return client.get("/community/list", { params: data });
 };
 
 export const createCommunityPost = ({
