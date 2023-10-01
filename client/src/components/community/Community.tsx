@@ -91,11 +91,25 @@ const TitleBox = styled.h1`
   overflow: hidden;
 `;
 
+const FavoriteBox = styled.div`
+  display: block;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  font-size: 20px;
+`;
+
 type CommunityPropType = {
   posts: string[];
+  onClickAddFavoritePost: (postId: number) => void;
 };
 
-const Community: React.FC<CommunityPropType> = ({ posts }) => {
+const Community: React.FC<CommunityPropType> = ({
+  posts,
+  onClickAddFavoritePost,
+}) => {
   const changeLanguege = (category: string) => {
     if (category === "후기") {
       return "review";
@@ -137,6 +151,12 @@ const Community: React.FC<CommunityPropType> = ({ posts }) => {
               </DateBox>
 
               <TitleBox>{post.title}</TitleBox>
+              <div> 조회수{post.view}</div>
+              <FavoriteBox
+                onClick={() => onClickAddFavoritePost(post.communityNum)}
+              >
+                ⭐
+              </FavoriteBox>
             </PostBox>
           );
         })}

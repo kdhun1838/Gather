@@ -50,14 +50,17 @@ const models_1 = __importDefault(require("../models"));
 router.get("/list", (req, res, next) =>
   __awaiter(void 0, void 0, void 0, function* () {
     try {
-      console.log(req.query.data);
       const { mainSort, search } = req.query.data || "";
+      const { time, view, like } = req.query.data.detailSort || "";
       let whereCondition = {};
+      let orderCondition = [];
 
+      // 큰틀의 정렬 값 where절에 넣기
       if (mainSort && mainSort !== "전체") {
         whereCondition.category = mainSort;
       }
 
+      // 검색어가 있을 경우 where절에 입력값넣기
       if (search) {
         // $or 연산자를 사용하여 title 또는 content 중 하나에 포함된 경우를 검사
         whereCondition[Op.or] = [
@@ -66,10 +69,24 @@ router.get("/list", (req, res, next) =>
         ];
       }
 
+      if (time === "newest") {
+        orderCondition.push(["createdAt", "DESC"]);
+      } else if (time === "latest") {
+        orderCondition.push(["createdAt", "ASC"]);
+      }
+
+      if (view === "highest") {
+        orderCondition.push(["view", "DESC"]);
+      } else if (view === "lowest") {
+        orderCondition.push(["view", "ASC"]);
+      }
+
       const getCommunityPosts = yield models_1.default.community.findAll({
         where: whereCondition,
-        order: [["createdAt", "DESC"]],
+        order: orderCondition,
       });
+
+      // 정리된 posts를 클라이언트로 보내주기
       res.status(200).json(getCommunityPosts);
     } catch (e) {
       res.status(500).json(e);
@@ -98,4 +115,5 @@ router.get("/list", (req, res, next) =>
       }
     })
   );
+
 exports.default = router;

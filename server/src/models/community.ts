@@ -6,6 +6,8 @@ export interface CommunityAttributes {
   category: string;
   detail: string;
   content: string;
+  view: number;
+  Favorite: boolean;
 }
 
 export interface CommunityCreationAttributes
@@ -20,6 +22,8 @@ export class Communitys
   public category!: string;
   public detail!: string;
   public content!: string;
+  public view!: number;
+  public Favorite!: boolean;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -46,9 +50,18 @@ export function communitysModel(sequelize: Sequelize): typeof Communitys {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
-
       content: {
         type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      view: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: true,
+      },
+      Favorite: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
     },

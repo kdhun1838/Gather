@@ -4,6 +4,9 @@ import {
   getPosts,
   saveForm,
   changeSortType,
+  changeDeailType,
+  initDetail,
+  addFavorite,
 } from "./action";
 
 // 타입 정의
@@ -16,9 +19,9 @@ type FormType = {
 };
 
 type DetailType = {
-  sort?: string;
-  category?: string;
-  online?: string;
+  time?: string;
+  view?: string;
+  like?: string;
 };
 
 type SortType = {
@@ -42,6 +45,9 @@ export type GetPostType = SortType;
 export type CommunityAction =
   | ReturnType<typeof changeForm>
   | ReturnType<typeof changeSortType>
+  | ReturnType<typeof changeDeailType>
   | ReturnType<typeof initForm>
+  | ReturnType<typeof initDetail>
   | ReturnType<typeof saveForm>
-  | ReturnType<typeof getPosts>;
+  | ReturnType<typeof getPosts>
+  | ReturnType<typeof addFavorite>;

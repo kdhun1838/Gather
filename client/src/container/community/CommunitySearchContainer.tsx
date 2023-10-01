@@ -14,7 +14,6 @@ const CommunitySearchContainer = () => {
   const [isClick, setIsClick] = useState("전체");
 
   const searchTypes: string[] = ["전체", "후기", "질문", "잡담"];
-  const detialTypes: string[] = ["시간", "조회수", "좋아요"];
 
   const onClickSortButton = useCallback(
     (data: { key: string; value: string }) => {
@@ -51,7 +50,6 @@ const CommunitySearchContainer = () => {
         searchValue={searchValue}
         isClick={isClick}
         searchTypes={searchTypes}
-        detialTypes={detialTypes}
         onClickSortButton={onClickSortButton}
         onChange={onChange}
         onKeyPress={onKeyPress}

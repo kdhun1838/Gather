@@ -1,7 +1,12 @@
 import React, { FormEvent, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommunityWrite from "../../components/community/CommunityWrite";
-import { changeForm, initForm, saveForm } from "../../modules/community/action";
+import {
+  changeForm,
+  getPosts,
+  initForm,
+  saveForm,
+} from "../../modules/community/action";
 import { RootState } from "../../modules";
 import { useNavigate } from "react-router";
 import { CommunityState } from "../../modules/community/type";

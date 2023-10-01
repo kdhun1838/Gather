@@ -2,9 +2,12 @@ import { CommunityState, CommunityAction } from "./type";
 import {
   CHANGE_FORM,
   CHANGE_SORT,
+  CHANGE_DETAIL_SORT,
   GET_POSTS,
   INIT_FORM,
   SAVE_FORM,
+  INIT_DETAIL_SORT,
+  ADD_FAVORITE_POST,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -19,9 +22,9 @@ const initialState: CommunityState = {
     sort: {
       mainSort: "전체",
       detailSort: {
-        sort: "",
-        category: "",
-        online: "",
+        time: "newest",
+        view: "",
+        like: "",
       },
       search: "",
     },
@@ -38,6 +41,23 @@ const community = (
     case INIT_FORM:
       return initialState;
     //입력값 변경
+
+    case INIT_DETAIL_SORT:
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          sort: {
+            ...state.main.sort,
+            detailSort: {
+              time: "",
+              view: "",
+              like: "",
+            },
+          },
+        },
+      };
+
     case CHANGE_FORM:
       // action.payload 객체 안에 key와 value 둘 다 존재할 경우
       if ("key" in action.payload && "value" in action.payload) {
@@ -62,6 +82,24 @@ const community = (
             sort: {
               ...state.main.sort,
               [action.payload.key]: action.payload.value,
+            },
+          },
+        };
+      }
+      return state;
+
+    case CHANGE_DETAIL_SORT:
+      if ("key" in action.payload && "value" in action.payload) {
+        return {
+          ...state,
+          main: {
+            ...state.main,
+            sort: {
+              ...state.main.sort,
+              detailSort: {
+                ...state.main.sort.detailSort,
+                [action.payload.key]: action.payload.value,
+              },
             },
           },
         };
@@ -98,6 +136,17 @@ const community = (
           ...state.main,
           mainPosts: null,
         },
+      };
+
+    case `${ADD_FAVORITE_POST}_SUCCESS`:
+      console.log("즐겨찾기 성공", action.payload);
+      return {
+        ...state,
+      };
+    case `${ADD_FAVORITE_POST}_FAILURE`:
+      console.log("즐겨찾기 실패", action.payload);
+      return {
+        ...state,
       };
 
     default:

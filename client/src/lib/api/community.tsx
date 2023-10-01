@@ -15,3 +15,8 @@ export const createCommunityPost = ({
   console.log("글을 db에 저장하겠습니다.");
   return client.post("/community/create", form);
 };
+
+export const addFavoritePost = ({ postId }: any): Promise<AxiosResponse> => {
+  console.log(postId);
+  return client.post("/community/addFavorite", { postId });
+};
