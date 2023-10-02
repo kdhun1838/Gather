@@ -103,11 +103,21 @@ const FavoriteBox = styled.div`
 
 type CommunityPropType = {
   posts: string[];
+  onClickPost: (postid: number) => void;
   onClickAddFavoritePost: (postId: number) => void;
+};
+
+export const changeDate = (date: number) => {
+  const newDate = new Date(date);
+  const showDate = `${newDate.getFullYear()}.${
+    newDate.getMonth() + 1
+  }.${newDate.getDate()}`;
+  return showDate;
 };
 
 const Community: React.FC<CommunityPropType> = ({
   posts,
+  onClickPost,
   onClickAddFavoritePost,
 }) => {
   const changeLanguege = (category: string) => {
@@ -132,13 +142,11 @@ const Community: React.FC<CommunityPropType> = ({
     <CommunityBox>
       <PostsBox>
         {posts?.map((post: any) => {
-          const date = new Date(post.createdAt);
-          const showDate = `${date.getFullYear()}.${
-            date.getMonth() + 1
-          }.${date.getDate()}`;
-
           return (
-            <PostBox key={post.communityNum}>
+            <PostBox
+              key={post.communityNum}
+              onClick={() => onClickPost(post.communityNum)}
+            >
               <CategoryTagBox>
                 <div className={changeLanguege(post.category)}>
                   {post.category}
@@ -147,7 +155,7 @@ const Community: React.FC<CommunityPropType> = ({
               <DateBox>
                 <p>작성일 |</p>
 
-                <p>{showDate}</p>
+                <p>{changeDate(post.createdAt)}</p>
               </DateBox>
 
               <TitleBox>{post.title}</TitleBox>

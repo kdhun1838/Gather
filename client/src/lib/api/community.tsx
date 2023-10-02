@@ -16,7 +16,12 @@ export const createCommunityPost = ({
   return client.post("/community/create", form);
 };
 
-export const addFavoritePost = ({ postId }: any): Promise<AxiosResponse> => {
+export const addFavoritePost = (postId: number): Promise<AxiosResponse> => {
   console.log(postId);
   return client.post("/community/addFavorite", { postId });
+};
+
+export const getPost = (postId: number): Promise<AxiosResponse> => {
+  console.log(postId);
+  return client.get("/community/:postId", { params: postId });
 };

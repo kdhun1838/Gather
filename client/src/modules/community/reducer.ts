@@ -8,6 +8,7 @@ import {
   SAVE_FORM,
   INIT_DETAIL_SORT,
   ADD_FAVORITE_POST,
+  GET_POST,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -30,6 +31,8 @@ const initialState: CommunityState = {
     },
     mainPosts: null,
   },
+
+  post: "",
 };
 
 const community = (
@@ -138,6 +141,7 @@ const community = (
         },
       };
 
+    // 즐겨찾기 추가 및 제거
     case `${ADD_FAVORITE_POST}_SUCCESS`:
       console.log("즐겨찾기 성공", action.payload);
       return {
@@ -147,6 +151,20 @@ const community = (
       console.log("즐겨찾기 실패", action.payload);
       return {
         ...state,
+      };
+
+    //Post 불러오기
+    case `${GET_POST}_SUCCESS`:
+      console.log("불러오기 성공", action.payload);
+      return {
+        ...state,
+        post: action.payload,
+      };
+    case `${GET_POST}_FAILURE`:
+      console.log("불러오기 실패", action.payload);
+      return {
+        ...state,
+        post: "",
       };
 
     default:

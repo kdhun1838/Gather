@@ -2,7 +2,13 @@ import React, { useCallback, useEffect } from "react";
 import Community from "../../components/community/Community";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
-import { addFavorite, getPosts } from "../../modules/community/action";
+import {
+  addFavorite,
+  getPost,
+  getPosts,
+  initForm,
+} from "../../modules/community/action";
+import { useNavigate } from "react-router-dom";
 
 const CommunityContainer = () => {
   const { posts, mainSort, detailSortName, search } = useSelector(
@@ -15,6 +21,7 @@ const CommunityContainer = () => {
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onClickAddFavoritePost = useCallback(
     (postId: number) => {
@@ -23,6 +30,17 @@ const CommunityContainer = () => {
     },
     [dispatch]
   );
+
+  const onClickPost = useCallback(
+    (postId: number) => {
+      navigate(`/community/${postId}`);
+    },
+    [navigate]
+  );
+
+  useEffect(() => {
+    dispatch(initForm());
+  }, []);
 
   useEffect(() => {
     console.log("마운트");
@@ -50,6 +68,7 @@ const CommunityContainer = () => {
     <div>
       <Community
         posts={posts}
+        onClickPost={onClickPost}
         onClickAddFavoritePost={onClickAddFavoritePost}
       />
     </div>

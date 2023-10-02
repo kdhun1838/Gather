@@ -7,6 +7,7 @@ import {
   changeDeailType,
   initDetail,
   addFavorite,
+  getPost,
 } from "./action";
 
 // 타입 정의
@@ -38,6 +39,8 @@ export type CommunityState = {
     sort: SortType;
     mainPosts: any;
   };
+
+  post: any;
 };
 
 export type GetPostType = SortType;
@@ -50,4 +53,5 @@ export type CommunityAction =
   | ReturnType<typeof initDetail>
   | ReturnType<typeof saveForm>
   | ReturnType<typeof getPosts>
+  | ReturnType<typeof getPost>
   | ReturnType<typeof addFavorite>;

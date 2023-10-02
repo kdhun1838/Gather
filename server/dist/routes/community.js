@@ -116,4 +116,32 @@ router.get("/list", (req, res, next) =>
     })
   );
 
+router.get("/:postId", (req, res, next) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.query || "";
+
+    try {
+      const getPost = yield models_1.default.community.findOne({
+        where: { communityNum: postId },
+      });
+
+      if (getPost) {
+        yield getPost.increment("view", { by: 1 });
+
+        const updatePost = yield models_1.default.community.findOne({
+          where: { communityNum: postId },
+        });
+
+        res.status(200).json(updatePost);
+      } else {
+        res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+      }
+    } catch (e) {
+      res.status(500).json(e);
+      console.log(e);
+      next(e);
+    }
+  })
+);
+
 exports.default = router;

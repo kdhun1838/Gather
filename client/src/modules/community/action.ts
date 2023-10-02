@@ -14,6 +14,9 @@ export const [SAVE_FORM, SAVE_FORM_SUCCESS, SAVE_FORM_FAILURE] =
 export const [GET_POSTS, GET_POSTS_SUCCESS, GET_POSTS_FAILURE] =
   createRequestActionTypes("community/GET_POSTS");
 
+export const [GET_POST, GET_POSTS_SUCCES, GET_POST_FAILURE] =
+  createRequestActionTypes("community/GET_POST");
+
 export const [
   ADD_FAVORITE_POST,
   ADD_FAVORITE_POST_SUCCESS,
@@ -78,6 +81,13 @@ export const getPosts = (data: GetPostType) => ({
   type: GET_POSTS,
   payload: {
     data,
+  },
+});
+
+export const getPost = (postId: number) => ({
+  type: GET_POST,
+  payload: {
+    postId,
   },
 });
 
