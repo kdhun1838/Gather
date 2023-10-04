@@ -92,6 +92,14 @@ type CommunityPropType = {
   ) => void;
 };
 
+type SearchType = {
+  key: string;
+  name: string;
+  content: {
+    [key: string]: string;
+  };
+};
+
 const CommunitySearch: React.FC<CommunityPropType> = ({
   searchValue,
   isClick,
@@ -105,7 +113,7 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
     lowest: "낮은순",
   };
 
-  const time = {
+  const time: SearchType = {
     key: "time",
     name: "시간",
     content: {
@@ -114,13 +122,13 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
     },
   };
 
-  const view = {
+  const view: SearchType = {
     key: "view",
     name: "조회수",
     content: viewOrLike,
   };
 
-  const like = {
+  const like: SearchType = {
     key: "like",
     name: "좋아요수",
     content: viewOrLike,
@@ -147,9 +155,9 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
 
         <SortTypeBox>
           <SortType>
-            <SearchButton type="option" object={time} />
-            <SearchButton type="option" object={view} />
-            <SearchButton type="option" object={like} />
+            <SearchButton type="reset" object={time} />
+            <SearchButton type="reset" object={view} />
+            <SearchButton type="reset" object={like} />
             <ClickButton img="⭐" value="즐겨찾기" />
           </SortType>
           <div>

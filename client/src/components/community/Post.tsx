@@ -72,10 +72,19 @@ const CommentBox = styled.div`
 
 type PostPropsType = {
   post: any;
+  load: {
+    [key: string]: boolean;
+  };
   onClickBack: () => void;
 };
 
-const Post: React.FC<PostPropsType> = ({ post, onClickBack }) => {
+const Post: React.FC<PostPropsType> = ({ post, load, onClickBack }) => {
+  const loading = load["community/GET_POST"];
+
+  if (loading) {
+    return <div>글 불러오는중... </div>;
+  }
+
   return (
     <PostContainer>
       <TitleBox>

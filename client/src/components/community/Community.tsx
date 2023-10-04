@@ -103,6 +103,9 @@ const FavoriteBox = styled.div`
 
 type CommunityPropType = {
   posts: string[];
+  load: {
+    [key: string]: boolean;
+  };
   onClickPost: (postid: number) => void;
   onClickAddFavoritePost: (postId: number) => void;
 };
@@ -117,9 +120,12 @@ export const changeDate = (date: number) => {
 
 const Community: React.FC<CommunityPropType> = ({
   posts,
+  load,
   onClickPost,
   onClickAddFavoritePost,
 }) => {
+  const loading = load["community/GET_POSTS"];
+
   const changeLanguege = (category: string) => {
     if (category === "후기") {
       return "review";
@@ -129,6 +135,10 @@ const Community: React.FC<CommunityPropType> = ({
       return "chat";
     }
   };
+
+  if (loading) {
+    return <div>로딩중...</div>;
+  }
 
   if (posts?.length === 0) {
     return (

@@ -5,17 +5,6 @@ import styled from "styled-components";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import { RootState } from "../../modules";
 
-type OptionProps = {
-  type: string;
-  object: {
-    key: string;
-    name: string;
-    content: {
-      [key: string]: string;
-    };
-  };
-};
-
 const ButtonBox = styled.div`
   -webkit-box-align: center;
   align-items: center;
@@ -95,6 +84,17 @@ const ListBox = styled.div`
   }
 `;
 
+type OptionProps = {
+  type: string;
+  object: {
+    key: string;
+    name: string;
+    content: {
+      [key: string]: string;
+    };
+  };
+};
+
 const Option: React.FC<OptionProps> = ({ type, object }) => {
   const dispatch = useDispatch();
   const [showOptionsBox, setShowOptionsBox] = useState<boolean>(false);
@@ -128,32 +128,48 @@ const Option: React.FC<OptionProps> = ({ type, object }) => {
     [dispatch, object.key]
   );
 
+  const resetButton = useCallback(
+    (type: string) => {
+      if (type === "reset") {
+        if (time === "") {
+          if (object.key === "time") {
+            setButtonName(object.name);
+          }
+        }
+
+        if (view === "") {
+          if (object.key === "view") {
+            setButtonName(object.name);
+          }
+        }
+
+        if (like === "") {
+          if (object.key === "like") {
+            setButtonName(object.name);
+          }
+        }
+      }
+    },
+    [like, object.key, object.name, time, view]
+  );
+
   //버튼과 리스트 외 다른 곳을 클릭했을 때 리스트가 사라지게 하는 함수
   useEffect(() => {
     document.addEventListener("mousedown", onClickOutside);
-
-    if (time === "") {
-      if (object.key === "time") {
-        setButtonName(object.name);
-      }
-    }
-
-    if (view === "") {
-      if (object.key === "view") {
-        setButtonName(object.name);
-      }
-    }
-
-    if (like === "") {
-      if (object.key === "like") {
-        setButtonName(object.name);
-      }
-    }
-
+    resetButton(type);
     return () => {
       document.removeEventListener("mousedown", onClickOutside);
     };
-  }, [like, object.key, object.name, onClickOutside, time, view]);
+  }, [
+    like,
+    object.key,
+    object.name,
+    onClickOutside,
+    time,
+    view,
+    resetButton,
+    type,
+  ]);
 
   return (
     <ButtonBox

@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
 import {
   addFavorite,
-  getPost,
   getPosts,
   initForm,
 } from "../../modules/community/action";
 import { useNavigate } from "react-router-dom";
 
 const CommunityContainer = () => {
-  const { posts, mainSort, detailSortName, search } = useSelector(
+  const { posts, mainSort, detailSortName, search, load } = useSelector(
     (state: RootState) => ({
       posts: state.community.main.mainPosts,
       mainSort: state.community.main.sort.mainSort,
       detailSortName: state.community.main.sort.detailSort,
       search: state.community.main.sort.search,
+      load: state.loading,
     })
   );
 
@@ -68,6 +68,7 @@ const CommunityContainer = () => {
     <div>
       <Community
         posts={posts}
+        load={load}
         onClickPost={onClickPost}
         onClickAddFavoritePost={onClickAddFavoritePost}
       />
