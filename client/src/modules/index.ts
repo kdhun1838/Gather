@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-
 import { all } from "redux-saga/effects";
 import register from "./register/reducer";
 import { registerSaga } from "./register/saga";

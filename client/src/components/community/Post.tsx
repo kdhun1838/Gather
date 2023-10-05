@@ -96,7 +96,9 @@ const Post: React.FC<PostPropsType> = ({ post, load, onClickBack }) => {
           <div className="date"> {changeDate(post.createdAt)}</div>
         </NameAndDateBox>
       </TitleBox>
-      <PostContentBox>{post.content}</PostContentBox>
+      <PostContentBox
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></PostContentBox>
       <ViewAndFavoriteBox>
         <div>조회수: {post.view}</div>
         <div>즐겨찾기 버튼 {post.favorite}</div>

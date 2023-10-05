@@ -9,6 +9,7 @@ import {
   INIT_DETAIL_SORT,
   ADD_FAVORITE_POST,
   GET_POST,
+  GET_POPULAR_POSTS,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -138,6 +139,26 @@ const community = (
         main: {
           ...state.main,
           mainPosts: null,
+        },
+      };
+
+    // 인기 게시물 불러오기
+    case `${GET_POPULAR_POSTS}_SUCCESS`:
+      console.log("불러오기 성공", action.payload);
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          popularPosts: action.payload,
+        },
+      };
+    case `${GET_POPULAR_POSTS}_FAILURE`:
+      console.log("불러오기 실패", action.payload);
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          popularPosts: "",
         },
       };
 

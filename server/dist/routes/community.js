@@ -93,49 +93,86 @@ router.get("/list", (req, res, next) =>
       next(e);
     }
   })
-),
-  router.post("/create", (req, res, next) =>
-    __awaiter(void 0, void 0, void 0, function* () {
-      const { category, title, detail, content } = req.body.form;
+);
+
+router.post("/create", (req, res, next) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const { category, title, detail, content } = req.body.form;
+    try {
+      const newCommunityPost = yield models_1.default.community.create({
+        category,
+        detail,
+        title,
+        content,
+      });
+      res.status(200).json({
+        message: "성공적으로 저장되었습니다.",
+        data: newCommunityPost,
+      });
+    } catch (e) {
+      res.status(500).json(e);
+      console.log(e);
+      next(e);
+    }
+  })
+);
+
+router.get("/post/:postId", (req, res, next) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.query;
+    console.log(postId);
+
+    if (postId) {
       try {
-        const newCommunityPost = yield models_1.default.community.create({
-          category,
-          detail,
-          title,
-          content,
+        const getPost = yield models_1.default.community.findOne({
+          where: { communityNum: postId },
         });
-        res.status(200).json({
-          message: "성공적으로 저장되었습니다.",
-          data: newCommunityPost,
-        });
+
+        if (getPost) {
+          yield getPost.increment("view", { by: 1 });
+
+          const updatePost = yield models_1.default.community.findOne({
+            where: { communityNum: postId },
+          });
+
+          res.status(200).json(updatePost);
+        } else {
+          res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+        }
       } catch (e) {
         res.status(500).json(e);
         console.log(e);
         next(e);
       }
-    })
-  );
+    }
+  })
+);
 
-router.get("/:postId", (req, res, next) =>
+router.get("/popularPosts", (req, res, next) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const { postId } = req.query || "";
-
     try {
-      const getPost = yield models_1.default.community.findOne({
-        where: { communityNum: postId },
+      // 현재 날짜를 얻습니다.
+      const today = new Date();
+
+      // 이번 주의 시작일을 계산합니다.
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - today.getDay());
+
+      // 이번 주의 종료일을 계산합니다.
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 7);
+
+      const getPopularPost = yield models_1.default.community.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [startDate, endDate], // 이번 주의 시작일과 종료일 사이
+          },
+        },
+        order: [["view", "DESC"]],
+        limit: 10,
       });
 
-      if (getPost) {
-        yield getPost.increment("view", { by: 1 });
-
-        const updatePost = yield models_1.default.community.findOne({
-          where: { communityNum: postId },
-        });
-
-        res.status(200).json(updatePost);
-      } else {
-        res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
-      }
+      res.status(200).json(getPopularPost);
     } catch (e) {
       res.status(500).json(e);
       console.log(e);
