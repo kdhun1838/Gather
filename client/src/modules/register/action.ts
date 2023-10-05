@@ -1,9 +1,5 @@
 import { RegisterState } from "./type";
-import createRequestSaga, {
-  createRequestActionTypes,
-} from "../../utils/createRequestSaga";
-import * as registerAPI from "../../lib/api/register";
-import { takeLatest } from "redux-saga/effects";
+import { createRequestActionTypes } from "../../lib/createRequestSaga";
 
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;

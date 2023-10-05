@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { users } from "../lib/api/user";
-import { boards } from "../lib/api/board";
-import { list } from "../lib/api/register";
+import { users } from "../../lib/api/user";
+import { boards } from "../../lib/api/board";
+import { list } from "../../lib/api/register";
 import { useNavigate } from "react-router";
+import Home from "../../components/home/Home";
 
-const Home: React.FC = () => {
+const HomeContainer: React.FC = () => {
   const [userData, setUserData] = useState<any[]>([]); // 빈 배열로 초기화
   const [boardData, setBoardData] = useState<any[]>([]); // 빈 배열로 초기화
   const [registerData, setRegisterData] = useState<any[]>([]); // 빈 배열로 초기화
+  //   const {loading} = useSelector((state:RootState)=>({
+  //     loading:loading[""]
+  //   }))
 
   const navigate = useNavigate();
 
@@ -34,37 +38,14 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <button onClick={() => goWrite()}>글쓰기</button>
-      <div>
-        <h2>User Data:</h2>
-        <ul>
-          {userData.map((item: any, index: number) => (
-            <li key={index}>{item.name}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h2>Board Data:</h2>
-        <ul>
-          {boardData.map((item: any, index: number) => (
-            <li key={index}>{item.title}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h2>Register Data:</h2>
-        <ul>
-          {registerData.map((item: any, index: number) => (
-            <li key={index}>
-              {item.category} - {item.title}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Home
+        goWrite={goWrite}
+        userData={userData}
+        boardData={boardData}
+        registerData={registerData}
+      />
     </div>
   );
 };
 
-export default Home;
+export default HomeContainer;

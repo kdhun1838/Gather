@@ -1,10 +1,14 @@
 import React, { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Register from "../components/Register";
-import { RootState } from "../modules";
-import { RegisterState } from "../modules/register/type";
-import { changeForm, postForm, unloadForm } from "./../modules/register/action";
+import Register from "../../components/register/Register";
+import { RootState } from "../../modules";
+import { RegisterState } from "../../modules/register/type";
+import {
+  changeForm,
+  postForm,
+  unloadForm,
+} from "../../modules/register/action";
 import { useNavigate } from "react-router";
 
 const RegisterContainer = () => {
@@ -24,7 +28,7 @@ const RegisterContainer = () => {
       console.log("form===", form);
       navigate("/");
     },
-    [dispatch]
+    [dispatch, form]
   );
   React.useEffect(() => {
     console.log("formmmmmmmmmmmmmmmmmm", form);

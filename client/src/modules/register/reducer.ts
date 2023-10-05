@@ -33,13 +33,11 @@ const register = (
       }
       return state;
     case `${POST_FORM}_SUCCESS`:
-      console.log("ssss", action.payload);
       return {
         ...state,
         register: action.payload,
       };
     case `${POST_FORM}_FAILURE`:
-      console.log("실패");
       return state;
     default:
       return state;
