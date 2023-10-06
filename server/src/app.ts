@@ -12,6 +12,7 @@ import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
 import boardsRouter from "./routes/boards";
 import registerRouter from "./routes/register";
+import communityRouter from "./routes/community";
 
 // import { sequelize } from "../dist/models";
 
@@ -36,6 +37,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/boards", boardsRouter);
 app.use("/register", registerRouter);
+app.use("/community", communityRouter);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {

@@ -3,7 +3,7 @@
     "username": "root",
     "password": "edurootroot",
     "database": "Mo2Da",
-    "host": "docs.yi.or.kr",
+    "host": "docs.yi.or.",
     "port": 9086,
     "dialect": "mysql"
   },

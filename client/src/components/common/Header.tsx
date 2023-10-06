@@ -11,7 +11,7 @@ const items: TabsProps["items"] = [
   },
   {
     key: "2",
-    label: "자유게시판",
+    label: "커뮤니티",
   },
 ];
 
