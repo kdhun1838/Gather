@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -34,6 +38,7 @@ const env = process.env;
 const index_1 = __importDefault(require("./routes/index"));
 const users_1 = __importDefault(require("./routes/users"));
 const boards_1 = __importDefault(require("./routes/boards"));
+const register_1 = __importDefault(require("./routes/register"));
 // import { sequelize } from "../dist/models";
 const app = (0, express_1.default)();
 app.set("port", 3003);
@@ -50,6 +55,7 @@ app.use((0, cors_1.default)({
 app.use("/", index_1.default);
 app.use("/users", users_1.default);
 app.use("/boards", boards_1.default);
+app.use("/register", register_1.default);
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
     next((0, http_errors_1.default)(404));
