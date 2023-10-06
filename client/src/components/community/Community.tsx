@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import Responsive from "../../styled/Responsive";
 
-const CommunityBox = styled.div`
-  min-height: 60rem;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
+const CommunityBox = styled(Responsive)`
+  /* width: 100%;
+max-width: 1300px;
+padding: 0px 15px;
+margin: 100px auto 60px; */
+  overflow: hidden;
+  margin-bottom: 2rem;
 `;
 
 const PostsBox = styled.div`
