@@ -3,19 +3,25 @@ import styled from "styled-components";
 import Responsive from "./Responsive";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
+import { useNavigate } from "react-router";
 
 const items: TabsProps["items"] = [
   {
-    key: "1",
+    key: "/",
     label: "모임게시판",
   },
   {
-    key: "2",
+    key: "/community",
     label: "커뮤니티",
   },
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
+  const onChange = (key: string) => {
+    console.log(key);
+    navigate(key);
+  };
   return (
     <ConfigProvider
       theme={{
@@ -38,7 +44,12 @@ const Header = () => {
           </div>
         </div>
         <span>
-          <Tabs defaultActiveKey="1" items={items} size="large" />
+          <Tabs
+            defaultActiveKey="/"
+            items={items}
+            size="large"
+            onChange={onChange}
+          />
         </span>
       </Wrapper>
     </ConfigProvider>
@@ -71,10 +82,10 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-const CustomTabs = styled(Tabs)`
-  .ant-tabs-tab {
-    margin-right: 40px;
-  }
-`;
+// const CustomTabs = styled(Tabs)`
+//   .ant-tabs-tab {
+//     margin-right: 40px;
+//   }
+// `;
 
 export default Header;
