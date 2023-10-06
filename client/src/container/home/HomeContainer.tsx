@@ -40,9 +40,9 @@ const HomeContainer: React.FC = () => {
     <div>
       <Home
         goWrite={goWrite}
-        userData={userData}
-        boardData={boardData}
-        registerData={registerData}
+        // userData={userData}
+        // boardData={boardData}
+        // registerData={registerData}
       />
     </div>
   );

@@ -5,13 +5,13 @@ import { Carousel } from "antd";
 
 type OwnProps = {
   goWrite: () => void;
-  userData: any;
-  boardData: any;
-  registerData: any;
+  // userData: any;
+  // boardData: any;
+  // registerData: any;
 };
 
 const contentStyle: React.CSSProperties = {
-  height: "160px",
+  height: "320px",
   color: "#fff",
   lineHeight: "160px",
   textAlign: "center",
