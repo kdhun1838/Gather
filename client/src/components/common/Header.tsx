@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Responsive from "./Responsive";
-import { Tabs } from "antd";
+import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
 
 const items: TabsProps["items"] = [
@@ -17,17 +17,31 @@ const items: TabsProps["items"] = [
 
 const Header = () => {
   return (
-    <Wrapper>
-      <div>
-        로고
+    <ConfigProvider
+      theme={{
+        components: {
+          Tabs: {
+            inkBarColor: "orange",
+            itemSelectedColor: "orange",
+            itemHoverColor: "orange",
+            horizontalItemMargin: "32222px",
+            // cardPadding: "32",
+          },
+        },
+      }}
+    >
+      <Wrapper>
         <div>
-          <button>로그인</button>
+          로고
+          <div>
+            <button>로그인</button>
+          </div>
         </div>
-      </div>
-      <span>
-        <CustomTabs defaultActiveKey="1" items={items} size="large" />
-      </span>
-    </Wrapper>
+        <span>
+          <Tabs defaultActiveKey="1" items={items} size="large" />
+        </span>
+      </Wrapper>
+    </ConfigProvider>
   );
 };
 
@@ -39,7 +53,7 @@ const Wrapper = styled(Responsive)`
     height: 6rem;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid orange;
     > div > button {
       outline: none;
       border: none;
