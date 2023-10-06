@@ -1,11 +1,13 @@
 import styled from "styled-components";
+import Responsive from "../../styled/Responsive";
 
-const PopularBox = styled.div`
-  width: 100%;
+const PopularBox = styled(Responsive)`
+  /* width: 100%;
   max-width: 1300px;
   padding: 0px 15px;
-  margin: 100px auto 60px;
+  margin: 100px auto 60px; */
   overflow: hidden;
+  margin-bottom: 2rem;
 `;
 
 const TitleBox = styled.div`

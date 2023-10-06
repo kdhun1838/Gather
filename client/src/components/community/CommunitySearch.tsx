@@ -3,16 +3,17 @@ import styled from "styled-components";
 import { BiSearch } from "react-icons/bi";
 import SearchButton from "../../lib/button/SearchButton";
 import ClickButton from "../../lib/button/ClickButton";
+import Responsive from "../../styled/Responsive";
 
-const SearchBox = styled.div`
-  max-width: 1300px;
-  width: 100%;
+const SearchBox = styled(Responsive)`
+  /* max-width: 1300px; */
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
   gap: 30px;
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
   margin-bottom: 2rem;
   padding: 0px 20px;
 

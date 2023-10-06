@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Responsive from "./Responsive";
+import Responsive from "../../styled/Responsive";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { Carousel } from "antd";
 
 const items: TabsProps["items"] = [
   {
@@ -15,12 +16,23 @@ const items: TabsProps["items"] = [
     label: "커뮤니티",
   },
 ];
+const contentStyle: React.CSSProperties = {
+  height: "320px",
+  color: "#fff",
+  lineHeight: "160px",
+  textAlign: "center",
+  background: "orange",
+};
 
 const Header = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const [currentLocation, setCurrentLocation] = React.useState<string>(
+    location.pathname
+  );
   const onChange = (key: string) => {
-    console.log(key);
     navigate(key);
+    setCurrentLocation(location.pathname);
   };
   return (
     <ConfigProvider
@@ -45,13 +57,27 @@ const Header = () => {
         </div>
         <span>
           <Tabs
-            defaultActiveKey="/"
+            defaultActiveKey={currentLocation}
             items={items}
             size="large"
             onChange={onChange}
           />
         </span>
       </Wrapper>
+      <Carousel autoplay>
+        <div>
+          <h3 style={contentStyle}>1</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>2</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>3</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>4</h3>
+        </div>
+      </Carousel>
     </ConfigProvider>
   );
 };

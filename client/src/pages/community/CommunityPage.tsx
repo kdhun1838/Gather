@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import CommunityContainer from "../../container/community/CommunityContainer";
 import CommunitySearchContainer from "../../container/community/CommunitySearchContainer";
 import CommunityPopularPostsContainer from "../../container/community/CommunityPopularPostsContainer";
+import HeaderContainer from "../../container/common/HeaderContainer";
 
 const CommunityBox = styled.div`
   min-height: 60rem;
@@ -15,6 +16,7 @@ const CommunityBox = styled.div`
 const CommunityPage = () => {
   return (
     <CommunityBox>
+      <HeaderContainer />
       게시물 <Link to="/community/write">글쓰기버튼</Link>
       <CommunityPopularPostsContainer />
       <CommunitySearchContainer />

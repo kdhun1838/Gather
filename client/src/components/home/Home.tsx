@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Responsive from "../common/Responsive";
-import { Carousel } from "antd";
+import Responsive from "../../styled/Responsive";
 
 type OwnProps = {
   goWrite: () => void;
@@ -10,31 +9,9 @@ type OwnProps = {
   // registerData: any;
 };
 
-const contentStyle: React.CSSProperties = {
-  height: "320px",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "orange",
-};
-
 const Home: React.FC<OwnProps> = (props) => {
   return (
     <div>
-      <Carousel autoplay>
-        <div>
-          <h3 style={contentStyle}>1</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>3</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>4</h3>
-        </div>
-      </Carousel>
       <Wrapper>ddd</Wrapper>
     </div>
   );
