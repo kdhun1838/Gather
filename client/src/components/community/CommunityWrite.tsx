@@ -11,9 +11,7 @@ import {
 import MyQuillEditor from "../../lib/editor/Editor";
 import { CommunityState } from "../../modules/community/type";
 import Responsive from "../../styled/Responsive";
-import styled from "styled-components";
 
-// 전달 받을 props를 타입에 지정해주기(미지정시 타입오류)
 type CommunityPropType = {
   form: CommunityState;
   onChangeForm: (data: { key: string; value: string }) => void;
@@ -35,7 +33,7 @@ const CommunityWrite: React.FC<CommunityPropType> = ({
   const { category, title, content } = form.form || "";
 
   return (
-    <WriteBox>
+    <Responsive>
       <form method="POST" onSubmit={(e) => onSubmit(e, form)}>
         <TitleBox>글쓰기 기본정보를 입력해주세요 .</TitleBox>
 
@@ -94,13 +92,13 @@ const CommunityWrite: React.FC<CommunityPropType> = ({
 
         <ButtonBox>
           <Button type="submit">글등록버튼</Button>
-          <Button onClick={onCancel}>취소버튼</Button>
+          <Button type="button" onClick={onCancel}>
+            취소버튼
+          </Button>
         </ButtonBox>
       </form>
-    </WriteBox>
+    </Responsive>
   );
 };
-
-const WriteBox = styled(Responsive)``;
 
 export default CommunityWrite;

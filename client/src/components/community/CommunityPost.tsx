@@ -70,16 +70,34 @@ const CommentBox = styled.div`
   padding-bottom: 80px;
 `;
 
+type PostType = {
+  Favorite: boolean;
+  category: string;
+  communityNum: number;
+  content: string;
+  createdAt: string;
+  detail: string;
+  title: string;
+  updatedAt: string;
+  view: number;
+};
+
 type PostPropsType = {
-  post: any;
+  post: PostType;
   load: {
     [key: string]: boolean;
   };
   onClickBack: () => void;
 };
 
-const Post: React.FC<PostPropsType> = ({ post, load, onClickBack }) => {
+const CommunityPost: React.FC<PostPropsType> = ({
+  post,
+  load,
+  onClickBack,
+}) => {
   const loading = load["community/GET_POST"];
+
+  console.log(post);
 
   if (loading) {
     return <div>글 불러오는중... </div>;
@@ -93,7 +111,7 @@ const Post: React.FC<PostPropsType> = ({ post, load, onClickBack }) => {
         <NameAndDateBox>
           <div className="username"></div>
           <div className="line"></div>
-          <div className="date"> {changeDate(post.createdAt)}</div>
+          <div className="date"> {changeDate(Number(post.createdAt))}</div>
         </NameAndDateBox>
       </TitleBox>
       <PostContentBox
@@ -101,11 +119,11 @@ const Post: React.FC<PostPropsType> = ({ post, load, onClickBack }) => {
       ></PostContentBox>
       <ViewAndFavoriteBox>
         <div>조회수: {post.view}</div>
-        <div>즐겨찾기 버튼 {post.favorite}</div>
+        <div>즐겨찾기 버튼</div>
       </ViewAndFavoriteBox>
       <CommentBox></CommentBox>
     </PostContainer>
   );
 };
 
-export default Post;
+export default CommunityPost;

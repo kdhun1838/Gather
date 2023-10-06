@@ -1,8 +1,8 @@
 import React from "react";
-import PostContainer from "../../container/community/PostContainer";
+import CommunityPostContainer from "../../container/community/CommunityPostContainer";
 
 const CommunityPostPage = () => {
-  return <PostContainer />;
+  return <CommunityPostContainer />;
 };
 
 export default CommunityPostPage;

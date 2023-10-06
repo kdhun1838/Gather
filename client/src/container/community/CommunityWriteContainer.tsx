@@ -1,12 +1,7 @@
-import React, { FormEvent, useCallback, useEffect } from "react";
+import { FormEvent, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommunityWrite from "../../components/community/CommunityWrite";
-import {
-  changeForm,
-  getPosts,
-  initForm,
-  saveForm,
-} from "../../modules/community/action";
+import { changeForm, initForm, saveForm } from "../../modules/community/action";
 import { RootState } from "../../modules";
 import { useNavigate } from "react-router";
 import { CommunityState } from "../../modules/community/type";
@@ -27,11 +22,10 @@ const CommunityWriteContainer = () => {
   );
 
   const onCancel = useCallback(() => {
-    console.log("클릭");
-    if (title !== "" || content !== "<p><br></p>") {
+    if (title !== "" || (content !== "" && content !== "<p><br></p>")) {
       console.log("아직 입력된 값이 있습니다. 정말 취소하겠습니까?");
     } else {
-      console.log("이전화면으로");
+      console.log("이전 화면으로");
       navigate(-1);
     }
   }, [content, title, navigate]);
@@ -57,7 +51,7 @@ const CommunityWriteContainer = () => {
     [category, title, content, dispatch, navigate]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(initForm());
   }, [dispatch]);
 

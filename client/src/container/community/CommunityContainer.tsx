@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Community from "../../components/community/Community";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
@@ -40,10 +40,9 @@ const CommunityContainer = () => {
 
   useEffect(() => {
     dispatch(initForm());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log("마운트");
     dispatch(
       getPosts({
         mainSort,

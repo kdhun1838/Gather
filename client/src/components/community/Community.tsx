@@ -143,7 +143,8 @@ const Community: React.FC<CommunityPropType> = ({
     return <div>로딩중...</div>;
   }
 
-  if (posts?.length === 0) {
+  // 글이 없거나 검색정보가 없을 때
+  if (posts.length === 0) {
     return (
       <CommunityBox>
         <PostsBox>글이 없습니다.</PostsBox>

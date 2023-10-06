@@ -1,4 +1,4 @@
-import React, { useCallback, useState, KeyboardEvent } from "react";
+import { useCallback, useState, KeyboardEvent } from "react";
 import CommunitySearch from "../../components/community/CommunitySearch";
 import { useDispatch, useSelector } from "react-redux";
 import { changeSortType, getPosts } from "../../modules/community/action";
@@ -11,7 +11,7 @@ const CommunitySearchContainer = () => {
     mainSort: state.community.main.sort.mainSort,
   }));
 
-  const [isClick, setIsClick] = useState("전체");
+  const [isClick, setIsClick] = useState<string>("전체");
 
   const searchTypes: string[] = ["전체", "후기", "질문", "잡담"];
 
@@ -37,7 +37,6 @@ const CommunitySearchContainer = () => {
       data: { key: string; value: string }
     ) => {
       if (e.key === "Enter") {
-        console.log("Enter 키가 눌렸습니다.");
         dispatch(getPosts({ mainSort, search: data.value }));
       }
     },

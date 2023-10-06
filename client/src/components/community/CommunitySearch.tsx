@@ -109,11 +109,6 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
   onChange,
   onKeyPress,
 }) => {
-  const viewOrLike = {
-    highest: "높은순",
-    lowest: "낮은순",
-  };
-
   const time: SearchType = {
     key: "time",
     name: "시간",
@@ -121,6 +116,11 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
       newest: "최신순",
       latest: "오래된순",
     },
+  };
+
+  const viewOrLike = {
+    highest: "높은순",
+    lowest: "낮은순",
   };
 
   const view: SearchType = {
