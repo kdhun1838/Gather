@@ -10,8 +10,7 @@ const initialState: RegisterState = {
     position: "",
     contact: "",
     content: "",
-  },
-  register: null,
+  }
 };
 
 const register = (
@@ -35,7 +34,9 @@ const register = (
     case `${POST_FORM}_SUCCESS`:
       return {
         ...state,
-        register: action.payload,
+        form: {
+          ...state.form,
+        },
       };
     case `${POST_FORM}_FAILURE`:
       return state;

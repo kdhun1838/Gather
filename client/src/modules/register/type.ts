@@ -9,7 +9,6 @@ export type RegisterState = {
     contact: string;
     content: string;
   };
-  register: any;
 };
 export type RegisterAction =
   | ReturnType<typeof changeForm>

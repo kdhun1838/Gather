@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Register from "../../components/register/Register";
@@ -12,9 +12,13 @@ import {
 import { useNavigate } from "react-router";
 
 const RegisterContainer = () => {
+  const [isPost, setIsPost] = useState(false);
+
   const form = useSelector((state: RootState) => state.register);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("ffffffff", form.form.title);
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {
@@ -22,11 +26,33 @@ const RegisterContainer = () => {
     },
     [dispatch]
   );
+
+  const onIsPost = (e: FormEvent) => {
+    if (
+      form.form.title === "" ||
+      form.form.category === "" ||
+      form.form.personnel === 0 ||
+      form.form.online === "" ||
+      form.form.position === "" ||
+      form.form.contact === "" ||
+      form.form.content === ""
+    ) {
+      e.preventDefault();
+      alert("내용을 입력하세요.");
+    } else {
+      setIsPost(true);
+    }
+  };
+  const onCancle = () => {
+    setIsPost(false);
+  };
+
   const onPostForm = useCallback(
     (form: RegisterState) => {
       dispatch(postForm(form));
       console.log("form===", form);
-      navigate("/");
+      setIsPost(false);
+      // navigate("/");
     },
     [dispatch, form]
   );
@@ -42,6 +68,9 @@ const RegisterContainer = () => {
       <Register
         onChangeForm={onChangeForm}
         onPostForm={onPostForm}
+        onIsPost={onIsPost}
+        onCancle={onCancle}
+        isPost={isPost}
         form={form}
       />
     </div>
