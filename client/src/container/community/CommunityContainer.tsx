@@ -40,7 +40,7 @@ const CommunityContainer = () => {
 
   useEffect(() => {
     dispatch(initForm());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     console.log("마운트");

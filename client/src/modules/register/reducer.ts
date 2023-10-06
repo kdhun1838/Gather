@@ -1,5 +1,11 @@
 import { RegisterState, RegisterAction } from "./type";
-import { CHANGE_FORM, POST_FORM, UNLOAD_FORM } from "./action";
+import {
+  CHANGE_DETAIL_SORT_FORM,
+  CHANGE_FORM,
+  CHANGE_SORT_FORM,
+  POST_FORM,
+  UNLOAD_FORM,
+} from "./action";
 
 const initialState: RegisterState = {
   form: {
@@ -10,6 +16,19 @@ const initialState: RegisterState = {
     position: "",
     contact: "",
     content: "",
+  },
+  list: {
+    popularList: null,
+    sort: {
+      mainSort: "전체",
+      detailSort: {
+        time: "newest",
+        view: "",
+        like: "",
+      },
+      search: "",
+    },
+    mainList: null,
   },
   register: null,
 };
@@ -28,6 +47,37 @@ const register = (
           form: {
             ...state.form,
             [action.payload.key]: action.payload.value,
+          },
+        };
+      }
+      return state;
+    case CHANGE_SORT_FORM:
+      if ("key" in action.payload && "value" in action.payload) {
+        return {
+          ...state,
+          list: {
+            ...state.list,
+            sort: {
+              ...state.list.sort,
+              [action.payload.key]: action.payload.value,
+            },
+          },
+        };
+      }
+      return state;
+    case CHANGE_DETAIL_SORT_FORM:
+      if ("key" in action.payload && "value" in action.payload) {
+        return {
+          ...state,
+          list: {
+            ...state.list,
+            sort: {
+              ...state.list.sort,
+              detailSort: {
+                ...state.list.sort.detailSort,
+                [action.payload.key]: action.payload.value,
+              },
+            },
           },
         };
       }
