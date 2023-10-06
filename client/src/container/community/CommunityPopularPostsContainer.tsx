@@ -5,11 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPopularPosts } from "../../modules/community/action";
 
 const CommunityPopularPostsContainer = () => {
-  const popularPost = useSelector(
+  const popularPosts = useSelector(
     (state: RootState) => state.community.main.popularPosts
   );
-
-  console.log(popularPost);
 
   const dispatch = useDispatch();
 
@@ -19,7 +17,7 @@ const CommunityPopularPostsContainer = () => {
 
   return (
     <>
-      <CommunityPopularPosts />
+      <CommunityPopularPosts popularPosts={popularPosts} />
     </>
   );
 };
