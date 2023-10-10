@@ -18,7 +18,7 @@ const PostsBox = styled.div`
   padding: 0 20px;
 `;
 
-const PostBox = styled.div`
+export const PostBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

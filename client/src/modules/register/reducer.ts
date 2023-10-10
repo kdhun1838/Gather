@@ -1,9 +1,10 @@
-import { RegisterState, RegisterAction } from "./type";
+import { RegisterState, RegisterAction, ListDetailType } from "./type";
 import {
   CHANGE_DETAIL_SORT_FORM,
   CHANGE_FORM,
   CHANGE_SORT_FORM,
   GET_LIST,
+  GET_POPULAR_LIST,
   POST_FORM,
   UNLOAD_FORM,
 } from "./action";
@@ -19,7 +20,7 @@ const initialState: RegisterState = {
     content: "",
   },
   list: {
-    popularList: null,
+    popularList: [],
     sort: {
       mainSort: "전체",
       detailSort: {
@@ -91,7 +92,6 @@ const register = (
     case `${POST_FORM}_FAILURE`:
       return state;
     case `${GET_LIST}_SUCCESS`:
-      console.log("getlist성공 리듀서", action.payload);
       return {
         ...state,
         list: {
@@ -100,12 +100,29 @@ const register = (
         },
       };
     case `${GET_LIST}_FAILURE`:
-      console.log("getlist실패 리듀서", action.payload);
       return {
         ...state,
         list: {
           ...state.list,
           mainList: null,
+        },
+      };
+    case `${GET_POPULAR_LIST}_SUCCESS`:
+      console.log("popular성공리듀서", action.payload);
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          popularList: action.payload as ListDetailType[],
+        },
+      };
+    case `${GET_POPULAR_LIST}_FAILURE`:
+      console.log("popular실패리듀서");
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          popularList: [],
         },
       };
 

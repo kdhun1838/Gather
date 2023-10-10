@@ -68,6 +68,16 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 }));
 router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("인기글 백입니다.");
+    try {
+        const popularData = yield models_1.default.registers.findAll({
+            order: [["favorite", "DESC"]],
+            limit: 10,
+        });
+        res.status(200).json(popularData);
+    }
+    catch (error) {
+        res.status(500).json({ error: "에러" });
+    }
 }));
 router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, category, personnel, online, position, contact, content } = req.body.form;

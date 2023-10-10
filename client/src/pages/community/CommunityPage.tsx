@@ -6,22 +6,22 @@ import CommunitySearchContainer from "../../container/community/CommunitySearchC
 import CommunityPopularPostsContainer from "../../container/community/CommunityPopularPostsContainer";
 import HeaderContainer from "../../container/common/HeaderContainer";
 
-const CommunityBox = styled.div`
-  min-height: 60rem;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-`;
+// const CommunityBox = styled.div`
+//   min-height: 60rem;
+//   display: flex;
+//   flex-direction: column;
+//   margin: 0 auto;
+// `;
 
 const CommunityPage = () => {
   return (
-    <CommunityBox>
+    <div>
       <HeaderContainer />
       게시물 <Link to="/community/write">글쓰기버튼</Link>
       <CommunityPopularPostsContainer />
       <CommunitySearchContainer />
       <CommunityContainer />
-    </CommunityBox>
+    </div>
   );
 };
 

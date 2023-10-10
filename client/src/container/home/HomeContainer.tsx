@@ -10,7 +10,6 @@ import {
 import { RootState } from "../../modules";
 
 const HomeContainer: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { mainSort, detailSort, search } = useSelector((state: RootState) => ({
     mainSort: state.register.list.sort.mainSort,
@@ -50,17 +49,12 @@ const HomeContainer: React.FC = () => {
     search,
   ]);
 
-  const goWrite = () => {
-    navigate("/register");
-  };
-
   return (
     <div>
       <Home
-        goWrite={goWrite}
-        // userData={userData}
-        // boardData={boardData}
-        // registerData={registerData}
+      // userData={userData}
+      // boardData={boardData}
+      // registerData={registerData}
       />
     </div>
   );

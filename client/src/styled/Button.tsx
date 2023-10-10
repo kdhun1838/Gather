@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const ButtonContainer = styled.div`
-  margin: 1rem 0 0 0;
+  margin: 0;
   display: flex;
-  width: 140px;
-  height: 50px;
+  width: 120px;
+  height: 40px;
   font-size: 20px;
   justify-content: center;
   align-items: center;

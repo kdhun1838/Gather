@@ -30,9 +30,25 @@ type SortType = {
 };
 
 type ListType = {
-  popularList: any;
+  popularList: ListDetailType[];
   sort: SortType;
   mainList: any;
+};
+
+export type ListDetailType = {
+  registerNum: number;
+  title: string;
+  category: string;
+  personnel: number;
+  meeting: string;
+  position: string;
+  contact: string;
+  period: string;
+  content: string;
+  view: number;
+  favorite: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type RegisterState = {

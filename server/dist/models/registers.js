@@ -45,6 +45,14 @@ function registersModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(255),
             allowNull: false,
         },
+        view: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+        },
+        favorite: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+        },
     }, {
         sequelize,
         modelName: "Registers",

@@ -69,6 +69,15 @@ router.get(
   "/popularList",
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("인기글 백입니다.");
+    try {
+      const popularData = await models.registers.findAll({
+        order: [["favorite", "DESC"]],
+        limit: 10,
+      });
+      res.status(200).json(popularData);
+    } catch (error) {
+      res.status(500).json({ error: "에러" });
+    }
   }
 );
 
