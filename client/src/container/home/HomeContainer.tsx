@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Home from "../../components/home/Home";
 import { useDispatch, useSelector } from "react-redux";
-import { getList, unloadForm } from "../../modules/register/action";
+import {
+  getList,
+  getPopularList,
+  unloadForm,
+} from "../../modules/register/action";
 import { RootState } from "../../modules";
 
 const HomeContainer: React.FC = () => {
@@ -35,6 +39,7 @@ const HomeContainer: React.FC = () => {
         search,
       })
     );
+    dispatch(getPopularList());
   }, [
     dispatch,
     detailSort?.like,

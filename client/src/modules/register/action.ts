@@ -8,6 +8,11 @@ export const CHANGE_DETAIL_SORT_FORM =
   "register/CHANGE_DETAIL_SORT_FORM" as const;
 export const [GET_LIST, GET_LIST_SUCCESS, GET_LIST_FAILURE] =
   createRequestActionTypes("register/GET_LIST");
+export const [
+  GET_POPULAR_LIST,
+  GET_POPULAR_LIST_SUCCESS,
+  GET_POPULAR_LIST_FAILURE,
+] = createRequestActionTypes("register/GET_POPULAR_LIST");
 export const [POST_FORM, POST_FORM_SUCCESS, POST_FORM_FAILURE] =
   createRequestActionTypes(" register/POST_FORM");
 
@@ -50,6 +55,11 @@ export const getList = (data: GetListType) => ({
   payload: {
     data,
   },
+});
+
+export const getPopularList = () => ({
+  type: GET_POPULAR_LIST,
+  payload: {},
 });
 
 export const postForm = (form: RegisterState) => ({

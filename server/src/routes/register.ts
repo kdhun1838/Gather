@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import models from "../models";
+import { Op } from "sequelize";
 
 type QueryData = {
   mainSort: string;
@@ -63,6 +64,13 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ error: "에러" });
   }
 });
+
+router.get(
+  "/popularList",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("인기글 백입니다.");
+  }
+);
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const { title, category, personnel, online, position, contact, content } =

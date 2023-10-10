@@ -15,17 +15,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
+const sequelize_1 = require("sequelize");
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c;
     console.log("도착", req.query.data);
     try {
-        const registerData = yield models_1.default.registers.findAll({});
-        // console.log("백 registerData===", registerData);
+        const data = req.query.data;
+        const mainSort = data.mainSort || "";
+        const search = data.search || "";
+        const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || "";
+        const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || "";
+        const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
+        const where = {};
+        let order = [["createdAt", "DESC"]];
+        if (mainSort && mainSort !== "전체") {
+            where.category = mainSort;
+        }
+        if (search) {
+            where[sequelize_1.Op.or] = [
+                { title: { [sequelize_1.Op.like]: `%${search}` } },
+                { content: { [sequelize_1.Op.like]: `%${search}` } },
+            ];
+        }
+        if (time === "newset") {
+            order = [["createdAt", "DESC"]];
+        }
+        else if (time === "latest") {
+            order = [["createdAt", "ASC"]];
+        }
+        else if (view === "highest") {
+            order = [["view", "DESC"]];
+        }
+        else if (view === "lowest") {
+            order = [["view", "ASC"]];
+        }
+        else if (like === "highest") {
+            order = [["favorite", "DESC"]];
+        }
+        else if (like === "lowest") {
+            order = [["favorite", "ASC"]];
+        }
+        const registerData = yield models_1.default.registers.findAll({
+            where,
+            order,
+        });
         res.status(200).json(registerData);
     }
     catch (error) {
         console.error(error);
         res.status(500).json({ error: "에러" });
     }
+}));
+router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("인기글 백입니다.");
 }));
 router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, category, personnel, online, position, contact, content } = req.body.form;
