@@ -16,10 +16,10 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("도착");
+    console.log("도착", req.query.data);
     try {
         const registerData = yield models_1.default.registers.findAll({});
-        console.log("백 registerData===", registerData);
+        // console.log("백 registerData===", registerData);
         res.status(200).json(registerData);
     }
     catch (error) {

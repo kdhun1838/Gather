@@ -3,6 +3,7 @@ import {
   CHANGE_DETAIL_SORT_FORM,
   CHANGE_FORM,
   CHANGE_SORT_FORM,
+  GET_LIST,
   POST_FORM,
   UNLOAD_FORM,
 } from "./action";
@@ -89,6 +90,25 @@ const register = (
       };
     case `${POST_FORM}_FAILURE`:
       return state;
+    case `${GET_LIST}_SUCCESS`:
+      console.log("getlist성공 리듀서", action.payload);
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          mainList: action.payload,
+        },
+      };
+    case `${GET_LIST}_FAILURE`:
+      console.log("getlist실패 리듀서", action.payload);
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          mainList: null,
+        },
+      };
+
     default:
       return state;
   }

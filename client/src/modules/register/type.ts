@@ -2,6 +2,7 @@ import {
   changeDetailSort,
   changeForm,
   changeSort,
+  getList,
   postForm,
   unloadForm,
 } from "./action";
@@ -40,9 +41,12 @@ export type RegisterState = {
   register: any;
 };
 
+export type GetListType = SortType;
+
 export type RegisterAction =
   | ReturnType<typeof changeForm>
   | ReturnType<typeof postForm>
   | ReturnType<typeof unloadForm>
   | ReturnType<typeof changeSort>
-  | ReturnType<typeof changeDetailSort>;
+  | ReturnType<typeof changeDetailSort>
+  | ReturnType<typeof getList>;

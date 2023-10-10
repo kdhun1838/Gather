@@ -1,6 +1,6 @@
 import client from "./client";
 import { AxiosResponse } from "axios";
-import { RegisterState } from "../../modules/register/type";
+import { GetListType, RegisterState } from "../../modules/register/type";
 
 export const registerForm = ({
   form,
@@ -9,7 +9,7 @@ export const registerForm = ({
   return client.post("/register", form);
 };
 
-export const list = (): Promise<AxiosResponse> => {
-  console.log("ss");
-  return client.get("/register/list");
+export const getList = (data: GetListType): Promise<AxiosResponse> => {
+  console.log("API의 getList입니다");
+  return client.get("/register/list", { params: data });
 };
