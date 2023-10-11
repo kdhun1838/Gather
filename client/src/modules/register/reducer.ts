@@ -5,6 +5,7 @@ import {
   CHANGE_SORT_FORM,
   GET_LIST,
   GET_POPULAR_LIST,
+  INIT_SORT,
   POST_FORM,
   UNLOAD_FORM,
 } from "./action";
@@ -42,6 +43,22 @@ const register = (
   switch (action.type) {
     case UNLOAD_FORM:
       return initialState;
+    case INIT_SORT:
+      console.log("초기화 리듀서");
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          sort: {
+            mainSort: "전체",
+            detailSort: {
+              time: "newest",
+              view: "",
+              like: "",
+            },
+          },
+        },
+      };
     case CHANGE_FORM:
       if ("key" in action.payload && "value" in action.payload) {
         return {
@@ -108,7 +125,6 @@ const register = (
         },
       };
     case `${GET_POPULAR_LIST}_SUCCESS`:
-      console.log("popular성공리듀서", action.payload);
       return {
         ...state,
         list: {
@@ -117,7 +133,6 @@ const register = (
         },
       };
     case `${GET_POPULAR_LIST}_FAILURE`:
-      console.log("popular실패리듀서");
       return {
         ...state,
         list: {

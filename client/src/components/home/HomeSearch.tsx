@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from "react";
+import React, { KeyboardEvent, MouseEvent } from "react";
 import styled from "styled-components";
 import { BiSearch } from "react-icons/bi";
 import SearchButton from "../../lib/button/SearchButton";
@@ -81,11 +81,14 @@ const SearchInputBox = styled.div`
   }
 `;
 
-type CommunityPropType = {
+type HomeSearchType = {
   searchValue: string | undefined;
   isClick: string;
   searchTypes: string[];
-  onClickSortButton: (data: { key: string; value: string }) => void;
+  onClickSortButton: (
+    data: { key: string; value: string },
+    e: MouseEvent
+  ) => void;
   onChange: (data: { key: string; value: string }) => void;
   onKeyPress: (
     e: KeyboardEvent<HTMLInputElement>,
@@ -101,7 +104,7 @@ type SearchType = {
   };
 };
 
-const HomeSearch: React.FC<CommunityPropType> = ({
+const HomeSearch: React.FC<HomeSearchType> = ({
   searchValue,
   isClick,
   searchTypes,
@@ -144,8 +147,8 @@ const HomeSearch: React.FC<CommunityPropType> = ({
               <div
                 key={index}
                 className={isClick === searchType ? "check" : ""}
-                onClick={() =>
-                  onClickSortButton({ key: "mainSort", value: searchType })
+                onClick={(e: MouseEvent<HTMLDivElement>) =>
+                  onClickSortButton({ key: "mainSort", value: searchType }, e)
                 }
               >
                 {searchType}

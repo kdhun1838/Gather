@@ -3,6 +3,7 @@ import { createRequestActionTypes } from "../../lib/createRequestSaga";
 
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
+export const INIT_SORT = "register/INIT_SORT" as const;
 export const CHANGE_SORT_FORM = "register/CHANGE_SORT_FORM" as const;
 export const CHANGE_DETAIL_SORT_FORM =
   "register/CHANGE_DETAIL_SORT_FORM" as const;
@@ -27,6 +28,11 @@ export const changeForm = ({ key, value }: { key: string; value: string }) => ({
     key,
     value,
   },
+});
+
+export const initSort = () => ({
+  type: INIT_SORT,
+  payload: {},
 });
 
 export const changeSort = ({ key, value }: { key: string; value: string }) => ({

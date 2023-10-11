@@ -5,49 +5,45 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getList,
   getPopularList,
+  initSort,
   unloadForm,
 } from "../../modules/register/action";
 import { RootState } from "../../modules";
 
 const HomeContainer: React.FC = () => {
   const dispatch = useDispatch();
-  const { mainSort, detailSort, search } = useSelector((state: RootState) => ({
-    mainSort: state.register.list.sort.mainSort,
-    detailSort: state.register.list.sort.detailSort,
-    search: state.register.list.sort.search,
-  }));
+  // const { mainSort, detailSort, search } = useSelector((state: RootState) => ({
+  //   mainSort: state.register.list.sort.mainSort,
+  //   detailSort: state.register.list.sort.detailSort,
+  //   search: state.register.list.sort.search,
+  // }));
 
-  const fetchData = async () => {
-    try {
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
+  // useEffect(() => {
+  //   // dispatch(unloadForm());
+  //   console.log("ㅇㅇㅇ", mainSort, detailSort, "sss", search);
+  //   dispatch(
+  //     getList({
+  //       mainSort,
+  //       detailSort: {
+  //         time: detailSort?.time,
+  //         view: detailSort?.view,
+  //         like: detailSort?.like,
+  //       },
+  //       search,
+  //     })
+  //   );
+  //   dispatch(getPopularList());
+  // }, [
+  //   dispatch,
+  //   detailSort?.like,
+  //   detailSort?.time,
+  //   detailSort?.view,
+  //   mainSort,
+  // ]);
+  React.useEffect(() => {
+    console.log("uuuuuuuuuuuuuuuuuuuuuuu");
     dispatch(unloadForm());
-    console.log("ㅇㅇㅇ", mainSort, detailSort, "sss", search);
-    dispatch(
-      getList({
-        mainSort,
-        detailSort: {
-          time: detailSort?.time,
-          view: detailSort?.view,
-          like: detailSort?.like,
-        },
-        search,
-      })
-    );
-    dispatch(getPopularList());
-  }, [
-    dispatch,
-    detailSort?.like,
-    detailSort?.time,
-    detailSort?.view,
-    mainSort,
-    detailSort,
-    search,
-  ]);
+  }, []);
 
   return (
     <div>

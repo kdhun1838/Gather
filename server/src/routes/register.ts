@@ -16,7 +16,6 @@ type DetailSort = {
 };
 
 router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
-  console.log("도착", req.query.data);
   try {
     const data: QueryData = req.query.data as QueryData;
     const mainSort: string = data.mainSort || "";
@@ -26,12 +25,28 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     const view: string = data.detailSort?.view || "";
     const like: string = data.detailSort?.like || "";
 
-    const where: any = {};
+    let where: any = {};
     let order: any = [["createdAt", "DESC"]];
 
     if (mainSort && mainSort !== "전체") {
-      where.category = mainSort;
+      if (mainSort === "운동") {
+        where.category = "sport";
+        console.log("where===운동", where);
+      } else if (mainSort === "게임") {
+        where.category = "game";
+        console.log("where===게임", where);
+      } else if (mainSort === "스터디") {
+        where.category = "study";
+        console.log("where===스터디", where);
+      } else {
+        where.category = "etc";
+        console.log("where===기타", where);
+      }
+    } else if (mainSort && mainSort === "전체") {
+      console.log("전체");
+      where = {};
     }
+    console.log("if밖 where", where);
 
     if (search) {
       where[Op.or] = [

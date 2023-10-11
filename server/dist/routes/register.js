@@ -18,7 +18,6 @@ const models_1 = __importDefault(require("../models"));
 const sequelize_1 = require("sequelize");
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
-    console.log("도착", req.query.data);
     try {
         const data = req.query.data;
         const mainSort = data.mainSort || "";
@@ -26,11 +25,31 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || "";
         const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || "";
         const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
-        const where = {};
+        let where = {};
         let order = [["createdAt", "DESC"]];
         if (mainSort && mainSort !== "전체") {
-            where.category = mainSort;
+            if (mainSort === "운동") {
+                where.category = "sport";
+                console.log("where===운동", where);
+            }
+            else if (mainSort === "게임") {
+                where.category = "game";
+                console.log("where===게임", where);
+            }
+            else if (mainSort === "스터디") {
+                where.category = "study";
+                console.log("where===스터디", where);
+            }
+            else {
+                where.category = "etc";
+                console.log("where===기타", where);
+            }
         }
+        else if (mainSort && mainSort === "전체") {
+            console.log("전체");
+            where = {};
+        }
+        console.log("if밖 where", where);
         if (search) {
             where[sequelize_1.Op.or] = [
                 { title: { [sequelize_1.Op.like]: `%${search}` } },

@@ -26,7 +26,23 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
     infinite: true,
     centerPadding: "60px",
     slidesToShow: 3,
-    speed: 500,
+    // speed: 500,
+    responsive: [
+      {
+        breakpoint: 1440,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 720,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -171,26 +187,21 @@ const ButtonBlock = styled.div`
   justify-content: flex-end;
 `;
 const CustomSlider = styled(Slider)`
+  padding: 0 1rem 0 1rem;
+  max-width: 1280px;
+  min-width: 100px;
   .slick-next:before,
   .slick-prev:before {
     color: black;
-    font-size: 2rem; /* 화살표 아이콘의 크기 조절 */
-    margin: 0 1rem; /* 화살표의 좌우 마진 추가 */
-  }
-
-  .slick-prev {
-    left: -40px; /* 좌측 화살표 위치 조절 */
-  }
-
-  .slick-next {
-    right: -40px; /* 우측 화살표 위치 조절 */
+    font-size: 2rem;
+    margin: 0 1rem;
   }
 
   .slick-list {
-    margin-left: 3rem;
+    margin: 0 2rem 0 2rem;
   }
   .slick-slide {
-    padding-left: 1rem;
+    padding-left: 0.5rem;
   }
 `;
 
