@@ -16,16 +16,39 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models")); // 수정된 부분: Users 클래스를 가져옴
 /* GET users listing. */
-router.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('하이');
+router.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('login===========================');
+    const { id, password } = req.body;
     try {
-        const usersData = yield models_1.default.users.findAll({}); // Users 클래스를 사용
-        res.status(200).json(usersData);
-        console.log(usersData);
+        const newLogin = yield models_1.default.users.findAll({
+            where: { id },
+        });
     }
-    catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'An error occurred' });
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('register==================');
+    const { id, password, name, nick, email, tel, age, grade, job, career, skill, } = req.body;
+    try {
+        const newSignup = yield models_1.default.users.create({
+            id,
+            password,
+            name,
+            nick,
+            email,
+            tel,
+            age,
+            grade,
+            job,
+            career,
+            skill,
+        });
+        res.status(200).json(newSignup);
+    }
+    catch (error) {
+        res.status(500).json(error);
     }
 }));
 exports.default = router;
