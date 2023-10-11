@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Responsive from "../../styled/Responsive";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { useLocation, useNavigate } from "react-router";
 import { Carousel } from "antd";
+import Responsive from "../../styled/Responsive";
 
 const items: TabsProps["items"] = [
   {

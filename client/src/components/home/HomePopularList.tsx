@@ -25,18 +25,25 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
     centerMode: true,
     infinite: true,
     centerPadding: "60px",
-    slidesToShow: 3,
+    slidesToShow: 5,
     // speed: 500,
     responsive: [
       {
-        breakpoint: 1440,
+        breakpoint: 1920,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1080,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 720,
+        breakpoint: 360,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -59,19 +66,19 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
             <Item key={index}>
               <ItemFirst>
                 <Category>
-                  {item.category && item.category === "sport" && (
+                  {item.category && item.category === "운동" && (
                     <FontAwesomeIcon
                       icon={faVolleyball}
                       style={{ color: "blue" }}
                     />
                   )}
-                  {item.category && item.category === "study" && (
+                  {item.category && item.category === "스터디" && (
                     <FontAwesomeIcon
                       icon={faPencil}
                       style={{ color: "#ff5900" }}
                     />
                   )}
-                  {item.category && item.category === "game" && (
+                  {item.category && item.category === "게임" && (
                     <FontAwesomeIcon
                       icon={faGamepad}
                       style={{ color: "#ff00d4" }}
@@ -188,7 +195,7 @@ const ButtonBlock = styled.div`
 `;
 const CustomSlider = styled(Slider)`
   padding: 0 1rem 0 1rem;
-  max-width: 1280px;
+  max-width: 1800px;
   min-width: 100px;
   .slick-next:before,
   .slick-prev:before {

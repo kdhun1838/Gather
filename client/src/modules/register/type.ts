@@ -6,6 +6,7 @@ import {
   postForm,
   unloadForm,
   initSort,
+  getForm,
 } from "./action";
 
 type FormType = {
@@ -15,6 +16,7 @@ type FormType = {
   online: string;
   position: string;
   contact: string;
+  period: string;
   content: string;
 };
 
@@ -56,6 +58,7 @@ export type RegisterState = {
   form: FormType;
   list: ListType;
   register: any;
+  formData: any;
 };
 
 export type GetListType = SortType;
@@ -67,4 +70,5 @@ export type RegisterAction =
   | ReturnType<typeof initSort>
   | ReturnType<typeof changeSort>
   | ReturnType<typeof changeDetailSort>
-  | ReturnType<typeof getList>;
+  | ReturnType<typeof getList>
+  | ReturnType<typeof getForm>;

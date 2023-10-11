@@ -1,7 +1,9 @@
-import e from "express";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import styled from "styled-components";
 import { RegisterState } from "../../modules/register/type";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale"; //한국어 설정
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -49,6 +51,9 @@ const InputForm = styled.div`
   &:nth-child(2n + 1) {
     margin-right: 40px;
   }
+  &:last-child{
+    margin-right: 0;
+  }
   &.textForm {
     width: 100%;
     textarea {
@@ -58,6 +63,9 @@ const InputForm = styled.div`
       font-size: 18px;
       resize: none;
     }
+  }
+  .react-datepicker-wrapper {
+    width: 100%;
   }
 `;
 
@@ -84,19 +92,81 @@ const ButtonForm = styled.div`
   }
 `;
 
-type RegisterProp = {
+const ModalWrap = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+
+  .modalForm {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 200px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+
+    h3 {
+      margin-bottom: 30px;
+    }
+
+    button {
+      width: 100px;
+      padding: 10px 20px;
+      background: #fff;
+      border: 2px solid;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:first-child {
+        margin-right: 10px;
+        border-color: #59d5f0;
+        color: #59d5f0;
+      }
+    }
+  }
+`;
+
+type RegisterProps = {
   onChangeForm: (data: { key: string; value: string | number }) => void;
   onPostForm: (form: RegisterState) => void;
+  onIsPost: (e: FormEvent) => void;
+  onCancle: () => void;
+  isPost: boolean;
   form: RegisterState;
 };
 
 const personner = Array.from({ length: 10 }, (_, index) => index + 1);
 
-const Register: React.FC<RegisterProp> = ({
+const Register: React.FC<RegisterProps> = ({
   onChangeForm,
   onPostForm,
+  onIsPost,
+  onCancle,
+  isPost,
   form,
 }) => {
+  const [date, setIsDate] = useState<Date | null>(null);
+  // const date = new Date();
+  const formatDate = (date: any) => {
+    if (!date) return "";
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   return (
     <>
       <StyleForm>
@@ -118,10 +188,10 @@ const Register: React.FC<RegisterProp> = ({
               }
             >
               <option value="">카테고리</option>
-              <option value="sport">운동</option>
-              <option value="game">게임</option>
-              <option value="study">스터디</option>
-              <option value="etc">기타</option>
+              <option value="운동">운동</option>
+              <option value="게임">게임</option>
+              <option value="스터디">스터디</option>
+              <option value="기타">기타</option>
             </select>
           </InputForm>
           <InputForm>
@@ -131,7 +201,7 @@ const Register: React.FC<RegisterProp> = ({
                 onChangeForm({ key: "personnel", value: e.target.value })
               }
             >
-              <option value="">인원</option>
+              <option value="0">인원</option>
               {personner.map((option) => (
                 <option key={option} value={option}>
                   {option} 명
@@ -148,8 +218,8 @@ const Register: React.FC<RegisterProp> = ({
               }
             >
               <option value="">온·오프라인</option>
-              <option value="online">온라인</option>
-              <option value="offline">오프라인</option>
+              <option value="온라인">온라인</option>
+              <option value="오프라인">오프라인</option>
             </select>
           </InputForm>
           <InputForm>
@@ -170,6 +240,27 @@ const Register: React.FC<RegisterProp> = ({
               }
             />
           </InputForm>
+          <InputForm>
+            <h3>마감 일자</h3>
+            {/* <input
+              type="text"
+              onChange={(e) =>
+                onChangeForm({ key: "contact", value: e.target.value })
+              }
+            /> */}
+            <DatePicker
+              locale={ko}
+              selected={date}
+              onChange={(selectedDate) => {
+                setIsDate(selectedDate);
+                onChangeForm({
+                  key: "period",
+                  value: formatDate(selectedDate),
+                });
+              }}
+              dateFormat="yyyy-MM-dd"
+            />
+          </InputForm>
           <InputForm className="textForm">
             <h3>모임 설명</h3>
             <textarea
@@ -181,10 +272,21 @@ const Register: React.FC<RegisterProp> = ({
           </InputForm>
         </OptionForm>
         <ButtonForm>
-          <button onClick={() => onPostForm(form)}>등록</button>
+          <button onClick={(e) => onIsPost(e)}>등록</button>
           <button>취소</button>
         </ButtonForm>
       </StyleForm>
+      {isPost === true && (
+        <ModalWrap>
+          <div className="modalForm">
+            <h3>정말 등록하시겠습니까?</h3>
+            <div>
+              <button onClick={(e) => onPostForm(form)}>확인</button>
+              <button onClick={() => onCancle()}>취소</button>
+            </div>
+          </div>
+        </ModalWrap>
+      )}
     </>
   );
 };

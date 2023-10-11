@@ -16,3 +16,8 @@ export const getPopularList = (): Promise<AxiosResponse> => {
   console.log("API의 getPopularList");
   return client.get("/register/popularList");
 };
+
+export const getForm = (postId: Number): Promise<AxiosResponse> => {
+  console.log('postid????', postId);
+  return client.get("/register/post/:postId", {params: postId});
+};

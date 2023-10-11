@@ -3,6 +3,7 @@ import { createRequestActionTypes } from "../../lib/createRequestSaga";
 
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
+
 export const INIT_SORT = "register/INIT_SORT" as const;
 export const CHANGE_SORT_FORM = "register/CHANGE_SORT_FORM" as const;
 export const CHANGE_DETAIL_SORT_FORM =
@@ -15,7 +16,9 @@ export const [
   GET_POPULAR_LIST_FAILURE,
 ] = createRequestActionTypes("register/GET_POPULAR_LIST");
 export const [POST_FORM, POST_FORM_SUCCESS, POST_FORM_FAILURE] =
-  createRequestActionTypes(" register/POST_FORM");
+  createRequestActionTypes("register/POST_FORM" as const);
+export const [GET_FORM, GET_FORM_SUCCESS, GET_FORM_FAILURE] =
+  createRequestActionTypes("register/GET_FORM" as const);
 
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
@@ -72,5 +75,12 @@ export const postForm = (form: RegisterState) => ({
   type: POST_FORM,
   payload: {
     form,
+  },
+});
+
+export const getForm = (postId: Number) => ({
+  type: GET_FORM,
+  payload: {
+    postId,
   },
 });

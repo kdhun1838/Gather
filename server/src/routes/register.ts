@@ -29,24 +29,8 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     let order: any = [["createdAt", "DESC"]];
 
     if (mainSort && mainSort !== "전체") {
-      if (mainSort === "운동") {
-        where.category = "sport";
-        console.log("where===운동", where);
-      } else if (mainSort === "게임") {
-        where.category = "game";
-        console.log("where===게임", where);
-      } else if (mainSort === "스터디") {
-        where.category = "study";
-        console.log("where===스터디", where);
-      } else {
-        where.category = "etc";
-        console.log("where===기타", where);
-      }
-    } else if (mainSort && mainSort === "전체") {
-      console.log("전체");
-      where = {};
+      where.category = mainSort;
     }
-    console.log("if밖 where", where);
 
     if (search) {
       where[Op.or] = [
@@ -97,8 +81,16 @@ router.get(
 );
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  const { title, category, personnel, online, position, contact, content } =
-    req.body.form;
+  const {
+    title,
+    category,
+    personnel,
+    online,
+    position,
+    contact,
+    period,
+    content,
+  } = req.body.form;
   console.log(
     "register 백도착",
     req.body,
@@ -109,6 +101,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     online,
     position,
     contact,
+    period,
     content
   );
   try {
@@ -119,6 +112,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       meeting: online,
       position,
       contact,
+      period,
       content,
     });
     res.status(200).json(newRegister);
@@ -127,5 +121,22 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
+
+router.get(
+  "/post/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.query;
+    console.log("postid?aaaaaaaaaaaaaa", postId);
+    try {
+      const getFormData = await models.registers.findOne({
+        where: { registerNum: postId },
+      });
+      res.status(200).json(getFormData);
+      console.log("getForm????????", getFormData);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+);
 
 export default router;

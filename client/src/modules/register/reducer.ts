@@ -8,6 +8,7 @@ import {
   INIT_SORT,
   POST_FORM,
   UNLOAD_FORM,
+  GET_FORM,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -18,6 +19,7 @@ const initialState: RegisterState = {
     online: "",
     position: "",
     contact: "",
+    period: "",
     content: "",
   },
   list: {
@@ -34,6 +36,7 @@ const initialState: RegisterState = {
     mainList: null,
   },
   register: null,
+  formData: {},
 };
 
 const register = (
@@ -104,7 +107,9 @@ const register = (
     case `${POST_FORM}_SUCCESS`:
       return {
         ...state,
-        register: action.payload,
+        form: {
+          ...state.form,
+        },
       };
     case `${POST_FORM}_FAILURE`:
       return state;
@@ -140,7 +145,14 @@ const register = (
           popularList: [],
         },
       };
-
+    case `${GET_FORM}_SUCCESS`:
+      console.log("getform", action.payload);
+      return {
+        ...state,
+        formData: action.payload,
+      };
+    case `${GET_FORM}_FAILURE`:
+      return state;
     default:
       return state;
   }
