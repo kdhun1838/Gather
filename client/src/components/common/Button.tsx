@@ -2,13 +2,14 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import palette from '../../lib/styles/palette';
+import { useNavigate } from 'react-router-dom';
 
 interface ButtonProps {
   to?: string;
   cyan?: boolean;
   fullWidth?: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children?: React.ReactNode;
   // 다른 필요한 속성들 추가 가능
 }
@@ -62,14 +63,17 @@ const StyledLink = styled(Link)<ButtonProps>`
   ${(props) => buttonStyle}
 `;
 
-const Button: React.FC<ButtonProps> = (props) => {
-  const { to, ...rest } = props;
-
-  return to ? (
-    <StyledLink {...rest} />
-  ) : (
-    <StyledButton {...rest}>{props.children}</StyledButton>
-  );
+const Button: React.FC<ButtonProps> = ({ to, ...rest }) => {
+  const navigate = useNavigate();
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (to) {
+      navigate(to);
+    }
+    if (rest.onClick) {
+      rest.onClick(e);
+    }
+  };
+  return <StyledButton {...rest} onClick={onClick} />;
 };
 
 export default Button;

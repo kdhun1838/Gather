@@ -45,6 +45,13 @@ const ButtonWithMarginTop = styled(Button)`
   margin-top: 1rem;
 `;
 
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
+
 const textMap: Record<string, string> = {
   login: '로그인',
   register: '회원가입',
@@ -54,19 +61,31 @@ interface textMapProps {
   type: any;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // 수정: key 인자 제거
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  error: string | null;
+  form: {
+    id: string;
+    password: string;
+  };
 }
 
-const AuthForm: React.FC<textMapProps> = ({ type, onChange, onSubmit }) => {
+const AuthForm: React.FC<textMapProps> = ({
+  type,
+  onChange,
+  onSubmit,
+  error,
+  form,
+}) => {
   const text = textMap[type];
   return (
     <AuthFormBlock>
       <h3>{text}</h3>
       <form onSubmit={onSubmit}>
         <StyledInput
-          autoComplete="username"
-          name="username"
+          autoComplete="id"
+          name="id"
           placeholder="아이디"
           onChange={onChange}
+          value={form.id}
         />
         <StyledInput
           autoComplete="new-password"
@@ -74,6 +93,7 @@ const AuthForm: React.FC<textMapProps> = ({ type, onChange, onSubmit }) => {
           placeholder="비밀번호"
           type="password"
           onChange={onChange}
+          value={form.password}
         />
         {type === 'register' && (
           <StyledInput
@@ -84,6 +104,79 @@ const AuthForm: React.FC<textMapProps> = ({ type, onChange, onSubmit }) => {
             onChange={onChange}
           />
         )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="name"
+            name="name"
+            placeholder="이름"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="nick"
+            name="nick"
+            placeholder="닉네임"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="email"
+            name="email"
+            placeholder="E-mail"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="tel"
+            name="tel"
+            placeholder="전화번호"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="age"
+            name="age"
+            placeholder="나이"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="grade"
+            name="grade"
+            placeholder="성별"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="job"
+            name="job"
+            placeholder="직무"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="career"
+            name="career"
+            placeholder="경력"
+            onChange={onChange}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="skill"
+            name="skill"
+            placeholder="관심스택"
+            onChange={onChange}
+          />
+        )}
+        {error && <ErrorMessage>에러 발생!</ErrorMessage>}
         <ButtonWithMarginTop>{text}</ButtonWithMarginTop>
       </form>
       <Footer>

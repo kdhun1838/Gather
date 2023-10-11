@@ -1,18 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import Responsive from "./Responsive";
-import { ConfigProvider, Tabs } from "antd";
-import type { TabsProps } from "antd";
-import { useNavigate } from "react-router";
+import React from 'react';
+import styled from 'styled-components';
+import Responsive from './Responsive';
+import { ConfigProvider, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
-const items: TabsProps["items"] = [
+const items: TabsProps['items'] = [
   {
-    key: "/",
-    label: "모임게시판",
+    key: '/',
+    label: '모임게시판',
   },
   {
-    key: "/community",
-    label: "커뮤니티",
+    key: '/community',
+    label: '커뮤니티',
   },
 ];
 
@@ -27,10 +28,10 @@ const Header = () => {
       theme={{
         components: {
           Tabs: {
-            inkBarColor: "orange",
-            itemSelectedColor: "orange",
-            itemHoverColor: "orange",
-            horizontalItemMargin: "32222px",
+            inkBarColor: 'orange',
+            itemSelectedColor: 'orange',
+            itemHoverColor: 'orange',
+            horizontalItemMargin: '32222px',
             // cardPadding: "32",
           },
         },
@@ -40,7 +41,9 @@ const Header = () => {
         <div>
           로고
           <div>
-            <button>로그인</button>
+            <button>
+              <Link to={'/login'}>로그인</Link>
+            </button>
           </div>
         </div>
         <span>
