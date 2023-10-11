@@ -1,5 +1,5 @@
 import { RegisterState, RegisterAction } from "./type";
-import { CHANGE_FORM, POST_FORM, UNLOAD_FORM } from "./action";
+import { CHANGE_FORM, GET_FORM, POST_FORM, UNLOAD_FORM } from "./action";
 
 const initialState: RegisterState = {
   form: {
@@ -9,8 +9,10 @@ const initialState: RegisterState = {
     online: "",
     position: "",
     contact: "",
+    period: "",
     content: "",
-  }
+  },
+  formData: {},
 };
 
 const register = (
@@ -40,6 +42,14 @@ const register = (
       };
     case `${POST_FORM}_FAILURE`:
       return state;
+    case `${GET_FORM}_SUCCESS`:
+      console.log('getform', action.payload);
+      return {
+        ...state,
+        formData: action.payload,
+      }
+      case `${GET_FORM}_FAILURE`:
+        return state;
     default:
       return state;
   }

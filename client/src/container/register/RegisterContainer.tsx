@@ -52,12 +52,11 @@ const RegisterContainer = () => {
       dispatch(postForm(form));
       console.log("form===", form);
       setIsPost(false);
-      // navigate("/");
+      navigate("/");
     },
     [dispatch, form]
   );
   React.useEffect(() => {
-    console.log("formmmmmmmmmmmmmmmmmm", form);
     return () => {
       dispatch(unloadForm());
     };

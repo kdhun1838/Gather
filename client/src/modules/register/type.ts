@@ -1,4 +1,4 @@
-import { changeForm, postForm, unloadForm } from "./action";
+import { changeForm, getForm, postForm, unloadForm } from "./action";
 export type RegisterState = {
   form: {
     title: string;
@@ -7,10 +7,13 @@ export type RegisterState = {
     online: string;
     position: string;
     contact: string;
+    period: string;
     content: string;
-  };
+  },
+  formData: any;
 };
 export type RegisterAction =
   | ReturnType<typeof changeForm>
   | ReturnType<typeof postForm>
-  | ReturnType<typeof unloadForm>;
+  | ReturnType<typeof unloadForm>
+  | ReturnType<typeof getForm>

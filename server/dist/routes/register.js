@@ -28,8 +28,8 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, category, personnel, online, position, contact, content } = req.body.form;
-    console.log("register 백도착", req.body, "sssssssss", title, category, personnel, online, position, contact, content);
+    const { title, category, personnel, online, position, contact, period, content } = req.body.form;
+    console.log("register 백도착", req.body, "sssssssss", title, category, personnel, online, position, contact, period, content);
     try {
         const newRegister = yield models_1.default.registers.create({
             title,
@@ -38,6 +38,7 @@ router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             meeting: online,
             position,
             contact,
+            period,
             content,
         });
         res.status(200).json(newRegister);
@@ -45,6 +46,20 @@ router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     catch (error) {
         res.status(500).json(error);
         next(error);
+    }
+}));
+router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.query;
+    console.log('postid?aaaaaaaaaaaaaa', postId);
+    try {
+        const getFormData = yield models_1.default.registers.findOne({
+            where: { registerNum: postId },
+        });
+        res.status(200).json(getFormData);
+        console.log('getForm????????', getFormData);
+    }
+    catch (e) {
+        console.error(e);
     }
 }));
 exports.default = router;

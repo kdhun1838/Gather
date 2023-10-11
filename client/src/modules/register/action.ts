@@ -3,11 +3,10 @@ import { createRequestActionTypes } from "../../lib/createRequestSaga";
 
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
-// export const POST_FORM = "register/POST_FORM" as const;
-// export const POST_FORM_SUCCESS = "register/POST_FORM_SUCCESS" as const;
-// export const POST_FORM_FAILURE = "register/POST_FORM_FAILURE" as const;
 export const [POST_FORM, POST_FORM_SUCCESS, POST_FORM_FAILURE] =
-  createRequestActionTypes("register/POST_FORM");
+  createRequestActionTypes("register/POST_FORM" as const);
+export const [GET_FORM, GET_FORM_SUCCESS, GET_FORM_FAILURE] =
+  createRequestActionTypes("register/GET_FORM" as const);
 
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
@@ -29,8 +28,9 @@ export const postForm = (form: RegisterState) => ({
   },
 });
 
-// const postFormSaga = createRequestSaga(POST_FORM, registerAPI.registerForm);
-
-// export function* registerSaga() {
-//   yield takeLatest(POST_FORM, postFormSaga);
-// }
+export const getForm = (postId: Number) => ({
+  type: GET_FORM,
+  payload: {
+    postId,
+  },
+});
