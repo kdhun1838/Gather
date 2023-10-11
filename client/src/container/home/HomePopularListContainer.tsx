@@ -13,6 +13,12 @@ const HomePopularListContainer: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const onClickPost = React.useCallback(
+    (postId: number) => {
+      navigate(`/register/${postId}`);
+    },
+    [navigate]
+  );
   React.useEffect(() => {
     dispatch(getPopularList());
   }, [dispatch]);
@@ -22,7 +28,11 @@ const HomePopularListContainer: React.FC = () => {
 
   return (
     <div>
-      <HomePopularList goWrite={goWrite} popularList={popularList} />
+      <HomePopularList
+        goWrite={goWrite}
+        popularList={popularList}
+        onClickPost={onClickPost}
+      />
     </div>
   );
 };

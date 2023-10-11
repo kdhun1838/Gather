@@ -11,46 +11,42 @@ import {
 import { RootState } from "../../modules";
 
 const HomeContainer: React.FC = () => {
+  const { list, mainSort, detailSortName, search, load } = useSelector(
+    (state: RootState) => ({
+      list: state.register.list.mainList,
+      mainSort: state.register.list.sort.mainSort,
+      detailSortName: state.register.list.sort.detailSort,
+      search: state.register.list.sort.search,
+      load: state.loading,
+    })
+  );
   const dispatch = useDispatch();
-  // const { mainSort, detailSort, search } = useSelector((state: RootState) => ({
-  //   mainSort: state.register.list.sort.mainSort,
-  //   detailSort: state.register.list.sort.detailSort,
-  //   search: state.register.list.sort.search,
-  // }));
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   // dispatch(unloadForm());
-  //   console.log("ㅇㅇㅇ", mainSort, detailSort, "sss", search);
-  //   dispatch(
-  //     getList({
-  //       mainSort,
-  //       detailSort: {
-  //         time: detailSort?.time,
-  //         view: detailSort?.view,
-  //         like: detailSort?.like,
-  //       },
-  //       search,
-  //     })
-  //   );
-  //   dispatch(getPopularList());
-  // }, [
-  //   dispatch,
-  //   detailSort?.like,
-  //   detailSort?.time,
-  //   detailSort?.view,
-  //   mainSort,
-  // ]);
+  const onClickAddFavoritePost = React.useCallback((postId: number) => {
+    console.log(postId);
+    // dispatch(addFavorite(postId));
+  }, []);
+
+  const onClickPost = React.useCallback(
+    (postId: number) => {
+      navigate(`/register/${postId}`);
+    },
+    [navigate]
+  );
+
   React.useEffect(() => {
     console.log("uuuuuuuuuuuuuuuuuuuuuuu");
     dispatch(unloadForm());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
       <Home
-      // userData={userData}
-      // boardData={boardData}
-      // registerData={registerData}
+        posts={list}
+        load={load}
+        onClickPost={onClickPost}
+        onClickAddFavoritePost={onClickAddFavoritePost}
       />
     </div>
   );

@@ -12,11 +12,13 @@ import {
   faPencil,
   faVolleyball,
   faGamepad,
+  faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface OwnProps {
   goWrite: () => void;
   popularList: ListDetailType[];
+  onClickPost: (postId: number) => void;
 }
 
 const HomePopularList: React.FC<OwnProps> = (props) => {
@@ -36,14 +38,14 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
         },
       },
       {
-        breakpoint: 1080,
+        breakpoint: 1440,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 360,
+        breakpoint: 720,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -63,7 +65,10 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
       <CustomSlider {...settings}>
         {props.popularList &&
           props.popularList.map((item: ListDetailType, index) => (
-            <Item key={index}>
+            <Item
+              key={index}
+              onClick={() => props.onClickPost(item.registerNum)}
+            >
               <ItemFirst>
                 <Category>
                   {item.category && item.category === "운동" && (
@@ -73,15 +78,18 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
                     />
                   )}
                   {item.category && item.category === "스터디" && (
-                    <FontAwesomeIcon
-                      icon={faPencil}
-                      style={{ color: "#ff5900" }}
-                    />
+                    <FontAwesomeIcon icon={faPencil} style={{ color: "red" }} />
                   )}
                   {item.category && item.category === "게임" && (
                     <FontAwesomeIcon
                       icon={faGamepad}
-                      style={{ color: "#ff00d4" }}
+                      style={{ color: "green" }}
+                    />
+                  )}
+                  {item.category && item.category === "기타" && (
+                    <FontAwesomeIcon
+                      icon={faEllipsis}
+                      style={{ color: "black" }}
                     />
                   )}
                   <div>{item.category}</div>
@@ -101,7 +109,7 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
 const Item = styled.div`
   color: black;
   display: flex;
-  width: 340px;
+  width: 100%;
   padding: 20px 25px;
   gap: 10px;
   border-radius: 20px;
@@ -194,9 +202,11 @@ const ButtonBlock = styled.div`
   justify-content: flex-end;
 `;
 const CustomSlider = styled(Slider)`
-  padding: 0 1rem 0 1rem;
+  padding: 1rem 1rem 0 1rem;
+  margin-bottom: 2rem;
   max-width: 1800px;
   min-width: 100px;
+  /* height: 15rem; */
   .slick-next:before,
   .slick-prev:before {
     color: black;
