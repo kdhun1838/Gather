@@ -10,7 +10,7 @@ const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const { form, auth, authError, user } = useSelector((state: RootState) => ({
-    form: state.auth.login,
+    form: state.auth,
     auth: state.auth.auth,
     authError: state.auth.authError,
     user: state.user.user,
@@ -33,9 +33,9 @@ const LoginForm = () => {
     dispatch(login(form));
     // 이 부분에서 로그인 처리를 수행할 수 있습니다.
   };
-
+  const initlogin = form.login;
   useEffect(() => {
-    dispatch(initializeForm(form));
+    dispatch(initializeForm(initlogin));
   }, [dispatch]);
 
   useEffect(() => {
@@ -54,10 +54,10 @@ const LoginForm = () => {
   return (
     <AuthForm
       type="login"
-      form={form}
       onChange={onChange}
       onSubmit={onSubmit}
       error={error}
+      form={form}
     />
   );
 };

@@ -45,18 +45,6 @@ function usersModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(100),
             allowNull: false,
         },
-        job: {
-            type: sequelize_1.DataTypes.STRING(100),
-            allowNull: false,
-        },
-        career: {
-            type: sequelize_1.DataTypes.INTEGER,
-            allowNull: false,
-        },
-        skill: {
-            type: sequelize_1.DataTypes.STRING(500),
-            allowNull: true,
-        },
     }, {
         sequelize,
         modelName: 'Users',

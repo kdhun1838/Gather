@@ -6,8 +6,8 @@ import models from '../models'; // 수정된 부분: Users 클래스를 가져�
 router.post(
   '/login',
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('login===========================');
-    const { id, password } = req.body;
+    console.log('login===========================', req.body);
+    const { id, password } = req.body.login;
 
     try {
       // 데이터베이스에서 사용자 찾기
@@ -40,20 +40,10 @@ router.post(
 router.post(
   '/signup',
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('register==================');
-    const {
-      id,
-      password,
-      name,
-      nick,
-      email,
-      tel,
-      age,
-      grade,
-      job,
-      career,
-      skill,
-    } = req.body;
+    const { id, password, name, nick, email, tel, age, grade } = req.body;
+    console.log('register==================', req.body);
+    const agetoNum = +age;
+    console.log('agetoNum==', agetoNum);
     try {
       const newSignup = await models.users.create({
         id,
@@ -64,13 +54,11 @@ router.post(
         tel,
         age,
         grade,
-        job,
-        career,
-        skill,
       });
       res.status(200).json(newSignup);
     } catch (error) {
       res.status(500).json(error);
+      next(error);
     }
   }
 );

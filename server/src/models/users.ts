@@ -10,9 +10,6 @@ export interface UsersAttributes {
   tel: string;
   age: number;
   grade: string;
-  job: string;
-  career: number;
-  skill: string | null;
 }
 
 export interface UsersCreationAttributes
@@ -31,9 +28,6 @@ export class Users
   public tel!: string;
   public age!: number;
   public grade!: string;
-  public job!: string;
-  public career!: number;
-  public skill!: string | null;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -79,18 +73,6 @@ export function usersModel(sequelize: Sequelize): typeof Users {
       grade: {
         type: DataTypes.STRING(100),
         allowNull: false,
-      },
-      job: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      career: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      skill: {
-        type: DataTypes.STRING(500),
-        allowNull: true,
       },
     },
     {
