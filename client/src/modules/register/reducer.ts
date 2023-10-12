@@ -1,5 +1,12 @@
 import { RegisterState, RegisterAction } from "./type";
-import { CHANGE_FORM, GET_FORM, POST_FORM, UNLOAD_FORM } from "./action";
+import {
+  CHANGE_FORM,
+  GET_FORM,
+  POST_CLOSE,
+  POST_DELETE,
+  POST_FORM,
+  UNLOAD_FORM,
+} from "./action";
 
 const initialState: RegisterState = {
   form: {
@@ -43,13 +50,24 @@ const register = (
     case `${POST_FORM}_FAILURE`:
       return state;
     case `${GET_FORM}_SUCCESS`:
-      console.log('getform', action.payload);
       return {
         ...state,
         formData: action.payload,
-      }
-      case `${GET_FORM}_FAILURE`:
-        return state;
+      };
+    case `${GET_FORM}_FAILURE`:
+      return state;
+    case `${POST_CLOSE}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${POST_CLOSE}_FAILURE`:
+      return state;
+    case `${POST_DELETE}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${POST_DELETE}_FAILURE`:
+      return state;
     default:
       return state;
   }

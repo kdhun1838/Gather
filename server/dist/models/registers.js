@@ -42,9 +42,18 @@ function registersModel(sequelize) {
             allowNull: true,
         },
         content: {
-            type: sequelize_1.DataTypes.STRING(255),
+            type: sequelize_1.DataTypes.STRING(2000),
             allowNull: false,
         },
+        state: {
+            type: sequelize_1.DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1,
+        },
+        view: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+        }
     }, {
         sequelize,
         modelName: "Registers",

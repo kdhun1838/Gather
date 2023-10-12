@@ -28,8 +28,20 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, category, personnel, online, position, contact, period, content } = req.body.form;
-    console.log("register 백도착", req.body, "sssssssss", title, category, personnel, online, position, contact, period, content);
+    const { title, category, personnel, online, position, contact, period, content, } = req.body.form;
+    // console.log(
+    //   "register 백도착",
+    //   req.body,
+    //   "sssssssss",
+    //   title,
+    //   category,
+    //   personnel,
+    //   online,
+    //   position,
+    //   contact,
+    //   period,
+    //   content
+    // );
     try {
         const newRegister = yield models_1.default.registers.create({
             title,
@@ -50,16 +62,44 @@ router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 }));
 router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.query;
-    console.log('postid?aaaaaaaaaaaaaa', postId);
+    console.log("ddvvsvsv", postId);
     try {
         const getFormData = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
         });
+        getFormData.view += 1;
+        yield getFormData.save();
         res.status(200).json(getFormData);
-        console.log('getForm????????', getFormData);
     }
     catch (e) {
         console.error(e);
+    }
+}));
+router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
+    try {
+        const postClose = yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
+            where: { registerNum: postId },
+        });
+        res.status(200).json(postClose);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json(e);
+    }
+}));
+router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
+    console.log("22222222222222", postId);
+    try {
+        const postDelete = yield models_1.default.registers.destroy({
+            where: { registerNum: postId },
+        });
+        res.status(200).json(postDelete);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json(e);
     }
 }));
 exports.default = router;

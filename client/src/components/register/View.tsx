@@ -50,12 +50,34 @@ const Section = styled.div`
     padding: 5px;
     font-size: 48px;
   }
+  .content {
+    word-wrap: break-word;
+  }
+`;
+
+const BtnSection = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+
+  button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 18px;
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
 `;
 type ViewProps = {
   formData: RegisterState;
+  onClose: (postId: Number) => void;
+  onDelete: (postId: Number) => void;
+  postId: Number;
 };
-const View: React.FC<ViewProps> = ({ formData }) => {
-  console.log("aaaaaa", formData);
+const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
   const {
     title,
     category,
@@ -65,7 +87,9 @@ const View: React.FC<ViewProps> = ({ formData }) => {
     contact,
     period,
     content,
+    view,
   } = formData.formData;
+  console.log("aaaaaa", formData);
   return (
     <PostWrap>
       <HeaderContainer />
@@ -74,6 +98,7 @@ const View: React.FC<ViewProps> = ({ formData }) => {
           <div className="firstInfo">
             <b>NickName</b>
             <p>2023-10-04</p>
+            <p>조회수 {view}</p>
           </div>
           <h1>{title}</h1>
         </Section>
@@ -102,18 +127,23 @@ const View: React.FC<ViewProps> = ({ formData }) => {
             <div>
               <h3>연락방법</h3>
               <b>
-                <a href="javascript:void(0)">{contact}</a>
+                <a href="#">{contact}</a>
               </b>
             </div>
             <div>
               <h3>마감일자</h3>
-              <b>{period}까지</b>
+              <b>{period}</b>
             </div>
           </div>
         </Section>
         <Section>
-          <p>{content}</p>
+          <p className="content">{content}</p>
         </Section>
+        <BtnSection>
+          <button onClick={() => onClose(postId)}>마감하기</button>
+          <button>수정</button>
+          <button onClick={() => onDelete(postId)}>삭제</button>
+        </BtnSection>
       </PostContainer>
     </PostWrap>
   );
