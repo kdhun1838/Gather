@@ -1,5 +1,5 @@
 import { GetListType, RegisterState } from "./type";
-import { createRequestActionTypes } from "../../lib/createRequestSaga";
+import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
@@ -97,7 +97,7 @@ export const postClose = (postId: Number) => ({
 });
 
 export const postDelete = (postId: Number) => ({
-  type: POST_CLOSE,
+  type: POST_DELETE,
   payload: {
     postId,
   },

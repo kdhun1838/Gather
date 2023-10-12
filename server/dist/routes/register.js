@@ -66,9 +66,15 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("인기글 백입니다.");
+    const today = new Date();
+    today.setHours(today.getHours() + 9);
     try {
         const popularData = yield models_1.default.registers.findAll({
+            where: {
+                period: {
+                    [sequelize_1.Op.gte]: today.toISOString().split("T")[0],
+                },
+            },
             order: [["favorite", "DESC"]],
             limit: 10,
         });

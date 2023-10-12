@@ -14,6 +14,7 @@ import {
   faGamepad,
   faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
+import { deadline } from "../../lib/function/date";
 
 interface OwnProps {
   goWrite: () => void;
@@ -94,10 +95,10 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
                   )}
                   <div>{item.category}</div>
                 </Category>
-                <Deadline>마감 ?일전</Deadline>
+                <Deadline>{deadline(item.period)}</Deadline>
               </ItemFirst>
               <ItemSecond>마감일 | {item.period}</ItemSecond>
-              <ItemThird>{item.content}</ItemThird>
+              <ItemThird>{item.title}</ItemThird>
               <ItemFourth>👀 조회수 {item.view}회</ItemFourth>
             </Item>
           ))}

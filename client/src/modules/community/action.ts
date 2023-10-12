@@ -1,4 +1,4 @@
-import { createRequestActionTypes } from "../../lib/createRequestSaga";
+import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 import { CommunityState, GetPostType } from "./type";
 
 // 액션 정의 (마지막에 as const 붙이기)

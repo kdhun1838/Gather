@@ -1,7 +1,7 @@
-import { takeLatest } from 'redux-saga/effects';
-import createRequestSaga from '../../lib/createRequestSaga';
-import * as authAPI from '../../lib/api/auth';
-import { LOGIN, SIGNUP } from './action';
+import { takeLatest } from "redux-saga/effects";
+import createRequestSaga from "../../lib/function/createRequestSaga";
+import * as authAPI from "../../lib/api/auth";
+import { LOGIN, SIGNUP } from "./action";
 
 const loginSaga = createRequestSaga(LOGIN, authAPI.Login);
 const registerSaga = createRequestSaga(SIGNUP, authAPI.Register);

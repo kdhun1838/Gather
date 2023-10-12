@@ -1,4 +1,4 @@
-import createRequestSaga from "../../lib/createRequestSaga";
+import createRequestSaga from "../../lib/function/createRequestSaga";
 import {
   GET_LIST,
   GET_POPULAR_LIST,
@@ -28,5 +28,5 @@ export function* registerSaga() {
   yield takeLatest(GET_POPULAR_LIST, getPopularListSaga);
   yield takeLatest(GET_FORM, getFormSaga);
   yield takeLatest(POST_CLOSE, postCloseSaga);
-  yield takeLatest(POST_CLOSE, postDeleteSaga);
+  yield takeLatest(POST_DELETE, postDeleteSaga);
 }

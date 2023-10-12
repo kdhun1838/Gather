@@ -16,6 +16,7 @@ const PostsBox = styled.div`
   flex-wrap: wrap;
   margin: 0 auto;
   padding: 0 20px;
+  justify-content: space-around; /* 중앙 정렬 */
 `;
 
 export const PostBox = styled.div`
@@ -194,15 +195,23 @@ const Home: React.FC<CommunityPropType> = ({
             );
           })}
       </PostsBox>
-      <Pagination
-        defaultCurrent={1}
-        total={posts && posts.length}
-        pageSize={itemsPerPage}
-        current={currentPage}
-        onChange={handlePageChange}
-      />
+      <Center>
+        <Pagination
+          defaultCurrent={1}
+          total={posts && posts.length}
+          pageSize={itemsPerPage}
+          current={currentPage}
+          onChange={handlePageChange}
+        />
+      </Center>
     </CommunityBox>
   );
 };
+
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`;
 
 export default Home;

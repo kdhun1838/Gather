@@ -67,9 +67,15 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 router.get(
   "/popularList",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("인기글 백입니다.");
+    const today = new Date();
+    today.setHours(today.getHours() + 9);
     try {
       const popularData = await models.registers.findAll({
+        where: {
+          period: {
+            [Op.gte]: today.toISOString().split("T")[0],
+          },
+        },
         order: [["favorite", "DESC"]],
         limit: 10,
       });
