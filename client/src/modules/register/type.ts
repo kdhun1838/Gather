@@ -7,6 +7,8 @@ import {
   unloadForm,
   initSort,
   getForm,
+  postClose,
+  postDelete,
 } from "./action";
 
 type FormType = {
@@ -71,4 +73,6 @@ export type RegisterAction =
   | ReturnType<typeof changeSort>
   | ReturnType<typeof changeDetailSort>
   | ReturnType<typeof getList>
-  | ReturnType<typeof getForm>;
+  | ReturnType<typeof getForm>
+  | ReturnType<typeof postClose>
+  | ReturnType<typeof postDelete>;

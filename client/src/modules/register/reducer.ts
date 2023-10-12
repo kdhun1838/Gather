@@ -9,6 +9,8 @@ import {
   POST_FORM,
   UNLOAD_FORM,
   GET_FORM,
+  POST_CLOSE,
+  POST_DELETE,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -152,6 +154,18 @@ const register = (
         formData: action.payload,
       };
     case `${GET_FORM}_FAILURE`:
+      return state;
+    case `${POST_CLOSE}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${POST_CLOSE}_FAILURE`:
+      return state;
+    case `${POST_DELETE}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${POST_DELETE}_FAILURE`:
       return state;
     default:
       return state;
