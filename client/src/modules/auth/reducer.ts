@@ -13,12 +13,9 @@ const initialState: AuthState = {
     name: '',
     nick: '',
     email: '',
-    tel: 0,
+    tel: '',
     age: 0,
     grade: '',
-    job: '',
-    career: '',
-    skill: '',
   },
   auth: null,
   authError: null,
@@ -56,7 +53,9 @@ function auth(state: AuthState = initialState, action: AuthAction): AuthState {
       return {
         ...state,
         authError: null,
-        auth: action.payload,
+        login: {
+          ...state.login,
+        },
       };
     case `${LOGIN}_FAILURE`:
       return {
@@ -67,7 +66,9 @@ function auth(state: AuthState = initialState, action: AuthAction): AuthState {
       return {
         ...state,
         authError: null,
-        auth: action.payload,
+        register: {
+          ...state.auth,
+        },
       };
     case `${SIGNUP}_FAILURE`:
       return {

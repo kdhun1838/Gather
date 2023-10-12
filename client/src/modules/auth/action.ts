@@ -33,54 +33,14 @@ export const initializeForm = (
   payload: form,
 });
 
-export const login = ({ id, password }: { id: string; password: string }) => ({
+export const login = (login: AuthState) => ({
   type: LOGIN,
   payload: {
-    id,
-    password,
+    login,
   },
 });
 
-export const signup = ({
-  id,
-  password,
-  passwordConfirm,
-  name,
-  nick,
-  email,
-  tel,
-  age,
-  grade,
-  job,
-  career,
-  skill,
-}: {
-  id: string;
-  password: string;
-  passwordConfirm: string;
-  name: string;
-  nick: string;
-  email: string;
-  tel: number;
-  age: number;
-  grade: string;
-  job: string;
-  career: string;
-  skill: string;
-}) => ({
+export const signup = (register: AuthState) => ({
   type: SIGNUP,
-  payload: {
-    id,
-    password,
-    passwordConfirm,
-    name,
-    nick,
-    email,
-    tel,
-    age,
-    grade,
-    job,
-    career,
-    skill,
-  },
+  payload: register,
 });

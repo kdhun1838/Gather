@@ -9,7 +9,7 @@ const RegisterForm = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const { form, auth, authError, user } = useSelector((state: RootState) => ({
-    form: state.auth.register,
+    form: state.auth,
     auth: state.auth.auth,
     authError: state.auth.authError,
     user: state.user.user,
@@ -38,9 +38,6 @@ const RegisterForm = () => {
       tel,
       age,
       grade,
-      job,
-      career,
-      skill,
     } = form;
 
     if (
@@ -54,9 +51,6 @@ const RegisterForm = () => {
         tel,
         age,
         grade,
-        job,
-        career,
-        skill,
       ].includes('')
     ) {
       setError('빈 칸을 모두 입력하세요.');
@@ -72,26 +66,11 @@ const RegisterForm = () => {
       );
       return;
     }
-    dispatch(
-      signup({
-        id,
-        password,
-        passwordConfirm,
-        name,
-        nick,
-        email,
-        tel,
-        age,
-        grade,
-        job,
-        career,
-        skill,
-      })
-    );
+    dispatch(signup(form));
   };
-
+  const initregister = form.register;
   useEffect(() => {
-    dispatch(initializeForm(form));
+    dispatch(initializeForm(initregister));
   }, [dispatch]);
 
   useEffect(() => {
@@ -119,10 +98,10 @@ const RegisterForm = () => {
   return (
     <AuthForm
       type="register"
-      form={form}
       onChange={onChange}
       onSubmit={onSubmit}
       error={error}
+      form={form}
     />
   );
 };

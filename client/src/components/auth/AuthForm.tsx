@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
+import { AuthState } from '../../modules/auth/type';
 
 // 스타일드 컴포넌트로 스타일링된 AuthFormBlock 정의
 const AuthFormBlock = styled.div`
@@ -62,10 +63,7 @@ interface textMapProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // 수정: key 인자 제거
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
-  form: {
-    id: string;
-    password: string;
-  };
+  form: AuthState;
 }
 
 const AuthForm: React.FC<textMapProps> = ({
@@ -85,7 +83,7 @@ const AuthForm: React.FC<textMapProps> = ({
           name="id"
           placeholder="아이디"
           onChange={onChange}
-          value={form.id}
+          value={type === 'register' ? form.register.id : form.login.id}
         />
         <StyledInput
           autoComplete="new-password"
@@ -93,7 +91,11 @@ const AuthForm: React.FC<textMapProps> = ({
           placeholder="비밀번호"
           type="password"
           onChange={onChange}
-          value={form.password}
+          value={
+            type === 'register'
+              ? form.register.password
+              : form.register.password
+          }
         />
         {type === 'register' && (
           <StyledInput
@@ -102,6 +104,7 @@ const AuthForm: React.FC<textMapProps> = ({
             placeholder="비밀번호 확인"
             type="password"
             onChange={onChange}
+            value={form.register.passwordConfirm}
           />
         )}
         {type === 'register' && (
@@ -110,6 +113,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="name"
             placeholder="이름"
             onChange={onChange}
+            value={form.register.name}
           />
         )}
         {type === 'register' && (
@@ -118,6 +122,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="nick"
             placeholder="닉네임"
             onChange={onChange}
+            value={form.register.nick}
           />
         )}
         {type === 'register' && (
@@ -126,6 +131,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="email"
             placeholder="E-mail"
             onChange={onChange}
+            value={form.register.email}
           />
         )}
         {type === 'register' && (
@@ -134,6 +140,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="tel"
             placeholder="전화번호"
             onChange={onChange}
+            value={form.register.tel}
           />
         )}
         {type === 'register' && (
@@ -142,6 +149,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="age"
             placeholder="나이"
             onChange={onChange}
+            value={form.register.age}
           />
         )}
         {type === 'register' && (
@@ -150,30 +158,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="grade"
             placeholder="성별"
             onChange={onChange}
-          />
-        )}
-        {type === 'register' && (
-          <StyledInput
-            autoComplete="job"
-            name="job"
-            placeholder="직무"
-            onChange={onChange}
-          />
-        )}
-        {type === 'register' && (
-          <StyledInput
-            autoComplete="career"
-            name="career"
-            placeholder="경력"
-            onChange={onChange}
-          />
-        )}
-        {type === 'register' && (
-          <StyledInput
-            autoComplete="skill"
-            name="skill"
-            placeholder="관심스택"
-            onChange={onChange}
+            value={form.register.grade}
           />
         )}
         {error && <ErrorMessage>에러 발생!</ErrorMessage>}

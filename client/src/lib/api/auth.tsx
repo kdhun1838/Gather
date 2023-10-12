@@ -1,32 +1,14 @@
 import client from './client';
 import { AxiosResponse } from 'axios';
-
-export const Login = ({
-  id,
-  password,
-}: {
-  id: string;
-  password: string;
-}): Promise<AxiosResponse> => {
-  console.log('loginform==============');
-  return client.post('/auth/login', { id, password });
+import { AuthState } from '../../modules/auth/type';
+export const Login = ({ login }: AuthState): Promise<AxiosResponse> => {
+  console.log('loginform==============', login);
+  return client.post('/auth/login', login);
 };
 
-export const Register = (auth: {
-  id: string;
-  password: string;
-  name: string;
-  nick: string;
-  email: string;
-  tel: number;
-  age: number;
-  grade: string;
-  job: string;
-  career: string;
-  skill: string;
-}): Promise<AxiosResponse> => {
-  console.log('signup=============>');
-  return client.post('/auth/signup', auth);
+export const Register = ({ register }: AuthState): Promise<AxiosResponse> => {
+  console.log('signup=============>', register);
+  return client.post('/auth/signup', register);
 };
 
 export const check = () => client.get('/auth/check');
