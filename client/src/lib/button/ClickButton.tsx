@@ -4,6 +4,7 @@ import styled from "styled-components";
 type ClickButtonProps = {
   img?: string;
   value: string;
+  isFilter: boolean;
 };
 
 const ClickButtonBox = styled.div`
@@ -31,15 +32,15 @@ const ClickButtonBox = styled.div`
   }
 `;
 
-const ClickButton: React.FC<ClickButtonProps> = ({ img, value }) => {
-  const [isClick, setIsClick] = useState<boolean>(false);
+const ClickButton: React.FC<ClickButtonProps> = ({ img, value, isFilter }) => {
+  const [checked, setChecked] = useState<boolean>(isFilter);
 
   const onClick = useCallback(() => {
-    setIsClick((prev) => !prev);
+    setChecked((prev) => !prev);
   }, []);
 
   return (
-    <ClickButtonBox onClick={onClick} className={isClick ? "check" : ""}>
+    <ClickButtonBox onClick={onClick} className={checked ? "check" : ""}>
       <span>{img}</span>
       {value}
     </ClickButtonBox>

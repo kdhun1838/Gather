@@ -156,10 +156,10 @@ const CommunitySearch: React.FC<CommunityPropType> = ({
 
         <SortTypeBox>
           <SortType>
-            <SearchButton type="reset" object={time} />
-            <SearchButton type="reset" object={view} />
-            <SearchButton type="reset" object={like} />
-            <ClickButton img="⭐" value="즐겨찾기" />
+            <SearchButton type="reset" object={time} isHome={false} />
+            <SearchButton type="reset" object={view} isHome={false} />
+            <SearchButton type="reset" object={like} isHome={false} />
+            <ClickButton img="⭐" value="즐겨찾기" isFilter={false} />
           </SortType>
           <div>
             <SearchInputBox>

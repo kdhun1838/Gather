@@ -29,7 +29,7 @@ const initialState: RegisterState = {
     sort: {
       mainSort: "전체",
       detailSort: {
-        time: "newest",
+        time: "",
         view: "",
         like: "",
       },
@@ -55,9 +55,9 @@ const register = (
         list: {
           ...state.list,
           sort: {
-            mainSort: "전체",
+            ...state.list.sort,
             detailSort: {
-              time: "newest",
+              time: "",
               view: "",
               like: "",
             },

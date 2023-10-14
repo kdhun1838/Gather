@@ -74,6 +74,7 @@ router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0,
                 period: {
                     [sequelize_1.Op.gte]: today.toISOString().split("T")[0],
                 },
+                state: 1,
             },
             order: [["favorite", "DESC"]],
             limit: 10,

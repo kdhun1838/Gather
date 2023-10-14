@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CommunityContainer from "../../container/community/CommunityContainer";
 import CommunitySearchContainer from "../../container/community/CommunitySearchContainer";

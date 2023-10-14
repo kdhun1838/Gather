@@ -26,7 +26,7 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
   const settings = {
     className: "center",
     centerMode: true,
-    infinite: true,
+    // infinite: true,
     centerPadding: "60px",
     slidesToShow: 5,
     // speed: 500,
@@ -117,13 +117,12 @@ const Item = styled.div`
   border: 2px solid rgb(209, 209, 209);
   background: rgb(255, 255, 255);
   cursor: pointer;
-  transition: transform 0.3s; /* transform 속성에 트랜지션 효과를 추가 */
-  z-index: 1;
+  transition: transform 0.3s;
+  margin: 1rem 0 1rem 0;
 
   &:hover {
-    /* background: orange; */
-    transform: scale(1.05); /* 호버 시 크기를 늘립니다. */
-    z-index: 1;
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
   }
 `;
 
@@ -203,9 +202,11 @@ const ButtonBlock = styled.div`
   justify-content: flex-end;
 `;
 const CustomSlider = styled(Slider)`
-  padding: 1rem 1rem 0 1rem;
+  /* padding: 1rem 0 0 1rem; */
+  display: flex;
+  justify-content: center;
   margin-bottom: 2rem;
-  max-width: 1800px;
+  max-width: 90%;
   min-width: 100px;
   /* height: 15rem; */
   .slick-next:before,
@@ -216,10 +217,16 @@ const CustomSlider = styled(Slider)`
   }
 
   .slick-list {
-    margin: 0 2rem 0 2rem;
+    margin: 0 6% 0 6%;
+    /* display: flex; */
   }
   .slick-slide {
     padding-left: 0.5rem;
+  }
+  .slick-slider {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 `;
 

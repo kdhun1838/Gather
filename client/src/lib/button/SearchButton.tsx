@@ -4,6 +4,7 @@ import { changeDeailType, initDetail } from "../../modules/community/action";
 import styled from "styled-components";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import { RootState } from "../../modules";
+import { initSort, changeDetailSort } from "../../modules/register/action";
 
 const ButtonBox = styled.div`
   -webkit-box-align: center;
@@ -19,7 +20,7 @@ const ButtonBox = styled.div`
   position: relative;
   transition: all 100ms ease 0s;
   box-sizing: border-box;
-  width: 125px;
+  width: 150px;
   height: 38px;
   background: white;
   border: 1px solid rgb(227, 227, 227);
@@ -93,20 +94,28 @@ type OptionProps = {
       [key: string]: string;
     };
   };
+  isHome: boolean;
 };
 
-const Option: React.FC<OptionProps> = ({ type, object }) => {
+const SearchButton: React.FC<OptionProps> = ({ type, object, isHome }) => {
   const dispatch = useDispatch();
   const [showOptionsBox, setShowOptionsBox] = useState<boolean>(false);
   const [buttonName, setButtonName] = useState<string>(object.name);
   const optionRef = useRef<HTMLDivElement | null>(null);
-  const detailSort = useSelector(
-    (state: RootState) => state.community.main.sort.detailSort
-  );
+  const { detailSort, detailHomeSort } = useSelector((state: RootState) => ({
+    detailSort: state.community.main.sort.detailSort,
+    detailHomeSort: state.register.list.sort.detailSort,
+  }));
 
-  const time: string = detailSort?.time || "";
-  const view: string = detailSort?.view || "";
-  const like: string = detailSort?.like || "";
+  const time: string = isHome
+    ? detailHomeSort?.time || ""
+    : detailSort?.time || "";
+  const view: string = isHome
+    ? detailHomeSort?.view || ""
+    : detailSort?.view || "";
+  const like: string = isHome
+    ? detailHomeSort?.like || ""
+    : detailSort?.like || "";
 
   const onClickShowOptionsBox = useCallback(() => {
     setShowOptionsBox(!showOptionsBox);
@@ -121,11 +130,17 @@ const Option: React.FC<OptionProps> = ({ type, object }) => {
   const onClickList = useCallback(
     (e: any, key: string) => {
       const content = e.target.textContent;
-      dispatch(initDetail());
-      dispatch(changeDeailType({ key: object.key, value: key }));
-      setButtonName(content);
+      if (!isHome) {
+        dispatch(initDetail());
+        dispatch(changeDeailType({ key: object.key, value: key }));
+        setButtonName(content);
+      } else {
+        dispatch(initSort());
+        dispatch(changeDetailSort({ key: object.key, value: key }));
+        setButtonName(content);
+      }
     },
-    [dispatch, object.key]
+    [dispatch, object.key, isHome]
   );
 
   const resetButton = useCallback(
@@ -196,4 +211,4 @@ const Option: React.FC<OptionProps> = ({ type, object }) => {
   );
 };
 
-export default Option;
+export default SearchButton;

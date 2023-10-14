@@ -1,12 +1,7 @@
 import React, { KeyboardEvent, MouseEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
-import {
-  changeSort,
-  getList,
-  initSort,
-  unloadForm,
-} from "../../modules/register/action";
+import { changeSort, getList } from "../../modules/register/action";
 import HomeSearch from "../../components/home/HomeSearch";
 
 const HomeSearchContainer = () => {

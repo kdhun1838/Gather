@@ -11,13 +11,13 @@ import {
 import { RootState } from "../../modules";
 
 const HomeContainer: React.FC = () => {
-  const { list, mainSort, detailSortName, search, load } = useSelector(
+  const { list, mainSort, detailSortName, search, loading } = useSelector(
     (state: RootState) => ({
       list: state.register.list.mainList,
       mainSort: state.register.list.sort.mainSort,
       detailSortName: state.register.list.sort.detailSort,
       search: state.register.list.sort.search,
-      load: state.loading,
+      loading: state.loading["register/GET_LIST"],
     })
   );
   const dispatch = useDispatch();
@@ -36,7 +36,6 @@ const HomeContainer: React.FC = () => {
   );
 
   React.useEffect(() => {
-    console.log("uuuuuuuuuuuuuuuuuuuuuuu");
     dispatch(unloadForm());
   }, [dispatch]);
 
@@ -44,7 +43,7 @@ const HomeContainer: React.FC = () => {
     <div>
       <Home
         posts={list}
-        load={load}
+        load={loading}
         onClickPost={onClickPost}
         onClickAddFavoritePost={onClickAddFavoritePost}
       />

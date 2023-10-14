@@ -75,6 +75,7 @@ router.get(
           period: {
             [Op.gte]: today.toISOString().split("T")[0],
           },
+          state: 1,
         },
         order: [["favorite", "DESC"]],
         limit: 10,

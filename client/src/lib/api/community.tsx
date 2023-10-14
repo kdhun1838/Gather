@@ -1,6 +1,6 @@
 import client from "./client";
 import { CommunityState, GetPostType } from "../../modules/community/type";
-import { AxiosHeaders, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 export const getCommunityPosts = (
   data: GetPostType

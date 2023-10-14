@@ -112,11 +112,6 @@ const HomeSearch: React.FC<HomeSearchType> = ({
   onChange,
   onKeyPress,
 }) => {
-  const viewOrLike = {
-    highest: "높은순",
-    lowest: "낮은순",
-  };
-
   const time: SearchType = {
     key: "time",
     name: "시간",
@@ -129,13 +124,19 @@ const HomeSearch: React.FC<HomeSearchType> = ({
   const view: SearchType = {
     key: "view",
     name: "조회수",
-    content: viewOrLike,
+    content: {
+      highest: "👀 높은순",
+      lowest: "👀 낮은순",
+    },
   };
 
   const like: SearchType = {
     key: "like",
     name: "좋아요수",
-    content: viewOrLike,
+    content: {
+      highest: "⭐ 높은순",
+      lowest: "⭐ 낮은순",
+    },
   };
 
   return (
@@ -159,10 +160,11 @@ const HomeSearch: React.FC<HomeSearchType> = ({
 
         <SortTypeBox>
           <SortType>
-            <SearchButton type="reset" object={time} />
-            <SearchButton type="reset" object={view} />
-            <SearchButton type="reset" object={like} />
-            <ClickButton img="⭐" value="즐겨찾기" />
+            <SearchButton type="reset" object={time} isHome={true} />
+            <SearchButton type="reset" object={view} isHome={true} />
+            <SearchButton type="reset" object={like} isHome={true} />
+            <ClickButton img="⭐" value="즐겨찾기" isFilter={false} />
+            <ClickButton img="" value="모집중만보기" isFilter={true} />
           </SortType>
           <div>
             <SearchInputBox>

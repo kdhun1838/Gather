@@ -12,17 +12,23 @@ const ViewContainer = () => {
   const postId = params.postId || "";
   const navigator = useNavigate();
 
-  const onClose = useCallback((postId:Number) => {
-    dispatch(postClose(postId));
-    alert("마감되었습니다.");
-    navigator("/")
-  }, [dispatch, postId]);
+  const onClose = useCallback(
+    (postId: Number) => {
+      dispatch(postClose(postId));
+      alert("마감되었습니다.");
+      navigator("/");
+    },
+    [dispatch, navigator]
+  );
 
-  const onDelete = useCallback((postId:Number) => {
-    dispatch(postDelete(postId));
-    alert("삭제되었습니다.");
-    navigator("/")
-  }, [dispatch, postId]);
+  const onDelete = useCallback(
+    (postId: Number) => {
+      dispatch(postDelete(postId));
+      alert("삭제되었습니다.");
+      navigator("/");
+    },
+    [dispatch, navigator]
+  );
 
   React.useEffect(() => {
     dispatch(getForm(Number(postId)));
@@ -30,7 +36,12 @@ const ViewContainer = () => {
 
   return (
     <div>
-      <View formData={formData} onClose={onClose} onDelete={onDelete} postId={Number(postId)}/>
+      <View
+        formData={formData}
+        onClose={onClose}
+        onDelete={onDelete}
+        postId={Number(postId)}
+      />
     </div>
   );
 };
