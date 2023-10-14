@@ -5,9 +5,10 @@ const ResponsiveBlock = styled.div<{ children: React.ReactNode }>`
   padding-right: 1rem;
   width: 1920px;
   margin: 0 auto;
+  background: #fff;
 
   @media (max-width: 1920px) {
-    width: 70%;
+    width: 100%;
   }
   @media (max-width: 1024px) {
     width: 850px;

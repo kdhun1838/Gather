@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import Responsive from "../../styled/Responsive";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { useLocation, useNavigate } from "react-router";
 import { Carousel } from "antd";
+import Responsive from "../../styled/Responsive";
+import { Link } from "react-router-dom";
 
 const items: TabsProps["items"] = [
   {
@@ -52,7 +53,9 @@ const Header = () => {
         <div>
           로고
           <div>
-            <button>로그인</button>
+            <button>
+              <Link to={"/login"}>로그인</Link>
+            </button>
           </div>
         </div>
         <span>

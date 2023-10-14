@@ -10,20 +10,22 @@ const PopularBox = styled(Responsive)`
   margin-bottom: 2rem;
 `;
 
-const TitleBox = styled.div`
+export const TitleBox = styled.div`
   display: flex;
+  margin: 2rem 0 2rem 0;
   -webkit-box-pack: justify;
   justify-content: space-between;
+  align-items: center;
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
   color: rgb(0, 0, 0);
   font-size: 26px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
   letter-spacing: -0.78px;
-  margin: 0px 0px 24px;
+  /* margin: 0px 0px 24px; */
 `;
 
 const PageButtonBox = styled.div`
@@ -53,7 +55,7 @@ const PopularPostsBox = styled.div`
   margin-left: 0px;
 `;
 
-const Post = styled.div`
+export const Post = styled.div`
   outline: none;
   width: 318px;
   margin: 0px 12px;

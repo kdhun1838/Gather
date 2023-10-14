@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-brands-svg-icons": "^6.4.2",
+    "@fortawesome/free-regular-svg-icons": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@redux-devtools/extension": "^3.2.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -11,19 +16,23 @@
     "@types/node": "^16.18.46",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
+    "@types/react-slick": "^0.23.10",
     "@types/redux-saga": "^0.10.5",
     "antd": "^5.9.4",
     "axios": "^1.5.0",
     "react": "^18.2.0",
+    "react-datepicker": "^4.20.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.2.3",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.0.8",
     "typesafe-actions": "^5.1.0",
     "typescript": "^4.9.5",
@@ -53,5 +62,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3003/"
+  "proxy": "http://localhost:3003/",
+  "devDependencies": {
+    "@types/react-datepicker": "^4.15.2"
+  }
 }

@@ -41,35 +41,27 @@ function usersModel(sequelize) {
             type: sequelize_1.DataTypes.INTEGER,
             allowNull: false,
         },
-        job: {
+        grade: {
             type: sequelize_1.DataTypes.STRING(100),
             allowNull: false,
         },
-        career: {
-            type: sequelize_1.DataTypes.INTEGER,
-            allowNull: false,
-        },
-        skill: {
-            type: sequelize_1.DataTypes.STRING(500),
-            allowNull: true,
-        },
     }, {
         sequelize,
-        modelName: "Users",
-        tableName: "users",
+        modelName: 'Users',
+        tableName: 'users',
         timestamps: true,
         indexes: [
             {
-                name: "PRIMARY",
+                name: 'PRIMARY',
                 unique: true,
-                using: "BTREE",
-                fields: [{ name: "userNum" }],
+                using: 'BTREE',
+                fields: [{ name: 'userNum' }],
             },
             {
-                name: "user_UN",
+                name: 'user_UN',
                 unique: true,
-                using: "BTREE",
-                fields: ["id", "nick", "email", "tel"],
+                using: 'BTREE',
+                fields: ['id', 'nick', 'email', 'tel'],
             },
         ],
     });

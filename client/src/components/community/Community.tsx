@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Responsive from "../../styled/Responsive";
+import { Pagination } from "antd";
 
 const CommunityBox = styled(Responsive)`
-  /* width: 100%;
-max-width: 1300px;
-padding: 0px 15px;
-margin: 100px auto 60px; */
   overflow: hidden;
   margin-bottom: 2rem;
 `;
@@ -21,7 +18,7 @@ const PostsBox = styled.div`
   padding: 0 20px;
 `;
 
-const PostBox = styled.div`
+export const PostBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -128,6 +125,7 @@ const Community: React.FC<CommunityPropType> = ({
   onClickAddFavoritePost,
 }) => {
   const loading = load["community/GET_POSTS"];
+  const [currentPage, setCurrentPage] = React.useState(1); // 현재 페이지 상태 추가
 
   const changeLanguege = (category: string) => {
     if (category === "후기") {
@@ -137,6 +135,11 @@ const Community: React.FC<CommunityPropType> = ({
     } else if (category === "잡담") {
       return "chat";
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    // 페이지 변경 이벤트 처리
+    setCurrentPage(page);
   };
 
   if (loading) {
@@ -152,37 +155,49 @@ const Community: React.FC<CommunityPropType> = ({
     );
   }
 
+  // 현재 페이지에 맞게 글 목록을 출력
+  const itemsPerPage = 12; // 한 페이지에 보여줄 아이템 수
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = posts && posts.slice(startIndex, endIndex);
+
   return (
     <CommunityBox>
       <PostsBox>
-        {posts?.map((post: any) => {
-          return (
-            <PostBox
-              key={post.communityNum}
-              onClick={() => onClickPost(post.communityNum)}
-            >
-              <CategoryTagBox>
-                <div className={changeLanguege(post.category)}>
-                  {post.category}
-                </div>
-              </CategoryTagBox>
-              <DateBox>
-                <p>작성일 |</p>
-
-                <p>{changeDate(post.createdAt)}</p>
-              </DateBox>
-
-              <TitleBox>{post.title}</TitleBox>
-              <div> 조회수{post.view}</div>
-              <FavoriteBox
-                onClick={() => onClickAddFavoritePost(post.communityNum)}
+        {currentPosts &&
+          currentPosts.map((post: any) => {
+            return (
+              <PostBox
+                key={post.communityNum}
+                onClick={() => onClickPost(post.communityNum)}
               >
-                ⭐
-              </FavoriteBox>
-            </PostBox>
-          );
-        })}
+                <CategoryTagBox>
+                  <div className={changeLanguege(post.category)}>
+                    {post.category}
+                  </div>
+                </CategoryTagBox>
+                <DateBox>
+                  <p>작성일 |</p>
+                  <p>{changeDate(post.createdAt)}</p>
+                </DateBox>
+                <TitleBox>{post.title}</TitleBox>
+                <div> 조회수{post.view}</div>
+                <FavoriteBox
+                  onClick={() => onClickAddFavoritePost(post.communityNum)}
+                >
+                  ⭐
+                </FavoriteBox>
+              </PostBox>
+            );
+          })}
       </PostsBox>
+      <Pagination
+        defaultCurrent={1}
+        total={posts && posts.length}
+        pageSize={itemsPerPage}
+        current={currentPage}
+        onChange={handlePageChange}
+      />
     </CommunityBox>
   );
 };

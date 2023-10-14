@@ -1,17 +1,78 @@
-import { changeForm, postForm, unloadForm } from "./action";
-export type RegisterState = {
-  form: {
-    title: string;
-    category: string;
-    personnel: number;
-    online: string;
-    position: string;
-    contact: string;
-    content: string;
-  };
-  register: any;
+import {
+  changeDetailSort,
+  changeForm,
+  changeSort,
+  getList,
+  postForm,
+  unloadForm,
+  initSort,
+  getForm,
+  postClose,
+  postDelete,
+} from "./action";
+
+type FormType = {
+  title: string;
+  category: string;
+  personnel: number;
+  online: string;
+  position: string;
+  contact: string;
+  period: string;
+  content: string;
 };
+
+type DetailType = {
+  time?: string;
+  view?: string;
+  like?: string;
+};
+
+type SortType = {
+  mainSort?: string;
+  detailSort?: DetailType;
+  search?: string;
+};
+
+type ListType = {
+  popularList: ListDetailType[];
+  sort: SortType;
+  mainList: any;
+};
+
+export type ListDetailType = {
+  registerNum: number;
+  title: string;
+  category: string;
+  personnel: number;
+  meeting: string;
+  position: string;
+  contact: string;
+  period: string;
+  content: string;
+  view: number;
+  favorite: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type RegisterState = {
+  form: FormType;
+  list: ListType;
+  register: any;
+  formData: any;
+};
+
+export type GetListType = SortType;
+
 export type RegisterAction =
   | ReturnType<typeof changeForm>
   | ReturnType<typeof postForm>
-  | ReturnType<typeof unloadForm>;
+  | ReturnType<typeof unloadForm>
+  | ReturnType<typeof initSort>
+  | ReturnType<typeof changeSort>
+  | ReturnType<typeof changeDetailSort>
+  | ReturnType<typeof getList>
+  | ReturnType<typeof getForm>
+  | ReturnType<typeof postClose>
+  | ReturnType<typeof postDelete>;

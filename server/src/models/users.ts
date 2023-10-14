@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface UsersAttributes {
   userNum: number;
@@ -9,13 +9,11 @@ export interface UsersAttributes {
   email: string;
   tel: string;
   age: number;
-  job: string;
-  career: number;
-  skill: string | null;
+  grade: string;
 }
 
 export interface UsersCreationAttributes
-  extends Omit<UsersAttributes, "userNum"> {}
+  extends Omit<UsersAttributes, 'userNum'> {}
 
 export class Users
   extends Model<UsersAttributes, UsersCreationAttributes>
@@ -29,9 +27,7 @@ export class Users
   public email!: string;
   public tel!: string;
   public age!: number;
-  public job!: string;
-  public career!: number;
-  public skill!: string | null;
+  public grade!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -74,36 +70,28 @@ export function usersModel(sequelize: Sequelize): typeof Users {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      job: {
+      grade: {
         type: DataTypes.STRING(100),
         allowNull: false,
-      },
-      career: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      skill: {
-        type: DataTypes.STRING(500),
-        allowNull: true,
       },
     },
     {
       sequelize,
-      modelName: "Users",
-      tableName: "users",
+      modelName: 'Users',
+      tableName: 'users',
       timestamps: true,
       indexes: [
         {
-          name: "PRIMARY",
+          name: 'PRIMARY',
           unique: true,
-          using: "BTREE",
-          fields: [{ name: "userNum" }],
+          using: 'BTREE',
+          fields: [{ name: 'userNum' }],
         },
         {
-          name: "user_UN",
+          name: 'user_UN',
           unique: true,
-          using: "BTREE",
-          fields: ["id", "nick", "email", "tel"],
+          using: 'BTREE',
+          fields: ['id', 'nick', 'email', 'tel'],
         },
       ],
     }

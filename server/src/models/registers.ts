@@ -10,6 +10,9 @@ export interface RegisterAttributes {
   contact: string;
   period: string;
   content: string;
+  view: number;
+  favorite: number;
+  state: number;
 }
 
 export interface RegisterCreationAttributes
@@ -28,6 +31,9 @@ export class Registers
   public contact!: string;
   public period!: string;
   public content!: string;
+  public view!: number;
+  public favorite!: number;
+  public state!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -71,8 +77,23 @@ export function registersModel(sequelize: Sequelize): typeof Registers {
         allowNull: true,
       },
       content: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(2000),
         allowNull: false,
+      },
+      view: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      favorite: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      state: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
       },
     },
     {
