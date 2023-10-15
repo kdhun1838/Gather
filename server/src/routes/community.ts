@@ -29,7 +29,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 
     const whereCondition: any = {};
     let orderCondition: any = [["createdAt", "DESC"]];
-
+    console.log("sss");
     // 큰틀의 정렬 값 where절에 넣기
     if (mainSort && mainSort !== "전체") {
       whereCondition.category = mainSort;

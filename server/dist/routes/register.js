@@ -16,12 +16,15 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
 const sequelize_1 = require("sequelize");
+const node_cron_1 = __importDefault(require("node-cron"));
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
         const data = req.query.data;
         const mainSort = data.mainSort || "";
         const search = data.search || "";
+        const recruit = data.recruit || "";
+        console.log("recruit=============", recruit);
         const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || "";
         const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || "";
         const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
@@ -36,6 +39,15 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 { content: { [sequelize_1.Op.like]: `%${search}` } },
             ];
         }
+        if (recruit === "true") {
+            where.state = 1;
+            console.log("true입니다");
+        }
+        else {
+            console.log("false입니다");
+            where.state < 3;
+        }
+        console.log("where-============", where);
         if (time === "newset") {
             order = [["createdAt", "DESC"]];
         }
@@ -159,4 +171,32 @@ router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
         res.status(500).json(e);
     }
 }));
+const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentDate = new Date();
+        const currentDateString = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0];
+        const expiredRegisters = yield models_1.default.registers.findAll({
+            where: {
+                state: {
+                    [sequelize_1.Op.ne]: 2,
+                },
+                period: {
+                    [sequelize_1.Op.lt]: currentDateString,
+                },
+            },
+        });
+        for (const register of expiredRegisters) {
+            yield register.update({ state: 2 });
+        }
+        console.log(`${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`);
+    }
+    catch (e) {
+        console.error("오류가 발생했습니다:", e);
+    }
+});
+node_cron_1.default.schedule("27 * * * *", () => {
+    updateExpiredStates();
+});
 exports.default = router;

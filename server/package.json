@@ -19,6 +19,7 @@
     "http-errors": "^2.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.0",
+    "node-cron": "^3.0.2",
     "path": "^0.12.7",
     "pug": "2.0.0-beta11",
     "sequelize": "^6.32.1",
@@ -29,6 +30,7 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
+    "@types/node-cron": "^3.0.9",
     "nodemon": "^3.0.1"
   }
 }

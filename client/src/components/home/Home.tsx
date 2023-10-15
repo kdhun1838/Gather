@@ -187,8 +187,14 @@ const Home: React.FC<CommunityPropType> = ({
                     <TitleBox>{post.title}</TitleBox>
                     <div>👀 조회수{post.view}</div>
                     <DateBox>
-                      <p>마감일 |</p>
-                      <p>{changeDate(post.period)}</p>
+                      {post.state === 1 ? (
+                        <>
+                          <p>마감일 |</p>
+                          <p>{changeDate(post.period)}</p>
+                        </>
+                      ) : (
+                        <DeadLine>마감되었습니다</DeadLine>
+                      )}
                     </DateBox>
                     <FavoriteBox
                       onClick={() => onClickAddFavoritePost(post.registerNum)}
@@ -218,6 +224,10 @@ const Center = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+`;
+
+const DeadLine = styled.div`
+  color: red;
 `;
 
 export default Home;

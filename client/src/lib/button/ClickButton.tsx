@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { changeRecruit } from "../../modules/register/action";
 
 type ClickButtonProps = {
   img?: string;
@@ -33,10 +35,14 @@ const ClickButtonBox = styled.div`
 `;
 
 const ClickButton: React.FC<ClickButtonProps> = ({ img, value, isFilter }) => {
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState<boolean>(isFilter);
 
   const onClick = useCallback(() => {
     setChecked((prev) => !prev);
+    if (isFilter) {
+      dispatch(changeRecruit());
+    }
   }, []);
 
   return (

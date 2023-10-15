@@ -8,6 +8,7 @@ export const INIT_SORT = "register/INIT_SORT" as const;
 export const CHANGE_SORT_FORM = "register/CHANGE_SORT_FORM" as const;
 export const CHANGE_DETAIL_SORT_FORM =
   "register/CHANGE_DETAIL_SORT_FORM" as const;
+export const CHANGE_RECRUIT = "register/CHANGE_RECRUIT" as const;
 export const [GET_LIST, GET_LIST_SUCCESS, GET_LIST_FAILURE] =
   createRequestActionTypes("register/GET_LIST");
 export const [
@@ -61,6 +62,11 @@ export const changeDetailSort = ({
     key,
     value,
   },
+});
+
+export const changeRecruit = () => ({
+  type: CHANGE_RECRUIT,
+  payload: {},
 });
 
 export const getList = (data: GetListType) => ({

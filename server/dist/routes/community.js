@@ -28,6 +28,7 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
         const whereCondition = {};
         let orderCondition = [["createdAt", "DESC"]];
+        console.log("sss");
         // 큰틀의 정렬 값 where절에 넣기
         if (mainSort && mainSort !== "전체") {
             whereCondition.category = mainSort;

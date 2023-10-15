@@ -11,6 +11,7 @@ import {
   GET_FORM,
   POST_CLOSE,
   POST_DELETE,
+  CHANGE_RECRUIT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -34,6 +35,7 @@ const initialState: RegisterState = {
         like: "",
       },
       search: "",
+      recruit: true,
     },
     mainList: null,
   },
@@ -106,6 +108,17 @@ const register = (
         };
       }
       return state;
+    case CHANGE_RECRUIT:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          sort: {
+            ...state.list.sort,
+            recruit: !state.list.sort.recruit,
+          },
+        },
+      };
     case `${POST_FORM}_SUCCESS`:
       return {
         ...state,

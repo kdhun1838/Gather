@@ -9,6 +9,7 @@ import {
   getForm,
   postClose,
   postDelete,
+  changeRecruit,
 } from "./action";
 
 type FormType = {
@@ -32,6 +33,7 @@ type SortType = {
   mainSort?: string;
   detailSort?: DetailType;
   search?: string;
+  recruit?: boolean;
 };
 
 type ListType = {
@@ -75,4 +77,5 @@ export type RegisterAction =
   | ReturnType<typeof getList>
   | ReturnType<typeof getForm>
   | ReturnType<typeof postClose>
-  | ReturnType<typeof postDelete>;
+  | ReturnType<typeof postDelete>
+  | ReturnType<typeof changeRecruit>;
