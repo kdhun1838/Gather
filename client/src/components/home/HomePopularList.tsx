@@ -28,31 +28,24 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
     centerMode: true,
     // infinite: true,
     centerPadding: "60px",
-    slidesToShow: 5,
+    slidesToShow: 4,
     // speed: 500,
-    responsive: [
-      {
-        breakpoint: 1920,
-        settings: {
-          slidesToShow: 5,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 1440,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 720,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 1920,
+    //     settings: {
+    //       slidesToShow: 5,
+    //       slidesToScroll: 1,
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 720,
+    //     settings: {
+    //       slidesToShow: 1,
+    //       slidesToScroll: 1,
+    //     },
+    //   },
+    // ],
   };
 
   return (
@@ -63,49 +56,58 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
           <Button onClick={() => props.goWrite()}>글쓰기</Button>
         </ButtonBlock>
       </TitleBox>
-      <CustomSlider {...settings}>
-        {props.popularList &&
-          props.popularList.map((item: ListDetailType, index) => (
-            <Item
-              key={index}
-              onClick={() => props.onClickPost(item.registerNum)}
-            >
-              <ItemFirst>
-                <Category>
-                  {item.category && item.category === "운동" && (
-                    <FontAwesomeIcon
-                      icon={faVolleyball}
-                      style={{ color: "blue" }}
-                    />
-                  )}
-                  {item.category && item.category === "스터디" && (
-                    <FontAwesomeIcon icon={faPencil} style={{ color: "red" }} />
-                  )}
-                  {item.category && item.category === "게임" && (
-                    <FontAwesomeIcon
-                      icon={faGamepad}
-                      style={{ color: "green" }}
-                    />
-                  )}
-                  {item.category && item.category === "기타" && (
-                    <FontAwesomeIcon
-                      icon={faEllipsis}
-                      style={{ color: "black" }}
-                    />
-                  )}
-                  <div>{item.category}</div>
-                </Category>
-                <Deadline>{deadline(item.period)}</Deadline>
-              </ItemFirst>
-              <ItemSecond>마감일 | {item.period}</ItemSecond>
-              <ItemThird>{item.title}</ItemThird>
-              <ItemFourth>👀 조회수 {item.view}회</ItemFourth>
-            </Item>
-          ))}
-      </CustomSlider>
+      <Center>
+        <CustomSlider {...settings}>
+          {props.popularList &&
+            props.popularList.map((item: ListDetailType, index) => (
+              <Item
+                key={index}
+                onClick={() => props.onClickPost(item.registerNum)}
+              >
+                <ItemFirst>
+                  <Category>
+                    {item.category && item.category === "운동" && (
+                      <FontAwesomeIcon
+                        icon={faVolleyball}
+                        style={{ color: "blue" }}
+                      />
+                    )}
+                    {item.category && item.category === "스터디" && (
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        style={{ color: "red" }}
+                      />
+                    )}
+                    {item.category && item.category === "게임" && (
+                      <FontAwesomeIcon
+                        icon={faGamepad}
+                        style={{ color: "green" }}
+                      />
+                    )}
+                    {item.category && item.category === "기타" && (
+                      <FontAwesomeIcon
+                        icon={faEllipsis}
+                        style={{ color: "black" }}
+                      />
+                    )}
+                    <div>{item.category}</div>
+                  </Category>
+                  <Deadline>{deadline(item.period)}</Deadline>
+                </ItemFirst>
+                <ItemSecond>마감일 | {item.period}</ItemSecond>
+                <ItemThird>{item.title}</ItemThird>
+                <ItemFourth>👀 조회수 {item.view}회</ItemFourth>
+              </Item>
+            ))}
+        </CustomSlider>
+      </Center>
     </Wrapper>
   );
 };
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Item = styled.div`
   color: black;

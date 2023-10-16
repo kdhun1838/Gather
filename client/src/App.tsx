@@ -8,6 +8,8 @@ import CommunityPostPage from "./pages/community/CommunityPostPage";
 import ViewPage from "./pages/Register/ViewPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import AdminHomePage from "./pages/admin/AdminHomePage";
+import AdminCarouselPage from "./pages/admin/AdminCarouselPage";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +23,9 @@ const App: React.FC = () => {
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/community/write" element={<CommunityWritePage />} />
         <Route path="/community/:postId" element={<CommunityPostPage />} />
+        {/* 관리자페이지 */}
+        <Route path="/admin" element={<AdminHomePage />} />
+        <Route path="/admin/carousel" element={<AdminCarouselPage />} />
       </Routes>
     </div>
   );

@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router";
 import { Carousel } from "antd";
 import Responsive from "../../styled/Responsive";
 import { Link } from "react-router-dom";
+import Logo from "../../images/Logo.png";
 
 const items: TabsProps["items"] = [
   {
@@ -51,7 +52,9 @@ const Header = () => {
     >
       <Wrapper>
         <div>
-          로고
+          <Link to="/">
+            <LogoBlock src={Logo} />
+          </Link>
           <div>
             <button>
               <Link to={"/login"}>로그인</Link>
@@ -111,10 +114,7 @@ const Wrapper = styled(Responsive)`
   }
 `;
 
-// const CustomTabs = styled(Tabs)`
-//   .ant-tabs-tab {
-//     margin-right: 40px;
-//   }
-// `;
-
+const LogoBlock = styled.img`
+  height: 5.5rem;
+`;
 export default Header;
