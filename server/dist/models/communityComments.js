@@ -2,66 +2,65 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.communityCommentsModel = exports.CommunityComments = void 0;
 const sequelize_1 = require("sequelize");
-class CommunityComments extends sequelize_1.Model {}
+class CommunityComments extends sequelize_1.Model {
+}
 exports.CommunityComments = CommunityComments;
 function communityCommentsModel(sequelize) {
-  CommunityComments.init(
-    {
-      commentNum: {
-        autoIncrement: true,
-        type: sequelize_1.DataTypes.BIGINT,
-        allowNull: false,
-        primaryKey: true,
-      },
-      content: {
-        type: sequelize_1.DataTypes.TEXT,
-        allowNull: false,
-      },
-      userId: {
-        type: sequelize_1.DataTypes.BIGINT,
-        allowNull: false,
-        references: {
-          model: "users",
-          key: "userNum",
+    CommunityComments.init({
+        commentNum: {
+            autoIncrement: true,
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            primaryKey: true,
         },
-      },
-      postId: {
-        type: sequelize_1.DataTypes.BIGINT,
-        allowNull: false,
-        references: {
-          model: "communitys",
-          key: "communityNum",
+        content: {
+            type: sequelize_1.DataTypes.TEXT,
+            allowNull: false,
         },
-      },
-      childComment: {
-        type: sequelize_1.DataTypes.BIGINT,
-        allowNull: true,
-      },
-    },
-    {
-      sequelize,
-      tableName: "communityComments",
-      timestamps: true,
-      indexes: [
-        {
-          name: "PRIMARY",
-          unique: true,
-          using: "BTREE",
-          fields: [{ name: "commentNum" }],
+        userId: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            references: {
+                model: "users",
+                key: "userNum",
+            },
         },
-        {
-          name: "userId",
-          using: "BTREE",
-          fields: [{ name: "userId" }],
+        postId: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            references: {
+                model: "communitys",
+                key: "communityNum",
+            },
         },
-        {
-          name: "postId",
-          using: "BTREE",
-          fields: [{ name: "postId" }],
+        childComment: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: true,
         },
-      ],
-    }
-  );
-  return CommunityComments;
+    }, {
+        sequelize,
+        modelName: "CommunityComments",
+        tableName: "communityComments",
+        timestamps: true,
+        indexes: [
+            {
+                name: "PRIMARY",
+                unique: true,
+                using: "BTREE",
+                fields: [{ name: "commentNum" }],
+            },
+            {
+                name: "userId",
+                using: "BTREE",
+                fields: [{ name: "userId" }],
+            },
+            {
+                name: "postId",
+                using: "BTREE",
+                fields: [{ name: "postId" }],
+            },
+        ],
+    });
+    return CommunityComments;
 }
 exports.communityCommentsModel = communityCommentsModel;

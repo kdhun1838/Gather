@@ -4,12 +4,14 @@ import { RootState } from '../../modules';
 import { changeField, initializeForm, signup } from '../../modules/auth/action';
 import AuthForm from '../../components/auth/AuthForm';
 import { check } from '../../modules/user/action';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { form, auth, authError, user } = useSelector((state: RootState) => ({
-    form: state.auth,
+    form: state.auth.register,
     auth: state.auth.auth,
     authError: state.auth.authError,
     user: state.user.user,
@@ -38,6 +40,8 @@ const RegisterForm = () => {
       tel,
       age,
       grade,
+      addr,
+      gender,
     } = form;
 
     if (
@@ -51,6 +55,8 @@ const RegisterForm = () => {
         tel,
         age,
         grade,
+        addr,
+        gender,
       ].includes('')
     ) {
       setError('빈 칸을 모두 입력하세요.');
@@ -58,7 +64,6 @@ const RegisterForm = () => {
     }
 
     if (password !== passwordConfirm) {
-      console.log('dfjksldfjklsdfj');
       setError('비밀번호가 일치하지 않습니다.');
       dispatch(changeField({ name: 'register', key: 'password', value: '' }));
       dispatch(
@@ -68,9 +73,8 @@ const RegisterForm = () => {
     }
     dispatch(signup(form));
   };
-  const initregister = form.register;
   useEffect(() => {
-    dispatch(initializeForm(initregister));
+    dispatch(initializeForm(form));
   }, [dispatch]);
 
   useEffect(() => {
@@ -79,6 +83,8 @@ const RegisterForm = () => {
         setError('이미 존재하는 계정명입니다.');
         return;
       }
+      console.log('회원가입 오류');
+      console.log(authError);
       setError('회원가입 실패');
     }
     if (auth) {
@@ -90,10 +96,16 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (user) {
+      navigate('/');
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.log('localStorage is not working');
+      }
       console.log('check API 성공');
       console.log(user);
     }
-  }, [user]);
+  }, [navigate, user]);
 
   return (
     <AuthForm

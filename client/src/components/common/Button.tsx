@@ -2,7 +2,6 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import palette from '../../lib/styles/palette';
-import { useNavigate } from 'react-router-dom';
 
 interface ButtonProps {
   to?: string;
@@ -24,6 +23,7 @@ const buttonStyle = css<ButtonProps>`
   outline: none;
   cursor: pointer;
   height: 100%;
+  transition: background 0.3s; // hover 효과에 transition 추가
 
   background: ${palette.gray[8]};
   &:hover {
@@ -56,24 +56,20 @@ const buttonStyle = css<ButtonProps>`
 `;
 
 const StyledButton = styled.button<ButtonProps>`
-  ${(props) => buttonStyle}
+  ${buttonStyle}
 `;
 
 const StyledLink = styled(Link)<ButtonProps>`
-  ${(props) => buttonStyle}
+  ${buttonStyle}
 `;
 
-const Button: React.FC<ButtonProps> = ({ to, ...rest }) => {
-  const navigate = useNavigate();
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (to) {
-      navigate(to);
-    }
-    if (rest.onClick) {
-      rest.onClick(e);
-    }
-  };
-  return <StyledButton {...rest} onClick={onClick} />;
+const Button: React.FC<ButtonProps> = (props) => {
+  if (props.to) {
+    const { cyan, ...rest } = props; // cyan 속성을 분리
+    return <StyledLink {...rest} />;
+  } else {
+    return <StyledButton {...props} />;
+  }
 };
 
 export default Button;

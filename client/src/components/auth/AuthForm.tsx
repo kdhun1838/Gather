@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
-import { AuthState } from '../../modules/auth/type';
+import { AuthState, LoginState } from '../../modules/auth/type';
 
 // 스타일드 컴포넌트로 스타일링된 AuthFormBlock 정의
 const AuthFormBlock = styled.div`
@@ -63,7 +63,7 @@ interface textMapProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // 수정: key 인자 제거
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
-  form: AuthState;
+  form: AuthState | LoginState;
 }
 
 const AuthForm: React.FC<textMapProps> = ({
@@ -83,7 +83,7 @@ const AuthForm: React.FC<textMapProps> = ({
           name="id"
           placeholder="아이디"
           onChange={onChange}
-          value={type === 'register' ? form.register.id : form.login.id}
+          // value={type === 'register' ? form.register.id : form.login.id}
         />
         <StyledInput
           autoComplete="new-password"
@@ -91,11 +91,9 @@ const AuthForm: React.FC<textMapProps> = ({
           placeholder="비밀번호"
           type="password"
           onChange={onChange}
-          value={
-            type === 'register'
-              ? form.register.password
-              : form.register.password
-          }
+          // value={
+          //   type === 'register' ? form.register.password : form.login.password
+          // }
         />
         {type === 'register' && (
           <StyledInput
@@ -104,7 +102,7 @@ const AuthForm: React.FC<textMapProps> = ({
             placeholder="비밀번호 확인"
             type="password"
             onChange={onChange}
-            value={form.register.passwordConfirm}
+            // value={form.register.passwordConfirm}
           />
         )}
         {type === 'register' && (
@@ -113,7 +111,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="name"
             placeholder="이름"
             onChange={onChange}
-            value={form.register.name}
+            // value={form.register.name}
           />
         )}
         {type === 'register' && (
@@ -122,7 +120,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="nick"
             placeholder="닉네임"
             onChange={onChange}
-            value={form.register.nick}
+            // value={form.register.nick}
           />
         )}
         {type === 'register' && (
@@ -131,7 +129,7 @@ const AuthForm: React.FC<textMapProps> = ({
             name="email"
             placeholder="E-mail"
             onChange={onChange}
-            value={form.register.email}
+            // value={form.register.email}
           />
         )}
         {type === 'register' && (
@@ -140,28 +138,46 @@ const AuthForm: React.FC<textMapProps> = ({
             name="tel"
             placeholder="전화번호"
             onChange={onChange}
-            value={form.register.tel}
+            // value={form.register.tel}
           />
         )}
         {type === 'register' && (
           <StyledInput
             autoComplete="age"
             name="age"
-            placeholder="나이"
+            placeholder="생년월일"
             onChange={onChange}
-            value={form.register.age}
+            // value={form.register.age}
           />
         )}
         {type === 'register' && (
           <StyledInput
             autoComplete="grade"
             name="grade"
-            placeholder="성별"
+            placeholder="학점"
             onChange={onChange}
-            value={form.register.grade}
+            // value={form.register.grade}
           />
         )}
-        {error && <ErrorMessage>에러 발생!</ErrorMessage>}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="addr"
+            name="addr"
+            placeholder="주소"
+            onChange={onChange}
+            // value={form.register.grade}
+          />
+        )}
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="gender"
+            name="gender"
+            placeholder="성별"
+            onChange={onChange}
+            // value={form.register.grade}
+          />
+        )}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <ButtonWithMarginTop>{text}</ButtonWithMarginTop>
       </form>
       <Footer>

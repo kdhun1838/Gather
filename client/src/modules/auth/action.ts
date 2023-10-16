@@ -1,5 +1,5 @@
 import { createRequestActionTypes } from '../../lib/createRequestSaga';
-import { AuthState } from './type';
+import { AuthState, LoginState, registerState } from './type';
 
 export const CHANGE_FIELD = 'auth/CHANGE_FIELD' as const;
 export const INITIALIZE_FORM = 'auth/INITIALIZE_FORM' as const;
@@ -33,14 +33,14 @@ export const initializeForm = (
   payload: form,
 });
 
-export const login = (login: AuthState) => ({
+export const login = (login: LoginState) => ({
   type: LOGIN,
   payload: {
     login,
   },
 });
 
-export const signup = (register: AuthState) => ({
+export const signup = (register: registerState) => ({
   type: SIGNUP,
   payload: register,
 });

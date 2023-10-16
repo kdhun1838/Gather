@@ -11,6 +11,8 @@ export interface UsersAttributes {
   tel: string;
   age: number;
   grade: string;
+  addr: string;
+  gender: string;
 }
 
 export interface UsersCreationAttributes
@@ -29,6 +31,8 @@ export class Users
   public tel!: string;
   public age!: number;
   public grade!: string;
+  public addr!: string;
+  public gender!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -75,6 +79,14 @@ export function usersModel(sequelize: Sequelize): typeof Users {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
+      addr: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      gender: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
     },
     {
       sequelize,
@@ -92,12 +104,19 @@ export function usersModel(sequelize: Sequelize): typeof Users {
           name: "user_UN",
           unique: true,
           using: "BTREE",
-          fields: [
-            { name: "id" },
-            { name: "nick" },
-            { name: "email" },
-            { name: "tel" },
-          ],
+          fields: ["id"],
+        },
+        {
+          name: "user_UN1",
+          unique: true,
+          using: "BTREE",
+          fields: ["nick"],
+        },
+        {
+          name: "user_UN2",
+          unique: true,
+          using: "BTREE",
+          fields: ["email"],
         },
       ],
     }
