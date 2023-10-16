@@ -1,4 +1,13 @@
-import { DataTypes, HasManyAddAssociationMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, Model, Sequelize } from "sequelize";
+import {
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  Model,
+  Sequelize,
+} from "sequelize";
 import { Registers } from "./registers";
 
 interface CommentAttributes {
@@ -62,6 +71,3 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
 
   return RegisterComments;
 }
-
-Registers.hasMany(RegisterComments, { foreignKey: "registerNum" });
-RegisterComments.belongsTo(Registers, { foreignKey: "registerNum" });

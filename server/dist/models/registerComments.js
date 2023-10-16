@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentsModel = exports.RegisterComments = void 0;
 const sequelize_1 = require("sequelize");
-const registers_1 = require("./registers");
 class RegisterComments extends sequelize_1.Model {
 }
 exports.RegisterComments = RegisterComments;
@@ -41,5 +40,3 @@ function CommentsModel(sequelize) {
     return RegisterComments;
 }
 exports.CommentsModel = CommentsModel;
-registers_1.Registers.hasMany(RegisterComments, { foreignKey: "registerNum" });
-RegisterComments.belongsTo(registers_1.Registers, { foreignKey: "registerNum" });
