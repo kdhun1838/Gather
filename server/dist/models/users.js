@@ -45,6 +45,14 @@ function usersModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(100),
             allowNull: false,
         },
+        addr: {
+            type: sequelize_1.DataTypes.STRING(100),
+            allowNull: false,
+        },
+        gender: {
+            type: sequelize_1.DataTypes.STRING(100),
+            allowNull: false,
+        },
     }, {
         sequelize,
         modelName: 'Users',
@@ -61,7 +69,19 @@ function usersModel(sequelize) {
                 name: 'user_UN',
                 unique: true,
                 using: 'BTREE',
-                fields: ['id', 'nick', 'email', 'tel'],
+                fields: ['id'],
+            },
+            {
+                name: 'user_UN1',
+                unique: true,
+                using: 'BTREE',
+                fields: ['nick'],
+            },
+            {
+                name: 'user_UN2',
+                unique: true,
+                using: 'BTREE',
+                fields: ['email'],
             },
         ],
     });

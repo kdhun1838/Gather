@@ -1,33 +1,41 @@
-import React from "react";
-import styled from "styled-components";
-import { ConfigProvider, Tabs } from "antd";
-import type { TabsProps } from "antd";
-import { useLocation, useNavigate } from "react-router";
-import { Carousel } from "antd";
-import Responsive from "../../styled/Responsive";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { ConfigProvider, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { useLocation, useNavigate } from 'react-router';
+import { Carousel } from 'antd';
+import Responsive from '../../styled/Responsive';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from './Button';
+import { logout } from '../../modules/user/action';
 
-const items: TabsProps["items"] = [
+const items: TabsProps['items'] = [
   {
-    key: "/",
-    label: "모임게시판",
+    key: '/',
+    label: '모임게시판',
   },
   {
-    key: "/community",
-    label: "커뮤니티",
+    key: '/community',
+    label: '커뮤니티',
   },
 ];
 const contentStyle: React.CSSProperties = {
-  height: "320px",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "orange",
+  height: '320px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: 'orange',
 };
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector(({ user }) => ({ user: user.user }));
+  const onLogout = () => {
+    dispatch(logout(user));
+  };
   const [currentLocation, setCurrentLocation] = React.useState<string>(
     location.pathname
   );
@@ -40,10 +48,10 @@ const Header = () => {
       theme={{
         components: {
           Tabs: {
-            inkBarColor: "orange",
-            itemSelectedColor: "orange",
-            itemHoverColor: "orange",
-            horizontalItemMargin: "32222px",
+            inkBarColor: 'orange',
+            itemSelectedColor: 'orange',
+            itemHoverColor: 'orange',
+            horizontalItemMargin: '32222px',
             // cardPadding: "32",
           },
         },
@@ -53,9 +61,16 @@ const Header = () => {
         <div>
           로고
           <div>
-            <button>
-              <Link to={"/login"}>로그인</Link>
-            </button>
+            {user ? (
+              <div className="right">
+                <UserInfo>{user.id}</UserInfo>
+                <Button onClick={onLogout}>로그아웃</Button>
+              </div>
+            ) : (
+              <div className="right">
+                <Button to="/login">로그인</Button>
+              </div>
+            )}
           </div>
         </div>
         <span>
@@ -94,6 +109,10 @@ const Wrapper = styled(Responsive)`
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid orange;
+    .right {
+      display: flex;
+      text-align: center;
+    }
     > div > button {
       outline: none;
       border: none;
@@ -109,6 +128,11 @@ const Wrapper = styled(Responsive)`
     justify-content: center;
     align-items: center;
   }
+`;
+
+const UserInfo = styled.div`
+  font-weight: 800;
+  margin-right: 1rem;
 `;
 
 // const CustomTabs = styled(Tabs)`

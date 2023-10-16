@@ -14,12 +14,12 @@ export type AuthState = {
   [key: string]: any;
 };
 
-type LoginState = {
+export type LoginState = {
   id: string;
   password: string;
 };
 
-type registerState = {
+export type registerState = {
   id: string;
   password: string;
   passwordConfirm: string;
@@ -29,4 +29,8 @@ type registerState = {
   tel: string;
   age: number;
   grade: string;
+  addr: string;
+  gender: string;
 };
+
+type authState = {};

@@ -3,14 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
 import { changeField, initializeForm, login } from '../../modules/auth/action';
 import AuthForm from '../../components/auth/AuthForm';
-import { check } from '../../modules/user/action';
+import { check, tempSetUser } from '../../modules/user/action';
 import { createGlobalStyle } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { form, auth, authError, user } = useSelector((state: RootState) => ({
-    form: state.auth,
+    form: state.auth.login,
     auth: state.auth.auth,
     authError: state.auth.authError,
     user: state.user.user,
@@ -29,13 +31,14 @@ const LoginForm = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('ddddddddddd', form);
+    const logininfo = form;
+    console.log('ddddddddddd', logininfo);
     dispatch(login(form));
     // 이 부분에서 로그인 처리를 수행할 수 있습니다.
   };
-  const initlogin = form.login;
+
   useEffect(() => {
-    dispatch(initializeForm(initlogin));
+    dispatch(initializeForm(form));
   }, [dispatch]);
 
   useEffect(() => {
@@ -48,8 +51,20 @@ const LoginForm = () => {
     if (auth) {
       console.log('로그인 성공');
       dispatch(check(user));
+      dispatch(tempSetUser(auth));
     }
   }, [auth, authError, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.log('localStorage is not working');
+      }
+    }
+  }, [navigate, user]);
 
   return (
     <AuthForm
