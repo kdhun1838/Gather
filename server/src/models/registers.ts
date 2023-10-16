@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
+import { RegisterComments } from "./registerComments";
 
 export interface RegisterAttributes {
   registerNum: number;
@@ -111,6 +112,8 @@ export function registersModel(sequelize: Sequelize): typeof Registers {
       ],
     }
   );
-
+  
+  
   return Registers;
 }
+

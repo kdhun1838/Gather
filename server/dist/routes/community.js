@@ -95,7 +95,25 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
             });
             const getComment = yield models_1.default.communityComments.findAll({
                 where: { postId },
+                nest: true,
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
+                // attributes: [
+                //   "commentNum",
+                //   "content",
+                //   "userId",
+                //   "postId",
+                //   "createdAt",
+                //   "updatedAt",
+                //   "nick":"User.nick",
+                // ],
             });
+            console.log("getComment===========", getComment);
             if (getPost) {
                 yield getPost.increment("view", { by: 1 });
                 // 모델 이름을 일관되게 사용합니다 (community)

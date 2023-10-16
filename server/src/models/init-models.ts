@@ -1,16 +1,24 @@
-import { Sequelize } from "sequelize";
-import { boardsModel } from "./boards"; // 소문자 모델명 사용
-import { usersModel } from "./users"; // 소문자 모델명 사용
+import { Sequelize, DataTypes } from "sequelize";
+import { boardsModel } from "./boards";
+import { usersModel } from "./users";
 import { registersModel } from "./registers";
 import { communitysModel } from "./communitys";
+import { CommentsModel } from "./registerComments";
 import { communityCommentsModel } from "./communityComments";
 
 function initModels(sequelize: Sequelize) {
-  const boards = boardsModel(sequelize); // 소문자 모델명 사용
-  const users = usersModel(sequelize); // 소문자 모델명 사용
+  const boards = boardsModel(sequelize);
+  const users = usersModel(sequelize);
   const registers = registersModel(sequelize);
   const communitys = communitysModel(sequelize);
   const communityComments = communityCommentsModel(sequelize);
+  const registerComments = CommentsModel(sequelize);
+
+  registers.hasMany(registerComments, { foreignKey: "registerNum" });
+  registerComments.belongsTo(registers, { foreignKey: "registerNum" });
+
+  users.hasMany(communityComments, { foreignKey: "userId" });
+  communityComments.belongsTo(users, { foreignKey: "userId" });
 
   return {
     boards,
@@ -18,6 +26,7 @@ function initModels(sequelize: Sequelize) {
     registers,
     communitys,
     communityComments,
+    registerComments,
   };
 }
 

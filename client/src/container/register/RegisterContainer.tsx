@@ -43,6 +43,11 @@ const RegisterContainer = () => {
       setIsPost(true);
     }
   };
+
+  const onPageBack = () => {
+    navigate(-1);
+  }
+
   const onCancle = () => {
     setIsPost(false);
   };
@@ -67,6 +72,7 @@ const RegisterContainer = () => {
       <Register
         onChangeForm={onChangeForm}
         onPostForm={onPostForm}
+        onPageBack={onPageBack}
         onIsPost={onIsPost}
         onCancle={onCancle}
         isPost={isPost}

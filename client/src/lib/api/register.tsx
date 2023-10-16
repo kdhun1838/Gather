@@ -20,11 +20,14 @@ export const getForm = (postId: Number): Promise<AxiosResponse> => {
 };
 
 export const postClose = (postId: Number): Promise<AxiosResponse> => {
-  console.log(postId);
   return client.post(`/register/close/${postId}`, postId);
 };
 
 export const postDelete = (postId: Number): Promise<AxiosResponse> => {
-  console.log(postId);
   return client.post(`/register/delete/${postId}`, postId);
 };
+
+export const postComment = ({ comment, postId }: { comment: RegisterState; postId: number }): Promise<AxiosResponse> => {
+  console.log("asdfasfsafsadf", comment, postId)
+  return client.post(`/register/postComment/${postId}`, { comment, postId });
+}

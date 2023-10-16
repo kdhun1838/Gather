@@ -107,8 +107,16 @@ router.get(
 
         const getComment = await models.communityComments.findAll({
           where: { postId },
+          nest: true,
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
-
+        console.log("getComment===========", getComment);
         if (getPost) {
           await getPost.increment("view", { by: 1 });
 

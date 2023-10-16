@@ -1,29 +1,45 @@
 import { GetListType, RegisterState } from "./type";
 import { createRequestActionTypes } from "../../lib/createRequestSaga";
 
+// 액션타입
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
+
 export const CHANGE_FORM = "register/CHANGE_FORM" as const;
 
 export const INIT_SORT = "register/INIT_SORT" as const;
+
 export const CHANGE_SORT_FORM = "register/CHANGE_SORT_FORM" as const;
+
 export const CHANGE_DETAIL_SORT_FORM =
   "register/CHANGE_DETAIL_SORT_FORM" as const;
+
 export const [GET_LIST, GET_LIST_SUCCESS, GET_LIST_FAILURE] =
   createRequestActionTypes("register/GET_LIST");
+
 export const [
   GET_POPULAR_LIST,
   GET_POPULAR_LIST_SUCCESS,
   GET_POPULAR_LIST_FAILURE,
 ] = createRequestActionTypes("register/GET_POPULAR_LIST");
+
 export const [POST_FORM, POST_FORM_SUCCESS, POST_FORM_FAILURE] =
   createRequestActionTypes("register/POST_FORM" as const);
+
 export const [GET_FORM, GET_FORM_SUCCESS, GET_FORM_FAILURE] =
   createRequestActionTypes("register/GET_FORM" as const);
+
 export const [POST_CLOSE, POST_CLOSE_SUCCESS, POST_CLOSE_FAILURE] =
   createRequestActionTypes("register/POST_CLOSE" as const);
+
 export const [POST_DELETE, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] =
   createRequestActionTypes("register/POST_DELETE" as const);
 
+export const CHANGE_COMMENT = "register/CHANGE_COMMENT" as const;
+
+export const [POST_COMMENT, POST_COMMENT_SUCCESS, POST_COMMENT_FAILURE] =
+  createRequestActionTypes("register/POST_COMMENT" as const);
+
+// 디스패치
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
   payload: {},
@@ -82,23 +98,42 @@ export const postForm = (form: RegisterState) => ({
   },
 });
 
-export const getForm = (postId: Number) => ({
+export const getForm = (postId: number) => ({
   type: GET_FORM,
   payload: {
     postId,
   },
 });
 
-export const postClose = (postId: Number) => ({
+export const postClose = (postId: number) => ({
   type: POST_CLOSE,
   payload: {
     postId,
   },
 });
 
-export const postDelete = (postId: Number) => ({
-  type: POST_CLOSE,
+export const postDelete = (postId: number) => ({
+  type: POST_DELETE,
   payload: {
+    postId,
+  },
+});
+
+export const changeComment = ({ key, value }: { key: string; value: string }) => ({
+  type: CHANGE_COMMENT,
+  payload: {
+    key,
+    value,
+  },
+});
+
+export const postComment = (
+  comment: string,
+  postId: number,
+) => ({
+  type: POST_COMMENT,
+  payload: {
+    comment,
     postId,
   },
 });
