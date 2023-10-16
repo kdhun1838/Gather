@@ -34,11 +34,6 @@ function communitysModel(sequelize) {
             defaultValue: 0,
             allowNull: true,
         },
-        Favorite: {
-            type: sequelize_1.DataTypes.BOOLEAN,
-            defaultValue: false,
-            allowNull: false,
-        },
     }, {
         sequelize,
         modelName: "Communitys",

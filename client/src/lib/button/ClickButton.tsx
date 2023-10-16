@@ -43,7 +43,7 @@ const ClickButton: React.FC<ClickButtonProps> = ({ img, value, isFilter }) => {
     if (isFilter) {
       dispatch(changeRecruit());
     }
-  }, []);
+  }, [dispatch, isFilter]);
 
   return (
     <ClickButtonBox onClick={onClick} className={checked ? "check" : ""}>
