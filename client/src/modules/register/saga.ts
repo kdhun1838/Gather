@@ -6,6 +6,7 @@ import {
   GET_FORM,
   POST_CLOSE,
   POST_DELETE,
+  POST_COMMENT,
 } from "./action";
 import * as registerAPI from "../../lib/api/register";
 import { takeLatest } from "redux-saga/effects";
@@ -22,11 +23,14 @@ const getPopularListSaga = createRequestSaga(
   registerAPI.getPopularList
 );
 
+const postCommentSaga = createRequestSaga(POST_COMMENT, registerAPI.postComment);
+
 export function* registerSaga() {
   yield takeLatest(POST_FORM, postFormSaga);
   yield takeLatest(GET_LIST, getListSaga);
   yield takeLatest(GET_POPULAR_LIST, getPopularListSaga);
   yield takeLatest(GET_FORM, getFormSaga);
   yield takeLatest(POST_CLOSE, postCloseSaga);
-  yield takeLatest(POST_CLOSE, postDeleteSaga);
+  yield takeLatest(POST_DELETE, postDeleteSaga);
+  yield takeLatest(POST_COMMENT, postCommentSaga);
 }

@@ -141,6 +141,7 @@ const ModalWrap = styled.div`
 type RegisterProps = {
   onChangeForm: (data: { key: string; value: string | number }) => void;
   onPostForm: (form: RegisterState) => void;
+  onPageBack: () => void;
   onIsPost: (e: FormEvent) => void;
   onCancle: () => void;
   isPost: boolean;
@@ -152,6 +153,7 @@ const personner = Array.from({ length: 10 }, (_, index) => index + 1);
 const Register: React.FC<RegisterProps> = ({
   onChangeForm,
   onPostForm,
+  onPageBack,
   onIsPost,
   onCancle,
   isPost,
@@ -273,7 +275,7 @@ const Register: React.FC<RegisterProps> = ({
         </OptionForm>
         <ButtonForm>
           <button onClick={(e) => onIsPost(e)}>등록</button>
-          <button>취소</button>
+          <button onClick={() => onPageBack()}>취소</button>
         </ButtonForm>
       </StyleForm>
       {isPost === true && (

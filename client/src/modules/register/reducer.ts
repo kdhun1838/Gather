@@ -11,6 +11,8 @@ import {
   GET_FORM,
   POST_CLOSE,
   POST_DELETE,
+  CHANGE_COMMENT,
+  POST_COMMENT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -39,6 +41,9 @@ const initialState: RegisterState = {
   },
   register: null,
   formData: {},
+  registerComment: {
+    comment: "",
+  },
 };
 
 const register = (
@@ -166,6 +171,23 @@ const register = (
         ...state,
       };
     case `${POST_DELETE}_FAILURE`:
+      return state;
+    case CHANGE_COMMENT:
+      if ("key" in action.payload && "value" in action.payload) {
+        return {
+          ...state,
+          registerComment: {
+            ...state.registerComment,
+            [action.payload.key]: action.payload.value,
+          },
+        };
+      };
+      return state;
+    case `${POST_COMMENT}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${POST_COMMENT}_FAILURE`:
       return state;
     default:
       return state;

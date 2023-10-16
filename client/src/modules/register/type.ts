@@ -9,6 +9,8 @@ import {
   getForm,
   postClose,
   postDelete,
+  changeComment,
+  postComment,
 } from "./action";
 
 type FormType = {
@@ -56,11 +58,16 @@ export type ListDetailType = {
   updatedAt: Date;
 };
 
+export type CommentType = {
+  comment: string;
+}
+
 export type RegisterState = {
   form: FormType;
   list: ListType;
   register: any;
   formData: any;
+  registerComment: CommentType;
 };
 
 export type GetListType = SortType;
@@ -75,4 +82,6 @@ export type RegisterAction =
   | ReturnType<typeof getList>
   | ReturnType<typeof getForm>
   | ReturnType<typeof postClose>
-  | ReturnType<typeof postDelete>;
+  | ReturnType<typeof postDelete>
+  | ReturnType<typeof changeComment>
+  | ReturnType<typeof postComment>

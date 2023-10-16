@@ -1,9 +1,9 @@
-import { Content } from "antd/es/layout/layout";
-import React from "react";
+import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import HeaderContainer from "../../container/common/HeaderContainer";
-import { getForm } from "../../modules/register/action";
+import CommentContainer from "../../container/register/CommentContainer";
+import { changeComment } from "../../modules/register/action";
 import { RegisterState } from "../../modules/register/type";
 
 const PostWrap = styled.div`
@@ -53,6 +53,25 @@ const Section = styled.div`
   .content {
     word-wrap: break-word;
   }
+  textarea {
+    padding: 15px;
+    width: 100%;
+    resize: none;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 18px;
+  }
+  .commentBtn {
+    margin: 10px 0 30px;
+    button {
+      float: right;
+      padding: 5px 10px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
 `;
 
 const BtnSection = styled.div`
@@ -73,9 +92,9 @@ const BtnSection = styled.div`
 `;
 type ViewProps = {
   formData: RegisterState;
-  onClose: (postId: Number) => void;
-  onDelete: (postId: Number) => void;
-  postId: Number;
+  onClose: (postId: number, e: FormEvent) => void;
+  onDelete: (postId: number, e: FormEvent) => void;
+  postId: number;
 };
 const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
   const {
@@ -89,7 +108,7 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
     content,
     view,
   } = formData.formData;
-  console.log("aaaaaa", formData);
+
   return (
     <PostWrap>
       <HeaderContainer />
@@ -139,10 +158,13 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
         <Section>
           <p className="content">{content}</p>
         </Section>
+        <Section>
+          <CommentContainer />
+        </Section>
         <BtnSection>
-          <button onClick={() => onClose(postId)}>마감하기</button>
+          <button onClick={(e) => onClose(postId, e)}>마감하기</button>
           <button>수정</button>
-          <button onClick={() => onDelete(postId)}>삭제</button>
+          <button onClick={(e) => onDelete(postId, e)}>삭제</button>
         </BtnSection>
       </PostContainer>
     </PostWrap>

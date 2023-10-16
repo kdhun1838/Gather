@@ -175,4 +175,21 @@ router.post(
   }
 );
 
+router.post("/postComment/:postId", async (req: Request, res: Response, next: NextFunction) => {
+  const postId = req.body.postId;
+  const comment = req.body.comment
+  const ID = "dkdlel123";
+  console.log("bodybodybodybodybodybodybodybodybody",req.body);
+  try {
+    const postComment = await models.registerComments.create({
+      userId: ID,
+      comment: comment,
+      registerNum: postId
+    })
+    res.status(200).json(postComment);
+  } catch(e) {
+    console.error(e);
+  }
+})
+
 export default router;

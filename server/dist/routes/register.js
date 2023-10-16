@@ -152,4 +152,21 @@ router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
         res.status(500).json(e);
     }
 }));
+router.post("/postComment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.body.postId;
+    const comment = req.body.comment;
+    const ID = "dkdlel123";
+    console.log("bodybodybodybodybodybodybodybodybody", req.body);
+    try {
+        const postComment = yield models_1.default.registerComments.create({
+            userId: ID,
+            comment: comment,
+            registerNum: postId
+        });
+        res.status(200).json(postComment);
+    }
+    catch (e) {
+        console.error(e);
+    }
+}));
 exports.default = router;
