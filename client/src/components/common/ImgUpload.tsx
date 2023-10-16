@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
+import client from "../../lib/api/client";
 
 const ImgUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -18,7 +19,7 @@ const ImgUpload: React.FC = () => {
       formData.append("file", file);
 
       try {
-        const response = await axios.post("/admin/uploadImg", formData, {
+        const response = await client.post("/admin/uploadImg", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

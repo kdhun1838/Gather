@@ -1,4 +1,4 @@
-import { changeField, initializeForm, login, signup } from './action';
+import { changeField, initializeForm, login, signup } from "./action";
 
 export type AuthAction =
   | ReturnType<typeof changeField>

@@ -1,4 +1,4 @@
-import { tempSetUser, check, logout } from './action';
+import { tempSetUser, check, logout } from "./action";
 
 export type UserState = {
   user: any;

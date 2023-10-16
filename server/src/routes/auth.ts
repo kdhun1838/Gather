@@ -85,6 +85,7 @@ router.post(
     const agetoNum = +age;
     try {
       const User = await models.users.findOne({ where: { id } });
+
       if (User) {
         console.log("중복");
         res.status(409).json("중복된 id 입니다.");

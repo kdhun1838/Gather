@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { logout } from "../../modules/user/action";
 import Logo from "../../images/Logo.png";
+import { UserState } from "../../modules/user/type";
 
 const items: TabsProps["items"] = [
   {
@@ -29,11 +30,14 @@ const contentStyle: React.CSSProperties = {
   background: "orange",
 };
 
-const Header = () => {
+interface HeaderProps {
+  user: UserState;
+}
+
+const Header: React.FC<HeaderProps> = ({ user }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector(({ user }) => ({ user: user.user }));
   const onLogout = () => {
     dispatch(logout(user));
   };
@@ -53,7 +57,7 @@ const Header = () => {
             itemSelectedColor: "orange",
             itemHoverColor: "orange",
             horizontalItemMargin: "32222px",
-            // cardPadding: "32",
+            cardPadding: "32",
           },
         },
       }}
@@ -64,9 +68,14 @@ const Header = () => {
             <LogoBlock src={Logo} />
           </Link>
           <div>
-            {user ? (
+            {user.user ? (
               <div className="right">
-                <UserInfo>{user.id}</UserInfo>
+                {user.user.grade > 2 ? (
+                  <Link to="/admin">관리자페이지</Link>
+                ) : (
+                  <div></div>
+                )}
+                <UserInfo>{user.user.id}</UserInfo>
                 <Button onClick={onLogout}>로그아웃</Button>
               </div>
             ) : (
@@ -88,15 +97,6 @@ const Header = () => {
       <Carousel autoplay>
         <div>
           <h3 style={contentStyle}>1</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>3</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>4</h3>
         </div>
       </Carousel>
     </ConfigProvider>
@@ -135,7 +135,7 @@ const Wrapper = styled(Responsive)`
 
 const UserInfo = styled.div`
   font-weight: 800;
-  margin-right: 1rem;
+  margin: 0 1rem 0 1rem;
 `;
 
 // const CustomTabs = styled(Tabs)`

@@ -1,16 +1,18 @@
 import React from "react";
 import AdminHeader from "../../components/common/admin/AdminHeader";
+import { RootState } from "../../modules";
+import { useSelector } from "react-redux";
 
 const AdminHeaderContainer: React.FC = () => {
-  const user = {
-    name: "이름",
-  };
+  const { user } = useSelector((state: RootState) => ({
+    user: state.user,
+  }));
   const onLogout = () => {
     console.log("onLogout");
   };
   return (
     <div>
-      <AdminHeader user={user} onLogout={onLogout} />
+      <AdminHeader user={user.user} onLogout={onLogout} />
     </div>
   );
 };

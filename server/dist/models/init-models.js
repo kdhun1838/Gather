@@ -7,6 +7,7 @@ const registers_1 = require("./registers");
 const communitys_1 = require("./communitys");
 const registerComments_1 = require("./registerComments");
 const communityComments_1 = require("./communityComments");
+const carousels_1 = require("./carousels");
 function initModels(sequelize) {
     const boards = (0, boards_1.boardsModel)(sequelize);
     const users = (0, users_1.usersModel)(sequelize);
@@ -14,6 +15,7 @@ function initModels(sequelize) {
     const communitys = (0, communitys_1.communitysModel)(sequelize);
     const communityComments = (0, communityComments_1.communityCommentsModel)(sequelize);
     const registerComments = (0, registerComments_1.CommentsModel)(sequelize);
+    const carousels = (0, carousels_1.carouselModel)(sequelize);
     registers.hasMany(registerComments, { foreignKey: "registerNum" });
     registerComments.belongsTo(registers, { foreignKey: "registerNum" });
     users.hasMany(communityComments, { foreignKey: "userId" });
@@ -25,6 +27,7 @@ function initModels(sequelize) {
         communitys,
         communityComments,
         registerComments,
+        carousels,
     };
 }
 exports.initModels = initModels;
