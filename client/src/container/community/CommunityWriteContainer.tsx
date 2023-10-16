@@ -16,7 +16,7 @@ const CommunityWriteContainer = () => {
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string }) => {
-      dispatch(changeForm({ key: data.key, value: data.value }));
+      dispatch(changeForm({ name: "form", key: data.key, value: data.value }));
     },
     [dispatch]
   );

@@ -10,6 +10,7 @@ import {
   ADD_FAVORITE_POST,
   GET_POST,
   GET_POPULAR_POSTS,
+  ADD_COMMENT,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -33,7 +34,15 @@ const initialState: CommunityState = {
     mainPosts: null,
   },
 
-  post: "",
+  post: {
+    getPost: "",
+    comment: "",
+  },
+
+  comment: {
+    parents: "",
+    child: "",
+  },
 };
 
 const community = (
@@ -63,14 +72,19 @@ const community = (
       };
 
     case CHANGE_FORM:
-      // action.payload 객체 안에 key와 value 둘 다 존재할 경우
-      if ("key" in action.payload && "value" in action.payload) {
+      // action.payload 객체 안에 name, key, value가 모두 존재할 경우
+      if (
+        "name" in action.payload &&
+        "key" in action.payload &&
+        "value" in action.payload
+      ) {
+        const { name, key, value } = action.payload;
+
         return {
-          //불변성
           ...state,
-          form: {
-            ...state.form,
-            [action.payload.key]: action.payload.value,
+          [name]: {
+            ...state[name],
+            [key]: value,
           },
         };
       }
@@ -112,28 +126,25 @@ const community = (
 
     // 게시물 저장하기
     case `${SAVE_FORM}_SUCCESS`:
-      console.log("저장성공", action.payload);
       return {
         ...state,
       };
     case `${SAVE_FORM}_FAILURE`:
-      console.log("저장실패", action.payload);
       return {
         ...state,
       };
 
     // 게시물 불러오기
     case `${GET_POSTS}_SUCCESS`:
-      console.log("불러오기 성공", action.payload);
+      const mainPosts = action.payload;
       return {
         ...state,
         main: {
           ...state.main,
-          mainPosts: action.payload,
+          mainPosts,
         },
       };
     case `${GET_POSTS}_FAILURE`:
-      console.log("불러오기 실패", action.payload);
       return {
         ...state,
         main: {
@@ -144,7 +155,6 @@ const community = (
 
     // 인기 게시물 불러오기
     case `${GET_POPULAR_POSTS}_SUCCESS`:
-      console.log("불러오기 성공", action.payload);
       return {
         ...state,
         main: {
@@ -153,7 +163,6 @@ const community = (
         },
       };
     case `${GET_POPULAR_POSTS}_FAILURE`:
-      console.log("불러오기 실패", action.payload);
       return {
         ...state,
         main: {
@@ -176,16 +185,30 @@ const community = (
 
     //Post 불러오기
     case `${GET_POST}_SUCCESS`:
-      console.log("불러오기 성공", action.payload);
+      const getPost = action.payload;
       return {
         ...state,
-        post: action.payload,
+        post: {
+          ...state.post,
+          getPost,
+        },
       };
     case `${GET_POST}_FAILURE`:
-      console.log("불러오기 실패", action.payload);
       return {
         ...state,
-        post: "",
+        post: {
+          ...state.post,
+          getPost: "",
+        },
+      };
+
+    case `${ADD_COMMENT}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${ADD_COMMENT}_FAILURE`:
+      return {
+        ...state,
       };
 
     default:

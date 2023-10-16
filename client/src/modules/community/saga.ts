@@ -1,4 +1,5 @@
 import {
+  ADD_COMMENT,
   ADD_FAVORITE_POST,
   GET_POPULAR_POSTS,
   GET_POST,
@@ -26,6 +27,8 @@ const getPopularPostsSaga = createRequestSaga(
 
 const getPostSaga = createRequestSaga(GET_POST, communityAPI.getPost);
 
+const addCommentSaga = createRequestSaga(ADD_COMMENT, communityAPI.addComment);
+
 const addFavoriteCommunityPostsSaga = createRequestSaga(
   ADD_FAVORITE_POST,
   communityAPI.addFavoritePost
@@ -37,4 +40,5 @@ export function* CommunitySaga() {
   yield takeLatest(ADD_FAVORITE_POST, addFavoriteCommunityPostsSaga);
   yield takeLatest(GET_POST, getPostSaga);
   yield takeLatest(GET_POPULAR_POSTS, getPopularPostsSaga);
+  yield takeLatest(ADD_COMMENT, addCommentSaga);
 }

@@ -8,10 +8,10 @@ exports.Communitys = Communitys;
 function communitysModel(sequelize) {
     Communitys.init({
         communityNum: {
+            autoIncrement: true,
             type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true,
         },
         category: {
             type: sequelize_1.DataTypes.STRING(100),
@@ -26,18 +26,21 @@ function communitysModel(sequelize) {
             allowNull: false,
         },
         content: {
-            type: sequelize_1.DataTypes.STRING(255),
+            type: sequelize_1.DataTypes.TEXT,
             allowNull: false,
         },
         view: {
             type: sequelize_1.DataTypes.INTEGER,
-            defaultValue: 0,
             allowNull: true,
+            defaultValue: 0,
         },
-        Favorite: {
-            type: sequelize_1.DataTypes.BOOLEAN,
-            defaultValue: false,
+        userId: {
+            type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
+            references: {
+                model: "users",
+                key: "userNum",
+            },
         },
     }, {
         sequelize,
@@ -50,6 +53,11 @@ function communitysModel(sequelize) {
                 unique: true,
                 using: "BTREE",
                 fields: [{ name: "communityNum" }],
+            },
+            {
+                name: "userId",
+                using: "BTREE",
+                fields: [{ name: "userId" }],
             },
         ],
     });

@@ -1,5 +1,5 @@
 import { createRequestActionTypes } from "../../lib/createRequestSaga";
-import { CommunityState, GetPostType } from "./type";
+import { CommentType, CommunityState, GetPostType } from "./type";
 
 // 액션 정의 (마지막에 as const 붙이기)
 export const CHANGE_FORM = "community/CHANGE_FORM" as const;
@@ -23,6 +23,9 @@ export const [
 export const [GET_POST, GET_POSTS_SUCCES, GET_POST_FAILURE] =
   createRequestActionTypes("community/GET_POST");
 
+export const [ADD_COMMENT, ADD_COMMENT_SUCCES, ADD_COMMENT_FAILURE] =
+  createRequestActionTypes("community/ADD_COMMENT");
+
 export const [
   ADD_FAVORITE_POST,
   ADD_FAVORITE_POST_SUCCESS,
@@ -35,9 +38,18 @@ export const initForm = () => ({
   payload: {},
 });
 
-export const changeForm = ({ key, value }: { key: string; value: string }) => ({
+export const changeForm = ({
+  name,
+  key,
+  value,
+}: {
+  name: string;
+  key: string;
+  value: string;
+}) => ({
   type: CHANGE_FORM,
   payload: {
+    name,
     key,
     value,
   },
@@ -99,6 +111,17 @@ export const getPost = (postId: number) => ({
   type: GET_POST,
   payload: {
     postId,
+  },
+});
+
+export const addCommnet = (data: {
+  userId: number;
+  postId: number;
+  comment: string;
+}) => ({
+  type: ADD_COMMENT,
+  payload: {
+    data,
   },
 });
 

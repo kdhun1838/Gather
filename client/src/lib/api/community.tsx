@@ -1,6 +1,6 @@
 import client from "./client";
 import { CommunityState, GetPostType } from "../../modules/community/type";
-import { AxiosHeaders, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 export const getCommunityPosts = (
   data: GetPostType
@@ -17,15 +17,18 @@ export const createCommunityPost = ({
 };
 
 export const addFavoritePost = (postId: number): Promise<AxiosResponse> => {
-  console.log(postId);
   return client.post("/community/addFavorite", { postId });
 };
 
-export const getPost = (postId: number): Promise<AxiosResponse> => {
-  console.log(postId);
-  return client.get("/community/post/:postId", { params: postId });
+export const getPost = (postId: { postId: number }): Promise<AxiosResponse> => {
+  const id = postId.postId;
+  return client.get(`/community/post/${id}`);
 };
 
 export const getPopularPosts = (): Promise<AxiosResponse> => {
   return client.get("/community/popularPosts");
+};
+
+export const addComment = (comment: string): Promise<AxiosResponse> => {
+  return client.post("/community/addComment", { comment });
 };

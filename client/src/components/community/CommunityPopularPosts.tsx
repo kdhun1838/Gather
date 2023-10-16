@@ -88,12 +88,13 @@ const CommunityPopularPosts: React.FC<PopularPostPorpsType> = ({
         </PageButtonBox>
         <PopularPostsBlock>
           <PopularPostsBox>
-            {popularPosts?.map((post: any, index) => (
-              <Post key={index}>
-                <div>{post.title}</div>
-                <div>{post.view}</div>
-              </Post>
-            ))}
+            {popularPosts &&
+              popularPosts?.map((post: any, index) => (
+                <Post key={index}>
+                  <div>{post.title}</div>
+                  <div>{post.view}</div>
+                </Post>
+              ))}
           </PopularPostsBox>
         </PopularPostsBlock>
       </PopularBox>

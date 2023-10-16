@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { changeDate } from "./Community";
+import CommunityCommentContainer from "../../container/community/CommunityCommentContainer";
 
 const PostContainer = styled.div`
   max-width: 900px;
@@ -70,7 +71,7 @@ const CommentBox = styled.div`
   padding-bottom: 80px;
 `;
 
-type PostType = {
+export type PostType = {
   Favorite: boolean;
   category: string;
   communityNum: number;
@@ -83,7 +84,10 @@ type PostType = {
 };
 
 type PostPropsType = {
-  post: PostType;
+  post: {
+    updatedPost: PostType;
+    getComment: string[];
+  };
   load: {
     [key: string]: boolean;
   };
@@ -97,7 +101,7 @@ const CommunityPost: React.FC<PostPropsType> = ({
 }) => {
   const loading = load["community/GET_POST"];
 
-  console.log(post);
+  const { updatedPost } = post;
 
   if (loading) {
     return <div>글 불러오는중... </div>;
@@ -107,21 +111,23 @@ const CommunityPost: React.FC<PostPropsType> = ({
     <PostContainer>
       <TitleBox>
         <div onClick={onClickBack}>뒤로가기버튼</div>
-        <Title>{post.title}</Title>
+        <Title>{updatedPost?.title}</Title>
         <NameAndDateBox>
           <div className="username"></div>
           <div className="line"></div>
-          <div className="date"> {changeDate(Number(post.createdAt))}</div>
+          <div className="date">{changeDate(updatedPost?.createdAt)}</div>
         </NameAndDateBox>
       </TitleBox>
       <PostContentBox
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: updatedPost?.content }}
       ></PostContentBox>
       <ViewAndFavoriteBox>
-        <div>조회수: {post.view}</div>
+        <div>조회수: {updatedPost?.view}</div>
         <div>즐겨찾기 버튼</div>
       </ViewAndFavoriteBox>
-      <CommentBox></CommentBox>
+      <CommentBox>
+        <CommunityCommentContainer />
+      </CommentBox>
     </PostContainer>
   );
 };

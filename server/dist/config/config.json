@@ -5,7 +5,8 @@
     "database": "Mo2Da",
     "host": "docs.yi.or.kr",
     "port": 9086,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "Asia/Seoul"
   },
   "test": {
     "username": "root",

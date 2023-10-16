@@ -110,7 +110,7 @@ type CommunityPropType = {
   onClickAddFavoritePost: (postId: number) => void;
 };
 
-export const changeDate = (date: number) => {
+export const changeDate = (date: string) => {
   const newDate = new Date(date);
   const showDate = `${newDate.getFullYear()}.${
     newDate.getMonth() + 1
@@ -147,7 +147,7 @@ const Community: React.FC<CommunityPropType> = ({
   }
 
   // 글이 없거나 검색정보가 없을 때
-  if (posts.length === 0) {
+  if (posts?.length === 0) {
     return (
       <CommunityBox>
         <PostsBox>글이 없습니다.</PostsBox>

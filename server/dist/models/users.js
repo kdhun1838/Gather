@@ -47,21 +47,26 @@ function usersModel(sequelize) {
         },
     }, {
         sequelize,
-        modelName: 'Users',
-        tableName: 'users',
+        modelName: "Users",
+        tableName: "users",
         timestamps: true,
         indexes: [
             {
-                name: 'PRIMARY',
+                name: "PRIMARY",
                 unique: true,
-                using: 'BTREE',
-                fields: [{ name: 'userNum' }],
+                using: "BTREE",
+                fields: [{ name: "userNum" }],
             },
             {
-                name: 'user_UN',
+                name: "user_UN",
                 unique: true,
-                using: 'BTREE',
-                fields: ['id', 'nick', 'email', 'tel'],
+                using: "BTREE",
+                fields: [
+                    { name: "id" },
+                    { name: "nick" },
+                    { name: "email" },
+                    { name: "tel" },
+                ],
             },
         ],
     });

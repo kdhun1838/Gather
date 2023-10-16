@@ -7,7 +7,7 @@ export interface CommunityAttributes {
   detail: string;
   content: string;
   view: number;
-  Favorite: boolean;
+  userId: number;
 }
 
 export interface CommunityCreationAttributes
@@ -23,7 +23,7 @@ export class Communitys
   public detail!: string;
   public content!: string;
   public view!: number;
-  public Favorite!: boolean;
+  public userId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -33,10 +33,10 @@ export function communitysModel(sequelize: Sequelize): typeof Communitys {
   Communitys.init(
     {
       communityNum: {
+        autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
       },
       category: {
         type: DataTypes.STRING(100),
@@ -51,18 +51,21 @@ export function communitysModel(sequelize: Sequelize): typeof Communitys {
         allowNull: false,
       },
       content: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       view: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
         allowNull: true,
+        defaultValue: 0,
       },
-      Favorite: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      userId: {
+        type: DataTypes.BIGINT,
         allowNull: false,
+        references: {
+          model: "users",
+          key: "userNum",
+        },
       },
     },
     {
@@ -76,6 +79,11 @@ export function communitysModel(sequelize: Sequelize): typeof Communitys {
           unique: true,
           using: "BTREE",
           fields: [{ name: "communityNum" }],
+        },
+        {
+          name: "userId",
+          using: "BTREE",
+          fields: [{ name: "userId" }],
         },
       ],
     }

@@ -8,6 +8,7 @@ import {
   initDetail,
   addFavorite,
   getPost,
+  addCommnet,
 } from "./action";
 
 // 타입 정의
@@ -31,7 +32,13 @@ type SortType = {
   search?: string;
 };
 
+export type CommentType = {
+  parents: any;
+  child: any;
+};
+
 export type CommunityState = {
+  [key: string]: any;
   form: FormType;
 
   main: {
@@ -40,7 +47,12 @@ export type CommunityState = {
     mainPosts: any;
   };
 
-  post: any;
+  post: {
+    getPost: any;
+    comment: any;
+  };
+
+  comment: CommentType;
 };
 
 export type GetPostType = SortType;
@@ -54,4 +66,5 @@ export type CommunityAction =
   | ReturnType<typeof saveForm>
   | ReturnType<typeof getPosts>
   | ReturnType<typeof getPost>
-  | ReturnType<typeof addFavorite>;
+  | ReturnType<typeof addFavorite>
+  | ReturnType<typeof addCommnet>;
