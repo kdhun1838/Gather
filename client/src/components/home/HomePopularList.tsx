@@ -14,6 +14,7 @@ import {
   faGamepad,
   faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
+import { deadline } from "../../lib/function/date";
 
 interface OwnProps {
   goWrite: () => void;
@@ -25,33 +26,26 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
   const settings = {
     className: "center",
     centerMode: true,
-    infinite: true,
+    // infinite: true,
     centerPadding: "60px",
-    slidesToShow: 5,
+    slidesToShow: 4,
     // speed: 500,
-    responsive: [
-      {
-        breakpoint: 1920,
-        settings: {
-          slidesToShow: 5,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 1440,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 720,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 1920,
+    //     settings: {
+    //       slidesToShow: 5,
+    //       slidesToScroll: 1,
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 720,
+    //     settings: {
+    //       slidesToShow: 1,
+    //       slidesToScroll: 1,
+    //     },
+    //   },
+    // ],
   };
 
   return (
@@ -62,49 +56,58 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
           <Button onClick={() => props.goWrite()}>글쓰기</Button>
         </ButtonBlock>
       </TitleBox>
-      <CustomSlider {...settings}>
-        {props.popularList &&
-          props.popularList.map((item: ListDetailType, index) => (
-            <Item
-              key={index}
-              onClick={() => props.onClickPost(item.registerNum)}
-            >
-              <ItemFirst>
-                <Category>
-                  {item.category && item.category === "운동" && (
-                    <FontAwesomeIcon
-                      icon={faVolleyball}
-                      style={{ color: "blue" }}
-                    />
-                  )}
-                  {item.category && item.category === "스터디" && (
-                    <FontAwesomeIcon icon={faPencil} style={{ color: "red" }} />
-                  )}
-                  {item.category && item.category === "게임" && (
-                    <FontAwesomeIcon
-                      icon={faGamepad}
-                      style={{ color: "green" }}
-                    />
-                  )}
-                  {item.category && item.category === "기타" && (
-                    <FontAwesomeIcon
-                      icon={faEllipsis}
-                      style={{ color: "black" }}
-                    />
-                  )}
-                  <div>{item.category}</div>
-                </Category>
-                <Deadline>마감 ?일전</Deadline>
-              </ItemFirst>
-              <ItemSecond>마감일 | {item.period}</ItemSecond>
-              <ItemThird>{item.content}</ItemThird>
-              <ItemFourth>👀 조회수 {item.view}회</ItemFourth>
-            </Item>
-          ))}
-      </CustomSlider>
+      <Center>
+        <CustomSlider {...settings}>
+          {props.popularList &&
+            props.popularList.map((item: ListDetailType, index) => (
+              <Item
+                key={index}
+                onClick={() => props.onClickPost(item.registerNum)}
+              >
+                <ItemFirst>
+                  <Category>
+                    {item.category && item.category === "운동" && (
+                      <FontAwesomeIcon
+                        icon={faVolleyball}
+                        style={{ color: "blue" }}
+                      />
+                    )}
+                    {item.category && item.category === "스터디" && (
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        style={{ color: "red" }}
+                      />
+                    )}
+                    {item.category && item.category === "게임" && (
+                      <FontAwesomeIcon
+                        icon={faGamepad}
+                        style={{ color: "green" }}
+                      />
+                    )}
+                    {item.category && item.category === "기타" && (
+                      <FontAwesomeIcon
+                        icon={faEllipsis}
+                        style={{ color: "black" }}
+                      />
+                    )}
+                    <div>{item.category}</div>
+                  </Category>
+                  <Deadline>{deadline(item.period)}</Deadline>
+                </ItemFirst>
+                <ItemSecond>마감일 | {item.period}</ItemSecond>
+                <ItemThird>{item.title}</ItemThird>
+                <ItemFourth>👀 조회수 {item.view}회</ItemFourth>
+              </Item>
+            ))}
+        </CustomSlider>
+      </Center>
     </Wrapper>
   );
 };
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Item = styled.div`
   color: black;
@@ -116,13 +119,12 @@ const Item = styled.div`
   border: 2px solid rgb(209, 209, 209);
   background: rgb(255, 255, 255);
   cursor: pointer;
-  transition: transform 0.3s; /* transform 속성에 트랜지션 효과를 추가 */
-  z-index: 1;
+  transition: transform 0.3s;
+  margin: 1rem 0 1rem 0;
 
   &:hover {
-    /* background: orange; */
-    transform: scale(1.05); /* 호버 시 크기를 늘립니다. */
-    z-index: 1;
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
   }
 `;
 
@@ -202,9 +204,11 @@ const ButtonBlock = styled.div`
   justify-content: flex-end;
 `;
 const CustomSlider = styled(Slider)`
-  padding: 1rem 1rem 0 1rem;
+  /* padding: 1rem 0 0 1rem; */
+  display: flex;
+  justify-content: center;
   margin-bottom: 2rem;
-  max-width: 1800px;
+  max-width: 90%;
   min-width: 100px;
   /* height: 15rem; */
   .slick-next:before,
@@ -215,10 +219,16 @@ const CustomSlider = styled(Slider)`
   }
 
   .slick-list {
-    margin: 0 2rem 0 2rem;
+    margin: 0 6% 0 6%;
+    /* display: flex; */
   }
   .slick-slide {
     padding-left: 0.5rem;
+  }
+  .slick-slider {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 `;
 

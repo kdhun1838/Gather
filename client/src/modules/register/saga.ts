@@ -1,4 +1,4 @@
-import createRequestSaga from "../../lib/createRequestSaga";
+import createRequestSaga from "../../lib/function/createRequestSaga";
 import {
   GET_LIST,
   GET_POPULAR_LIST,
@@ -23,7 +23,10 @@ const getPopularListSaga = createRequestSaga(
   registerAPI.getPopularList
 );
 
-const postCommentSaga = createRequestSaga(POST_COMMENT, registerAPI.postComment);
+const postCommentSaga = createRequestSaga(
+  POST_COMMENT,
+  registerAPI.postComment
+);
 
 export function* registerSaga() {
   yield takeLatest(POST_FORM, postFormSaga);

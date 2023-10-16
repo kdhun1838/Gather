@@ -1,5 +1,5 @@
 import { GetListType, RegisterState } from "./type";
-import { createRequestActionTypes } from "../../lib/createRequestSaga";
+import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 
 // 액션타입
 export const UNLOAD_FORM = "register/UNLOAD_FORM" as const;
@@ -12,7 +12,7 @@ export const CHANGE_SORT_FORM = "register/CHANGE_SORT_FORM" as const;
 
 export const CHANGE_DETAIL_SORT_FORM =
   "register/CHANGE_DETAIL_SORT_FORM" as const;
-
+export const CHANGE_RECRUIT = "register/CHANGE_RECRUIT" as const;
 export const [GET_LIST, GET_LIST_SUCCESS, GET_LIST_FAILURE] =
   createRequestActionTypes("register/GET_LIST");
 
@@ -79,6 +79,11 @@ export const changeDetailSort = ({
   },
 });
 
+export const changeRecruit = () => ({
+  type: CHANGE_RECRUIT,
+  payload: {},
+});
+
 export const getList = (data: GetListType) => ({
   type: GET_LIST,
   payload: {
@@ -98,28 +103,34 @@ export const postForm = (form: RegisterState) => ({
   },
 });
 
-export const getForm = (postId: number) => ({
+export const getForm = (postId: Number) => ({
   type: GET_FORM,
   payload: {
     postId,
   },
 });
 
-export const postClose = (postId: number) => ({
+export const postClose = (postId: Number) => ({
   type: POST_CLOSE,
   payload: {
     postId,
   },
 });
 
-export const postDelete = (postId: number) => ({
+export const postDelete = (postId: Number) => ({
   type: POST_DELETE,
   payload: {
     postId,
   },
 });
 
-export const changeComment = ({ key, value }: { key: string; value: string }) => ({
+export const changeComment = ({
+  key,
+  value,
+}: {
+  key: string;
+  value: string;
+}) => ({
   type: CHANGE_COMMENT,
   payload: {
     key,
@@ -127,10 +138,7 @@ export const changeComment = ({ key, value }: { key: string; value: string }) =>
   },
 });
 
-export const postComment = (
-  comment: string,
-  postId: number,
-) => ({
+export const postComment = (comment: string, postId: number) => ({
   type: POST_COMMENT,
   payload: {
     comment,

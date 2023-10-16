@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Responsive from "../../styled/Responsive";
 import { Pagination } from "antd";
+import { LoadingState } from "../../modules/loading";
 
 const CommunityBox = styled(Responsive)`
   overflow: hidden;
   margin-bottom: 2rem;
+  box-sizing: inherit;
 `;
 
 const PostsBox = styled.div`
@@ -16,6 +18,7 @@ const PostsBox = styled.div`
   flex-wrap: wrap;
   margin: 0 auto;
   padding: 0 20px;
+  justify-content: space-around; /* 중앙 정렬 */
 `;
 
 export const PostBox = styled.div`
@@ -31,10 +34,11 @@ export const PostBox = styled.div`
   position: relative;
   cursor: pointer;
   transition: 0.2s ease-in;
+  margin-top: 1rem;
 
   &:hover {
-    -webkit-transform: scale(1.02);
-    transform: scale(1.02);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
   }
 `;
 
@@ -106,9 +110,7 @@ const FavoriteBox = styled.div`
 
 type CommunityPropType = {
   posts: string[];
-  load: {
-    [key: string]: boolean;
-  };
+  load: boolean;
   onClickPost: (postid: number) => void;
   onClickAddFavoritePost: (postId: number) => void;
 };
@@ -127,7 +129,6 @@ const Home: React.FC<CommunityPropType> = ({
   onClickPost,
   onClickAddFavoritePost,
 }) => {
-  const loading = load["register/GET_LIST"];
   const [currentPage, setCurrentPage] = React.useState(1); // 현재 페이지 상태 추가
 
   const changeLanguege = (category: string) => {
@@ -147,10 +148,6 @@ const Home: React.FC<CommunityPropType> = ({
     setCurrentPage(page);
   };
 
-  if (loading) {
-    return <div>로딩중...</div>;
-  }
-
   if (posts?.length === 0) {
     return (
       <CommunityBox>
@@ -165,44 +162,72 @@ const Home: React.FC<CommunityPropType> = ({
   const currentPosts = posts && posts.slice(startIndex, endIndex);
 
   return (
-    <CommunityBox>
-      <PostsBox>
-        {currentPosts &&
-          currentPosts.map((post: any) => {
-            return (
-              <PostBox
-                key={post.registerNum}
-                onClick={() => onClickPost(post.registerNum)}
-              >
-                <CategoryTagBox>
-                  <div className={changeLanguege(post.category)}>
-                    {post.category}
-                  </div>
-                </CategoryTagBox>
-                <DateBox>
-                  <p>작성일 |</p>
-                  <p>{changeDate(post.createdAt)}</p>
-                </DateBox>
-                <TitleBox>{post.title}</TitleBox>
-                <div> 조회수{post.view}</div>
-                <FavoriteBox
-                  onClick={() => onClickAddFavoritePost(post.registerNum)}
-                >
-                  ⭐
-                </FavoriteBox>
-              </PostBox>
-            );
-          })}
-      </PostsBox>
-      <Pagination
-        defaultCurrent={1}
-        total={posts && posts.length}
-        pageSize={itemsPerPage}
-        current={currentPage}
-        onChange={handlePageChange}
-      />
-    </CommunityBox>
+    <>
+      {load ? (
+        <div>로딩</div>
+      ) : (
+        <CommunityBox>
+          <PostsBox>
+            {currentPosts &&
+              currentPosts.map((post: any) => {
+                return (
+                  <PostBox
+                    key={post.registerNum}
+                    onClick={() => onClickPost(post.registerNum)}
+                  >
+                    <CategoryTagBox>
+                      <div className={changeLanguege(post.category)}>
+                        {post.category}
+                      </div>
+                    </CategoryTagBox>
+                    <DateBox>
+                      <p>작성일 |</p>
+                      <p>{changeDate(post.createdAt)}</p>
+                    </DateBox>
+                    <TitleBox>{post.title}</TitleBox>
+                    <div>👀 조회수{post.view}</div>
+                    <DateBox>
+                      {post.state === 1 ? (
+                        <>
+                          <p>마감일 |</p>
+                          <p>{changeDate(post.period)}</p>
+                        </>
+                      ) : (
+                        <DeadLine>마감되었습니다</DeadLine>
+                      )}
+                    </DateBox>
+                    <FavoriteBox
+                      onClick={() => onClickAddFavoritePost(post.registerNum)}
+                    >
+                      ⭐
+                    </FavoriteBox>
+                  </PostBox>
+                );
+              })}
+          </PostsBox>
+          <Center>
+            <Pagination
+              defaultCurrent={1}
+              total={posts && posts.length}
+              pageSize={itemsPerPage}
+              current={currentPage}
+              onChange={handlePageChange}
+            />
+          </Center>
+        </CommunityBox>
+      )}
+    </>
   );
 };
+
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`;
+
+const DeadLine = styled.div`
+  color: red;
+`;
 
 export default Home;

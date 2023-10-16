@@ -12,7 +12,7 @@ export const finishLoading = createAction(FINISH_LOADING)<string>();
 type LoadingAction = ActionType<typeof startLoading | typeof finishLoading>;
 
 // 상태 초기화
-interface LoadingState {
+export interface LoadingState {
   [key: string]: boolean;
 }
 

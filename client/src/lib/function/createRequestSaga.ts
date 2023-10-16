@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { AxiosResponse } from "axios"; // AxiosResponse를 사용하여 API 응답의 타입을 지정합니다.
-import { finishLoading, startLoading } from "../modules/loading";
+import { finishLoading, startLoading } from "../../modules/loading";
 
 // 액션 타입을 생성하는 함수
 export const createRequestActionTypes = (type: string) => {

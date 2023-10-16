@@ -8,7 +8,7 @@ import {
 } from "./action";
 import * as communityAPI from "../../lib/api/community";
 import { takeLatest } from "redux-saga/effects";
-import createRequestSaga from "../../lib/createRequestSaga";
+import createRequestSaga from "../../lib/function/createRequestSaga";
 
 const saveFormSaga = createRequestSaga(
   SAVE_FORM,

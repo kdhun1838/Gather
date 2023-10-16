@@ -13,6 +13,7 @@ import {
   POST_DELETE,
   CHANGE_COMMENT,
   POST_COMMENT,
+  CHANGE_RECRUIT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -31,11 +32,12 @@ const initialState: RegisterState = {
     sort: {
       mainSort: "전체",
       detailSort: {
-        time: "newest",
+        time: "",
         view: "",
         like: "",
       },
       search: "",
+      recruit: true,
     },
     mainList: null,
   },
@@ -60,9 +62,9 @@ const register = (
         list: {
           ...state.list,
           sort: {
-            mainSort: "전체",
+            ...state.list.sort,
             detailSort: {
-              time: "newest",
+              time: "",
               view: "",
               like: "",
             },
@@ -111,6 +113,17 @@ const register = (
         };
       }
       return state;
+    case CHANGE_RECRUIT:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          sort: {
+            ...state.list.sort,
+            recruit: !state.list.sort.recruit,
+          },
+        },
+      };
     case `${POST_FORM}_SUCCESS`:
       return {
         ...state,
@@ -181,7 +194,7 @@ const register = (
             [action.payload.key]: action.payload.value,
           },
         };
-      };
+      }
       return state;
     case `${POST_COMMENT}_SUCCESS`:
       return {

@@ -11,6 +11,7 @@ import {
   postDelete,
   changeComment,
   postComment,
+  changeRecruit,
 } from "./action";
 
 type FormType = {
@@ -34,6 +35,7 @@ type SortType = {
   mainSort?: string;
   detailSort?: DetailType;
   search?: string;
+  recruit?: boolean;
 };
 
 type ListType = {
@@ -60,7 +62,7 @@ export type ListDetailType = {
 
 export type CommentType = {
   comment: string;
-}
+};
 
 export type RegisterState = {
   form: FormType;
@@ -85,3 +87,4 @@ export type RegisterAction =
   | ReturnType<typeof postDelete>
   | ReturnType<typeof changeComment>
   | ReturnType<typeof postComment>
+  | ReturnType<typeof changeRecruit>;

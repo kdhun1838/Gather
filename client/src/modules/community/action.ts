@@ -1,5 +1,5 @@
-import { createRequestActionTypes } from "../../lib/createRequestSaga";
 import { CommentType, CommunityState, GetPostType } from "./type";
+import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 
 // 액션 정의 (마지막에 as const 붙이기)
 export const CHANGE_FORM = "community/CHANGE_FORM" as const;

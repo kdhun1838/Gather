@@ -2,11 +2,13 @@ import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import models from "../models";
 import { Op } from "sequelize";
+import cron from "node-cron";
 
 type QueryData = {
   mainSort: string;
   detailSort: DetailSort;
   search: string;
+  recruit: string;
 };
 
 type DetailSort = {
@@ -17,10 +19,11 @@ type DetailSort = {
 
 router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data: QueryData = req.query.data as QueryData;
+    const data: QueryData = req.query.data as unknown as QueryData;
     const mainSort: string = data.mainSort || "";
     const search: string = data.search || "";
-
+    const recruit: string = data.recruit || "";
+    console.log("recruit=============", recruit);
     const time: string = data.detailSort?.time || "";
     const view: string = data.detailSort?.view || "";
     const like: string = data.detailSort?.like || "";
@@ -38,6 +41,14 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
         { content: { [Op.like]: `%${search}` } },
       ];
     }
+    if (recruit === "true") {
+      where.state = 1;
+      console.log("true입니다");
+    } else {
+      console.log("false입니다");
+      where.state < 3;
+    }
+    console.log("where-============", where);
 
     if (time === "newset") {
       order = [["createdAt", "DESC"]];
@@ -67,9 +78,16 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 router.get(
   "/popularList",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("인기글 백입니다.");
+    const today = new Date();
+    today.setHours(today.getHours() + 9);
     try {
       const popularData = await models.registers.findAll({
+        where: {
+          period: {
+            [Op.gte]: today.toISOString().split("T")[0],
+          },
+          state: 1,
+        },
         order: [["favorite", "DESC"]],
         limit: 10,
       });
@@ -175,21 +193,58 @@ router.post(
   }
 );
 
-router.post("/postComment/:postId", async (req: Request, res: Response, next: NextFunction) => {
-  const postId = req.body.postId;
-  const comment = req.body.comment
-  const ID = "dkdlel123";
-  console.log("bodybodybodybodybodybodybodybodybody",req.body);
-  try {
-    const postComment = await models.registerComments.create({
-      userId: ID,
-      comment: comment,
-      registerNum: postId
-    })
-    res.status(200).json(postComment);
-  } catch(e) {
-    console.error(e);
+router.post(
+  "/postComment/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.body.postId;
+    const comment = req.body.comment;
+    const ID = "dkdlel123";
+    console.log("bodybodybodybodybodybodybodybodybody", req.body);
+    try {
+      const postComment = await models.registerComments.create({
+        userId: ID,
+        comment: comment,
+        registerNum: postId,
+      });
+      res.status(200).json(postComment);
+    } catch (e) {
+      console.error(e);
+    }
   }
-})
+);
+
+const updateExpiredStates = async () => {
+  try {
+    const currentDate = new Date();
+    const currentDateString = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split("T")[0];
+    const expiredRegisters = await models.registers.findAll({
+      where: {
+        state: {
+          [Op.ne]: 2,
+        },
+        period: {
+          [Op.lt]: currentDateString,
+        },
+      },
+    });
+    for (const register of expiredRegisters) {
+      await register.update({ state: 2 });
+    }
+
+    console.log(
+      `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
+    );
+  } catch (e) {
+    console.error("오류가 발생했습니다:", e);
+  }
+};
+
+cron.schedule("27 * * * *", () => {
+  updateExpiredStates();
+});
 
 export default router;

@@ -18,21 +18,21 @@ const ViewContainer = () => {
   const navigate = useNavigate();
 
   const onClose = useCallback(
-    (postId: number) => {
+    (postId: Number) => {
       dispatch(postClose(postId));
       alert("마감되었습니다.");
       navigate("/");
     },
-    [dispatch, postId]
+    [dispatch, navigate]
   );
 
   const onDelete = useCallback(
-    (postId: number) => {
+    (postId: Number) => {
       dispatch(postDelete(postId));
       alert("삭제되었습니다.");
       navigate("/");
     },
-    [dispatch, postId]
+    [dispatch, navigate]
   );
 
   React.useEffect(() => {

@@ -4,7 +4,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 import indexRouter from "./routes/index";
@@ -13,16 +13,15 @@ import boardsRouter from "./routes/boards";
 import registerRouter from "./routes/register";
 import communityRouter from "./routes/community";
 import authRouter from "./routes/auth";
+import adminRouter from "./routes/admin";
 
 // import { sequelize } from "../dist/models";
 
 const app: Express = express();
-
 app.set("port", 3003);
-
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -40,6 +39,8 @@ app.use("/boards", boardsRouter);
 app.use("/register", registerRouter);
 app.use("/community", communityRouter);
 app.use("/auth", authRouter);
+app.use("/admin", adminRouter);
+
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(createError(404));
