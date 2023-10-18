@@ -64,7 +64,6 @@
   },
   "proxy": "http://localhost:3003/",
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/react-datepicker": "^4.15.2",
     "typescript": "^5.2.2",
     "file-loader": "^6.2.0",
