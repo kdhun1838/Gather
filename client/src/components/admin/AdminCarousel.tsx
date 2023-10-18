@@ -4,6 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { changeDate } from "../community/Community";
 import { styled } from "styled-components";
+import ImgUpload from "../common/ImgUpload";
 
 // 데이터 구조를 기존의 DataType 대신에 받아온 데이터 구조로 변경
 interface CarouselData {
@@ -13,6 +14,15 @@ interface CarouselData {
   href: string;
   img: { url: string; filename: string }[];
   updatedAt: string;
+}
+
+interface AdminCarouselProps {
+  data: CarouselData[];
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleUpload: (content: string, link: string) => void;
+  file: File | null;
+  initFile: () => void;
+  getData: () => void;
 }
 
 const columns: ColumnsType<CarouselData> = [
@@ -51,44 +61,51 @@ const columns: ColumnsType<CarouselData> = [
         <a>삭제</a>
       </Space>
     ),
-    width: "20%",
+    width: "10%",
+  },
+  {
+    title: "이미지",
+    dataIndex: "img",
+    key: "img",
+    render: (img) => (
+      <>
+        <img src={`/carousel/${img.filename}`} />
+        {img.filename}
+      </>
+    ),
   },
 ];
 
-const AdminCarousel: React.FC<{ data: CarouselData[] }> = ({ data }) => {
+const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [content, setContent] = useState("");
+  const [link, setLink] = useState("");
 
   const showModal = () => {
+    setContent("");
+    setLink("");
+    props.initFile();
     setModalVisible(true);
   };
 
   const handleOk = () => {
-    // 모달에서 확인 버튼을 눌렀을 때 수행할 작업 추가
+    props.handleUpload(content, link);
     setModalVisible(false);
+    window.location.reload();
   };
 
   const handleCancel = () => {
     setModalVisible(false);
+    setContent("");
+    setLink("");
   };
 
-  const uploadProps = {
-    // 이미지 업로드 설정 추가
-    name: "file",
-    action: "https://your-upload-endpoint.com", // 이미지 업로드를 처리할 서버 엔드포인트
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info: any) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+  const onChangeContent = React.useCallback((input: string) => {
+    setContent(input);
+  }, []);
+  const onChangeLink = React.useCallback((input: string) => {
+    setLink(input);
+  }, []);
 
   return (
     <>
@@ -97,7 +114,7 @@ const AdminCarousel: React.FC<{ data: CarouselData[] }> = ({ data }) => {
           추가하기
         </Button>
       </ButtonArea>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={props.data} />
 
       <Modal
         title="이미지 추가"
@@ -105,11 +122,20 @@ const AdminCarousel: React.FC<{ data: CarouselData[] }> = ({ data }) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Input placeholder="내용 입력" />
-        <Input placeholder="링크 입력" />
-        <Upload {...uploadProps}>
-          <Button icon={<UploadOutlined />}>이미지 업로드</Button>
-        </Upload>
+        <Input
+          placeholder="내용 입력"
+          onChange={(e) => onChangeContent(e.target.value)}
+          value={content}
+        />
+        <Input
+          placeholder="링크 입력"
+          onChange={(e) => onChangeLink(e.target.value)}
+          value={link}
+        />
+        <ImgUpload
+          handleFileChange={props.handleFileChange}
+          file={props.file}
+        />
       </Modal>
     </>
   );

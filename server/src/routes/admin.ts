@@ -4,12 +4,12 @@ import multer from "multer";
 const router = express.Router();
 const uniqueFileName = (name: string) => {
   const timestamp = Date.now();
-  return `${timestamp}-${name}`;
+  return `${timestamp}-00`;
 };
 
 const storage = multer.diskStorage({
   destination(req, file, done) {
-    done(null, "../client/src/images/carousel");
+    done(null, "../client/public/carousel");
   },
   filename(req, file, done) {
     done(null, uniqueFileName(file.originalname));
@@ -29,9 +29,25 @@ router.post(
       return res.status(400).send("업로드실패");
     }
     console.log("하하하", req.file);
-    const newCarousel = await models.carousels.findAll({});
-    console.log("ddddddddddd", newCarousel);
-    res.status(200);
+    console.log("오오오", req.body.content, req.body.link);
+
+    const { content, link } = req.body;
+    // const newCarousel = await models.carousels.findAll({});
+
+    const newUpload = await models.carousels.create({
+      content,
+      href: link,
+      img: {
+        filename: req.file.filename,
+        url: `../../images/carousel/${req.file.filename}`,
+      },
+    });
+    if (newUpload === null) {
+      res.status(400).send("등록실패하였습니다.");
+    } else {
+      console.log("등록성공");
+      res.status(200);
+    }
   }
 );
 
