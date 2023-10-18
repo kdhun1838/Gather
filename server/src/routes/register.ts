@@ -148,9 +148,21 @@ router.get(
       const getFormData = await models.registers.findOne({
         where: { registerNum: postId },
       });
+      const getComment = await models.registerComments.findAll({
+        where: { registerNum: postId },
+        include: [
+          {
+            nest: true,
+            model: models.registers,
+            attribute: ["registerNum"],
+          },
+        ],
+      });
       getFormData.view += 1;
       await getFormData.save();
-      res.status(200).json(getFormData);
+      res.status(200).json({ getFormData, getComment });
+      console.log("getFormDataaaaaaaaaaaa", getFormData);
+      console.log("getCommentttttttttttttttt", getComment);
     } catch (e) {
       console.error(e);
     }
@@ -246,5 +258,20 @@ const updateExpiredStates = async () => {
 cron.schedule("27 * * * *", () => {
   updateExpiredStates();
 });
+
+// router.get(
+//   "/getComment/:postId",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const {postId} = req.query;
+//       const getComment = await models.registerComments.findAll({
+//         where: {postId}
+//       })
+//       res.status(200).json(getComment);
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   }
+// );
 
 export default router;

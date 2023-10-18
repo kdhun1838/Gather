@@ -26,11 +26,11 @@ export class RegisterComments extends Model<CommentAttributes> {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public getRegisters!: HasManyGetAssociationsMixin<Registers>; // Note the null assertions!
-  public addRegisters!: HasManyAddAssociationMixin<Registers, number>;
-  public hasRegisters!: HasManyHasAssociationMixin<Registers, number>;
-  public countRegisters!: HasManyCountAssociationsMixin;
-  public createRegisters!: HasManyCreateAssociationMixin<Registers>;
+  // public getRegisters!: HasManyGetAssociationsMixin<Registers>; // Note the null assertions!
+  // public addRegisters!: HasManyAddAssociationMixin<Registers, number>;
+  // public hasRegisters!: HasManyHasAssociationMixin<Registers, number>;
+  // public countRegisters!: HasManyCountAssociationsMixin;
+  // public createRegisters!: HasManyCreateAssociationMixin<Registers>;
 }
 
 export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
@@ -39,6 +39,8 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
       commentNum: {
         type: DataTypes.BIGINT,
         allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
       },
       registerNum: {
         type: DataTypes.BIGINT,
@@ -55,8 +57,8 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
     },
     {
       sequelize,
-      modelName: "Comments",
-      tableName: "comments",
+      modelName: "RegisterComments",
+      tableName: "registercomments",
       timestamps: true,
       indexes: [
         {

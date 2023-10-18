@@ -1,48 +1,44 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('registercomments', {
-    commentNum: {
-      autoIncrement: true,
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true
-    },
-    registerNum: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      references: {
-        model: 'registers',
-        key: 'registerNum'
-      }
-    },
-    userId: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    comment: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    tableName: 'registercomments',
-    timestamps: true,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "commentNum" },
-        ]
-      },
-      {
-        name: "NewTable_FK",
-        using: "BTREE",
-        fields: [
-          { name: "registerNum" },
-        ]
-      },
-    ]
-  });
-};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CommentsModel = exports.RegisterComments = void 0;
+const sequelize_1 = require("sequelize");
+class RegisterComments extends sequelize_1.Model {
+}
+exports.RegisterComments = RegisterComments;
+function CommentsModel(sequelize) {
+    RegisterComments.init({
+        commentNum: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        registerNum: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+        },
+        userId: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+        },
+        comment: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+        },
+    }, {
+        sequelize,
+        modelName: "RegisterComments",
+        tableName: "registercomments",
+        timestamps: true,
+        indexes: [
+            {
+                name: "PRIMARY",
+                unique: true,
+                using: "BTREE",
+                fields: [{ name: "commentNum" }],
+            },
+        ],
+    });
+    return RegisterComments;
+}
+exports.CommentsModel = CommentsModel;

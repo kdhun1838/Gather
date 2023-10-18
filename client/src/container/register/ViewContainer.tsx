@@ -5,6 +5,7 @@ import View from "../../components/register/View";
 import { RootState } from "../../modules";
 import {
   changeComment,
+  getComment,
   getForm,
   postClose,
   postDelete,
@@ -37,6 +38,7 @@ const ViewContainer = () => {
 
   React.useEffect(() => {
     dispatch(getForm(Number(postId)));
+    dispatch(getComment(Number(postId)));
   }, [dispatch, postId]);
 
   return (

@@ -14,6 +14,7 @@ import {
   CHANGE_COMMENT,
   POST_COMMENT,
   CHANGE_RECRUIT,
+  GET_COMMENT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -201,6 +202,12 @@ const register = (
         ...state,
       };
     case `${POST_COMMENT}_FAILURE`:
+      return state;
+    case `${GET_COMMENT}_SUCCESS`:
+      return {
+        ...state,
+      };
+    case `${GET_COMMENT}_FAILURE`:
       return state;
     default:
       return state;

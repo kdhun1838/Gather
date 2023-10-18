@@ -1,4 +1,9 @@
-import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEvent,
+  useState,
+} from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import HeaderContainer from "../../container/common/HeaderContainer";
@@ -25,7 +30,18 @@ const Section = styled.div`
   .firstInfo {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-top: 20px;
+
+    .dateView {
+      display: flex;
+      text-align: right;
+
+      p {
+        &:first-child {
+          margin-right: 20px;
+        }
+      }
+    }
   }
   .secondInfo {
     display: flex;
@@ -107,19 +123,27 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
     period,
     content,
     view,
-  } = formData.formData;
+  } = formData.formData.getFormData;
 
+  console.log("title", formData)
+  
+  // const {
+  //   comment,
+  //   userId,
+  // } = formData.formData.getComment;
   return (
     <PostWrap>
       <HeaderContainer />
       <PostContainer>
         <Section>
+          <h1>{title}</h1>
           <div className="firstInfo">
             <b>NickName</b>
-            <p>2023-10-04</p>
-            <p>조회수 {view}</p>
+            <div className="dateView">
+              <p>2023-10-04</p>
+              <p>조회수 {view}</p>
+            </div>
           </div>
-          <h1>{title}</h1>
         </Section>
         <Section>
           <div className="secondInfo">

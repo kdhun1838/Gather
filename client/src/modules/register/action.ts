@@ -39,6 +39,9 @@ export const CHANGE_COMMENT = "register/CHANGE_COMMENT" as const;
 export const [POST_COMMENT, POST_COMMENT_SUCCESS, POST_COMMENT_FAILURE] =
   createRequestActionTypes("register/POST_COMMENT" as const);
 
+  export const [GET_COMMENT, GET_COMMENT_SUCCESS, GET_COMMENT_FAILURE] =
+  createRequestActionTypes("register/GET_COMMENT" as const);
+
 // 디스패치
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
@@ -144,4 +147,11 @@ export const postComment = (comment: string, postId: number) => ({
     comment,
     postId,
   },
+});
+
+export const getComment = (postId: number) => ({
+  type: GET_COMMENT,
+  payload: {
+    postId
+  }
 });

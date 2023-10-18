@@ -136,9 +136,21 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
         const getFormData = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
         });
+        const getComment = yield models_1.default.registerComments.findAll({
+            where: { registerNum: postId },
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.registers,
+                    attribute: ["registerNum"],
+                },
+            ],
+        });
         getFormData.view += 1;
         yield getFormData.save();
-        res.status(200).json(getFormData);
+        res.status(200).json({ getFormData, getComment });
+        console.log("getFormDataaaaaaaaaaaa", getFormData);
+        console.log("getCommentttttttttttttttt", getComment);
     }
     catch (e) {
         console.error(e);
@@ -216,4 +228,18 @@ const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* ()
 node_cron_1.default.schedule("27 * * * *", () => {
     updateExpiredStates();
 });
+// router.get(
+//   "/getComment/:postId",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const {postId} = req.query;
+//       const getComment = await models.registerComments.findAll({
+//         where: {postId}
+//       })
+//       res.status(200).json(getComment);
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   }
+// );
 exports.default = router;
