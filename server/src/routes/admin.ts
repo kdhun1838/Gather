@@ -35,4 +35,16 @@ router.post(
   }
 );
 
+router.get(
+  "/getCarousel",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const Carousel = await models.carousels.findAll({});
+    res.status(200).json(Carousel);
+    try {
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+
 export default router;

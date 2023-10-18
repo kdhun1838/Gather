@@ -41,4 +41,13 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
     console.log("ddddddddddd", newCarousel);
     res.status(200);
 }));
+router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const Carousel = yield models_1.default.carousels.findAll({});
+    res.status(200).json(Carousel);
+    try {
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 exports.default = router;

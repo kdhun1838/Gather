@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommentsModel = exports.RegisterComments = void 0;
+exports.RegisterCommentsModel = exports.RegisterComments = void 0;
 const sequelize_1 = require("sequelize");
 class RegisterComments extends sequelize_1.Model {
 }
 exports.RegisterComments = RegisterComments;
-function CommentsModel(sequelize) {
+function RegisterCommentsModel(sequelize) {
     RegisterComments.init({
         commentNum: {
+            autoIncrement: true,
             type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
+            primaryKey: true,
         },
         registerNum: {
             type: sequelize_1.DataTypes.BIGINT,
@@ -25,8 +27,8 @@ function CommentsModel(sequelize) {
         },
     }, {
         sequelize,
-        modelName: "Comments",
-        tableName: "comments",
+        modelName: "RegisterComments",
+        tableName: "registercomments",
         timestamps: true,
         indexes: [
             {
@@ -39,4 +41,4 @@ function CommentsModel(sequelize) {
     });
     return RegisterComments;
 }
-exports.CommentsModel = CommentsModel;
+exports.RegisterCommentsModel = RegisterCommentsModel;
