@@ -22,31 +22,69 @@ const AdminCarouselContainer = () => {
     setFile(null);
   };
 
-  const handleUpload = async (content: string, link: string) => {
-    console.log("sss", content, link);
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("content", content);
-      formData.append("link", link);
+  const handleUpload = async (
+    content: string,
+    link: string,
+    isUpdate: boolean,
+    carouselNum: number
+  ) => {
+    console.log("sss", content, link, isUpdate, carouselNum);
 
-      try {
-        const response = await client.post("/admin/uploadImg", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+    if (isUpdate) {
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("content", content);
+        formData.append("link", link);
+        formData.append("carouselNum", carouselNum.toString());
 
-        if (response.status === 200) {
-          console.log("파일이 성공적으로 업로드되었습니다.");
-        } else {
-          console.error("파일 업로드 실패:", response.statusText);
+        try {
+          const response = await client.post(
+            "/admin/updateCarousel",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          if (response.status === 200) {
+            console.log("파일이 성공적으로 업로드되었습니다.");
+          } else {
+            console.error("파일 업로드 실패:", response.statusText);
+          }
+        } catch (error) {
+          console.error("파일 업로드 중 오류 발생:", error);
         }
-      } catch (error) {
-        console.error("파일 업로드 중 오류 발생:", error);
+      } else {
+        alert("업로드할 파일이 선택되지 않았습니다.");
       }
     } else {
-      alert("업로드할 파일이 선택되지 않았습니다.");
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("content", content);
+        formData.append("link", link);
+
+        try {
+          const response = await client.post("/admin/uploadImg", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (response.status === 200) {
+            console.log("파일이 성공적으로 업로드되었습니다.");
+          } else {
+            console.error("파일 업로드 실패:", response.statusText);
+          }
+        } catch (error) {
+          console.error("파일 업로드 중 오류 발생:", error);
+        }
+      } else {
+        alert("업로드할 파일이 선택되지 않았습니다.");
+      }
     }
   };
 
@@ -83,7 +121,7 @@ const AdminCarouselContainer = () => {
           console.error("에러:", error);
         }
       },
-    }).then((res) => {
+    }).then((res: any) => {
       if (res.isConfirmed) {
         Swal.fire({
           icon: "success",
@@ -104,6 +142,7 @@ const AdminCarouselContainer = () => {
         initFile={initFile}
         getData={getData}
         handleDelete={handleDelete}
+        setFile={setFile}
       />
     </div>
   );

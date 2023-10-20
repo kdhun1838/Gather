@@ -65,6 +65,26 @@ router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0,
         res.status(500);
     }
 }));
+router.post("/updateCarousel/", upload.single("file"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const { content, link, carouselNum } = req.body;
+    console.log(req.body);
+    console.log("req.file", req.file);
+    try {
+        yield models_1.default.carousels.update({
+            content,
+            href: link,
+            img: {
+                filename: (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename,
+                url: `../../images/carousel/${(_b = req.file) === null || _b === void 0 ? void 0 : _b.filename}`,
+            },
+        }, { where: { carouselNum } });
+        res.status(200);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const carouselNum = req.params.carouselNum;
     console.log("sss");

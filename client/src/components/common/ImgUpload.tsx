@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ImgArea } from "../admin/AdminCarousel";
 
 const CustomFileUpload = styled.label`
   margin: 0.5rem 0 0 0;
@@ -32,6 +33,7 @@ interface ImgUploadProps {
 }
 
 const ImgUpload: React.FC<ImgUploadProps> = (props) => {
+  console.log("propsssssssssss", props);
   return (
     <div>
       <CustomFileUpload htmlFor="image-upload">이미지 선택</CustomFileUpload>
@@ -41,8 +43,12 @@ const ImgUpload: React.FC<ImgUploadProps> = (props) => {
         accept="image/*"
         onChange={props.handleFileChange}
       />
-      {props.file && (
-        <SelectedFileName>선택된 파일: {props.file.name}</SelectedFileName>
+      {props.file ? (
+        <>
+          <SelectedFileName>선택된 파일: {props.file.name}</SelectedFileName>
+        </>
+      ) : (
+        <div>선택된 파일이 없습니다. 파일을 선택해주세요</div>
       )}
     </div>
   );

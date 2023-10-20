@@ -11,6 +11,7 @@ import Button from "./Button";
 import { logout } from "../../modules/user/action";
 import Logo from "../../images/Logo.png";
 import { UserState } from "../../modules/user/type";
+import { getCarousel } from "../../lib/api/admin";
 
 const items: TabsProps["items"] = [
   {
@@ -27,14 +28,15 @@ const contentStyle: React.CSSProperties = {
   color: "#fff",
   lineHeight: "160px",
   textAlign: "center",
-  background: "orange",
+  // background: "orange",
 };
 
 interface HeaderProps {
   user: UserState;
+  carouselData: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ user }) => {
+const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,10 +46,14 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   const [currentLocation, setCurrentLocation] = React.useState<string>(
     location.pathname
   );
+
+  console.log("캐러셀데이터", carouselData);
+
   const onChange = (key: string) => {
     navigate(key);
     setCurrentLocation(location.pathname);
   };
+
   return (
     <ConfigProvider
       theme={{
@@ -94,18 +100,32 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
           />
         </span>
       </Wrapper>
-      <Carousel autoplay>
-        <div>
-          <h3 style={contentStyle}>1</h3>
-        </div>
+      <Carousel
+        autoplay
+        style={{ height: "320px" }} // 캐로셀의 높이 설정
+      >
+        {carouselData &&
+          carouselData.map((item: any) => (
+            <div key={item.carouselNum}>
+              <div
+                style={{
+                  ...contentStyle,
+                  backgroundImage: `url(/carousel/${item.img.filename})`,
+                  backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
+                  width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
+                }}
+              ></div>
+            </div>
+          ))}
       </Carousel>
     </ConfigProvider>
   );
 };
 
 const Wrapper = styled(Responsive)`
-  /* border: solid 1px black; */
-
   > div {
     display: flex;
     height: 6rem;
@@ -123,7 +143,6 @@ const Wrapper = styled(Responsive)`
       cursor: pointer;
       font-weight: 600;
       font-size: 1.125rem;
-      margin: ;
     }
   }
   > span {
@@ -137,12 +156,6 @@ const UserInfo = styled.div`
   font-weight: 800;
   margin: 0 1rem 0 1rem;
 `;
-
-// const CustomTabs = styled(Tabs)`
-//   .ant-tabs-tab {
-//     margin-right: 40px;
-//   }
-// `;
 
 const LogoBlock = styled.img`
   height: 5.5rem;

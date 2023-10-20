@@ -63,6 +63,33 @@ router.get(
   }
 );
 
+router.post(
+  "/updateCarousel/",
+  upload.single("file"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { content, link, carouselNum } = req.body;
+    console.log(req.body);
+    console.log("req.file", req.file);
+
+    try {
+      await models.carousels.update(
+        {
+          content,
+          href: link,
+          img: {
+            filename: req.file?.filename,
+            url: `../../images/carousel/${req.file?.filename}`,
+          },
+        },
+        { where: { carouselNum } }
+      );
+      res.status(200);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+
 router.delete(
   "/deleteCarousel/:carouselNum",
   async (req: Request, res: Response, next: NextFunction) => {
