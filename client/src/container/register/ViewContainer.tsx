@@ -4,18 +4,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import View from "../../components/register/View";
 import { RootState } from "../../modules";
 import {
-  changeComment,
-  getComment,
   getForm,
   postClose,
   postDelete,
 } from "../../modules/register/action";
 
 const ViewContainer = () => {
-  const formData = useSelector((state: RootState) => state.register);
+  const { formData } = useSelector((state: RootState) => state.register);
+  console.log("formData1111", formData);
   const dispatch = useDispatch();
   const params = useParams();
-  const postId = params.postId || "";
+  const postId = Number(params.postId);
   const navigate = useNavigate();
 
   const onClose = useCallback(
@@ -37,17 +36,19 @@ const ViewContainer = () => {
   );
 
   React.useEffect(() => {
-    dispatch(getForm(Number(postId)));
-    dispatch(getComment(Number(postId)));
+    dispatch(getForm(postId));
   }, [dispatch, postId]);
 
+  React.useEffect(() => {
+    console.log("formData22222222", formData)
+  })
   return (
     <div>
       <View
         formData={formData}
         onClose={onClose}
         onDelete={onDelete}
-        postId={Number(postId)}
+        postId={postId}
       />
     </div>
   );

@@ -12,7 +12,7 @@ import {
   changeComment,
   postComment,
   changeRecruit,
-  getComment,
+  unloadComment,
 } from "./action";
 
 type FormType = {
@@ -89,4 +89,4 @@ export type RegisterAction =
   | ReturnType<typeof changeComment>
   | ReturnType<typeof postComment>
   | ReturnType<typeof changeRecruit>
-  | ReturnType<typeof getComment>
+  | ReturnType<typeof unloadComment>

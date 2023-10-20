@@ -130,5 +130,16 @@ router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     }
     next();
 }));
-router.get("/check", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { }));
+router.get('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.cookies.accessToken;
+    if (!user) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+    }
+    res.json(jsonwebtoken_1.default.verify(user, getJwtSecret()));
+}));
+router.post('/logout', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.clearCookie('accessToken');
+    res.status(204).json('good');
+}));
 exports.default = router;

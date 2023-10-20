@@ -144,13 +144,17 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                     model: models_1.default.registers,
                     attribute: ["registerNum"],
                 },
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attribute: ["name"]
+                }
             ],
         });
         getFormData.view += 1;
         yield getFormData.save();
         res.status(200).json({ getFormData, getComment });
-        console.log("getFormDataaaaaaaaaaaa", getFormData);
-        console.log("getCommentttttttttttttttt", getComment);
+        // console.log("getCommentttttttttttttttt", getComment);
     }
     catch (e) {
         console.error(e);
@@ -171,7 +175,6 @@ router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void
 }));
 router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
-    console.log("22222222222222", postId);
     try {
         const postDelete = yield models_1.default.registers.destroy({
             where: { registerNum: postId },
@@ -184,17 +187,16 @@ router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
     }
 }));
 router.post("/postComment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const postId = req.body.postId;
-    const comment = req.body.comment;
-    const ID = "dkdlel123";
+    const { postId, userId, comment } = req.body;
     console.log("bodybodybodybodybodybodybodybodybody", req.body);
     try {
         const postComment = yield models_1.default.registerComments.create({
-            userId: ID,
-            comment: comment,
+            userId,
+            comment,
             registerNum: postId,
         });
         res.status(200).json(postComment);
+        console.log("postCommentpostComment", postComment);
     }
     catch (e) {
         console.error(e);
@@ -228,18 +230,4 @@ const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* ()
 node_cron_1.default.schedule("27 * * * *", () => {
     updateExpiredStates();
 });
-// router.get(
-//   "/getComment/:postId",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const {postId} = req.query;
-//       const getComment = await models.registerComments.findAll({
-//         where: {postId}
-//       })
-//       res.status(200).json(getComment);
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   }
-// );
 exports.default = router;

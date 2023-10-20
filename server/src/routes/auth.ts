@@ -139,8 +139,23 @@ router.post(
 );
 
 router.get(
-  "/check",
-  async (req: Request, res: Response, next: NextFunction) => {}
+  '/check',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.cookies.accessToken;
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    res.json(jwt.verify(user, getJwtSecret()));
+  }
+);
+
+router.post(
+  '/logout',
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie('accessToken');
+    res.status(204).json('good');
+  }
 );
 
 export default router;

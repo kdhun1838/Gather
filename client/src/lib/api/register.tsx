@@ -4,8 +4,9 @@ import { GetListType, RegisterState } from "../../modules/register/type";
 
 export const registerForm = ({
   form,
+  userNum
 }: RegisterState): Promise<AxiosResponse> => {
-  return client.post("/register", form);
+  return client.post("/register", {form, userNum});
 };
 
 export const getList = (data: GetListType): Promise<AxiosResponse> => {
@@ -32,12 +33,13 @@ export const postDelete = (postId: Number): Promise<AxiosResponse> => {
 export const postComment = ({
   comment,
   postId,
+  userNum,
 }: {
   comment: RegisterState;
   postId: number;
+  userNum: number;
 }): Promise<AxiosResponse> => {
-  console.log("asdfasfsafsadf", comment, postId);
-  return client.post(`/register/postComment/${postId}`, { comment, postId });
+  return client.post(`/register/postComment/${postId}`, { comment, postId, userNum });
 };
 
 export const getComment = (postId: Number): Promise<AxiosResponse> => {

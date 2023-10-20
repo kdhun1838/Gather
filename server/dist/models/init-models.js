@@ -16,6 +16,8 @@ function initModels(sequelize) {
     const registerComments = (0, registerComments_1.CommentsModel)(sequelize);
     registers.hasMany(registerComments, { foreignKey: "registerNum" });
     registerComments.belongsTo(registers, { foreignKey: "registerNum" });
+    users.hasMany(registerComments, { foreignKey: "userId" });
+    registerComments.belongsTo(users, { foreignKey: "userId" });
     users.hasMany(communityComments, { foreignKey: "userId" });
     communityComments.belongsTo(users, { foreignKey: "userId" });
     return {

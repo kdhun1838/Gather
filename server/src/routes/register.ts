@@ -156,13 +156,17 @@ router.get(
             model: models.registers,
             attribute: ["registerNum"],
           },
+          {
+            nest: true,
+            model: models.users,
+            attribute: ["name"]
+          }
         ],
       });
       getFormData.view += 1;
       await getFormData.save();
       res.status(200).json({ getFormData, getComment });
-      console.log("getFormDataaaaaaaaaaaa", getFormData);
-      console.log("getCommentttttttttttttttt", getComment);
+      // console.log("getCommentttttttttttttttt", getComment);
     } catch (e) {
       console.error(e);
     }
@@ -192,7 +196,6 @@ router.post(
   "/delete/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
-    console.log("22222222222222", postId);
     try {
       const postDelete = await models.registers.destroy({
         where: { registerNum: postId },
@@ -208,17 +211,16 @@ router.post(
 router.post(
   "/postComment/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const postId = req.body.postId;
-    const comment = req.body.comment;
-    const ID = "dkdlel123";
+    const { postId, userId, comment } = req.body;
     console.log("bodybodybodybodybodybodybodybodybody", req.body);
     try {
       const postComment = await models.registerComments.create({
-        userId: ID,
-        comment: comment,
+        userId,
+        comment,
         registerNum: postId,
       });
       res.status(200).json(postComment);
+      console.log("postCommentpostComment", postComment);
     } catch (e) {
       console.error(e);
     }
@@ -258,20 +260,5 @@ const updateExpiredStates = async () => {
 cron.schedule("27 * * * *", () => {
   updateExpiredStates();
 });
-
-// router.get(
-//   "/getComment/:postId",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const {postId} = req.query;
-//       const getComment = await models.registerComments.findAll({
-//         where: {postId}
-//       })
-//       res.status(200).json(getComment);
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   }
-// );
 
 export default router;
