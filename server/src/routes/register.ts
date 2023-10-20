@@ -109,19 +109,8 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     period,
     content,
   } = req.body.form;
-  // console.log(
-  //   "register 백도착",
-  //   req.body,
-  //   "sssssssss",
-  //   title,
-  //   category,
-  //   personnel,
-  //   online,
-  //   position,
-  //   contact,
-  //   period,
-  //   content
-  // );
+  const {userNum} = req.body;
+  console.log("body",req.body.userNum)
   try {
     const newRegister = await models.registers.create({
       title,
@@ -132,9 +121,12 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       contact,
       period,
       content,
+      userNum
     });
     res.status(200).json(newRegister);
+    console.log("newRegister", newRegister)
   } catch (error) {
+    console.error(error)
     res.status(500).json(error);
     next(error);
   }
@@ -144,6 +136,7 @@ router.get(
   "/post/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.query;
+    console.log("postId", postId);
     try {
       const getFormData = await models.registers.findOne({
         where: { registerNum: postId },
@@ -211,11 +204,11 @@ router.post(
 router.post(
   "/postComment/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { postId, userId, comment } = req.body;
+    const { postId, userNum, comment } = req.body;
     console.log("bodybodybodybodybodybodybodybodybody", req.body);
     try {
       const postComment = await models.registerComments.create({
-        userId,
+        userId: userNum,
         comment,
         registerNum: postId,
       });
@@ -227,38 +220,38 @@ router.post(
   }
 );
 
-const updateExpiredStates = async () => {
-  try {
-    const currentDate = new Date();
-    const currentDateString = new Date(
-      currentDate.getTime() + 9 * 60 * 60 * 1000
-    )
-      .toISOString()
-      .split("T")[0];
-    const expiredRegisters = await models.registers.findAll({
-      where: {
-        state: {
-          [Op.ne]: 2,
-        },
-        period: {
-          [Op.lt]: currentDateString,
-        },
-      },
-    });
-    for (const register of expiredRegisters) {
-      await register.update({ state: 2 });
-    }
+// const updateExpiredStates = async () => {
+//   try {
+//     const currentDate = new Date();
+//     const currentDateString = new Date(
+//       currentDate.getTime() + 9 * 60 * 60 * 1000
+//     )
+//       .toISOString()
+//       .split("T")[0];
+//     const expiredRegisters = await models.registers.findAll({
+//       where: {
+//         state: {
+//           [Op.ne]: 2,
+//         },
+//         period: {
+//           [Op.lt]: currentDateString,
+//         },
+//       },
+//     });
+//     for (const register of expiredRegisters) {
+//       await register.update({ state: 2 });
+//     }
 
-    console.log(
-      `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
-    );
-  } catch (e) {
-    console.error("오류가 발생했습니다:", e);
-  }
-};
+//     console.log(
+//       `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
+//     );
+//   } catch (e) {
+//     console.error("오류가 발생했습니다:", e);
+//   }
+// };
 
-cron.schedule("27 * * * *", () => {
-  updateExpiredStates();
-});
+// cron.schedule("27 * * * *", () => {
+//   updateExpiredStates();
+// });
 
 export default router;

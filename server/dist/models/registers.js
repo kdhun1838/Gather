@@ -13,6 +13,10 @@ function registersModel(sequelize) {
             primaryKey: true,
             autoIncrement: true,
         },
+        userNum: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+        },
         title: {
             type: sequelize_1.DataTypes.STRING(100),
             allowNull: false,

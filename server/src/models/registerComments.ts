@@ -13,14 +13,14 @@ import { Registers } from "./registers";
 interface CommentAttributes {
   commentNum: number;
   registerNum: number;
-  userId: string;
+  userId: number;
   comment: string;
 }
 
 export class RegisterComments extends Model<CommentAttributes> {
   public commentNum!: number;
   public registerNum!: number;
-  public userId!: string;
+  public userId!: number;
   public comment!: string;
 
   public readonly createdAt!: Date;
@@ -47,7 +47,7 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
         allowNull: false,
       },
       userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
       comment: {
@@ -58,7 +58,7 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
     {
       sequelize,
       modelName: "RegisterComments",
-      tableName: "registercomments",
+      tableName: "comments",
       timestamps: true,
       indexes: [
         {

@@ -51,7 +51,7 @@ const LoginForm = () => {
     if (auth) {
       console.log('로그인 성공');
       dispatch(check(user));
-      dispatch(tempSetUser(auth));
+      // dispatch(tempSetUser(auth));
     }
   }, [auth, authError, dispatch]);
 

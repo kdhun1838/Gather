@@ -18,7 +18,7 @@ function CommentsModel(sequelize) {
             allowNull: false,
         },
         userId: {
-            type: sequelize_1.DataTypes.STRING,
+            type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
         },
         comment: {
@@ -28,7 +28,7 @@ function CommentsModel(sequelize) {
     }, {
         sequelize,
         modelName: "RegisterComments",
-        tableName: "registercomments",
+        tableName: "comments",
         timestamps: true,
         indexes: [
             {
