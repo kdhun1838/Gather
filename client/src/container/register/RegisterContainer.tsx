@@ -59,7 +59,7 @@ const RegisterContainer = () => {
     (form: RegisterState, userNum: number) => {
       dispatch(postForm(form, userNum));
       setIsPost(false);
-      // navigate("/");
+      navigate("/");
     },
     [dispatch, form]
   );
