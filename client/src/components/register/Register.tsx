@@ -4,6 +4,8 @@ import { RegisterState } from "../../modules/register/type";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale"; //한국어 설정
+import HeaderContainer from "../../container/common/HeaderContainer";
+import { useNavigate } from "react-router-dom";
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -51,7 +53,7 @@ const InputForm = styled.div`
   &:nth-child(2n + 1) {
     margin-right: 40px;
   }
-  &:last-child{
+  &:last-child {
     margin-right: 0;
   }
   &.textForm {
@@ -140,12 +142,13 @@ const ModalWrap = styled.div`
 
 type RegisterProps = {
   onChangeForm: (data: { key: string; value: string | number }) => void;
-  onPostForm: (form: RegisterState) => void;
+  onPostForm: (form: RegisterState, userNum: number) => void;
   onPageBack: () => void;
   onIsPost: (e: FormEvent) => void;
   onCancle: () => void;
   isPost: boolean;
   form: RegisterState;
+  userNum: number;
 };
 
 const personner = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -158,8 +161,21 @@ const Register: React.FC<RegisterProps> = ({
   onCancle,
   isPost,
   form,
+  userNum
 }) => {
   const [date, setIsDate] = useState<Date | null>(null);
+
+  const navigate = useNavigate();
+  
+  const handlePostForm = (e: FormEvent) => {
+    if(!userNum){
+      e.preventDefault();
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    } else {
+      onPostForm(form, userNum);
+    }
+  }
   // const date = new Date();
   const formatDate = (date: any) => {
     if (!date) return "";
@@ -171,6 +187,7 @@ const Register: React.FC<RegisterProps> = ({
   };
   return (
     <>
+      <HeaderContainer />
       <StyleForm>
         <TitleForm>
           <h3>제목</h3>
@@ -283,7 +300,7 @@ const Register: React.FC<RegisterProps> = ({
           <div className="modalForm">
             <h3>정말 등록하시겠습니까?</h3>
             <div>
-              <button onClick={(e) => onPostForm(form)}>확인</button>
+              <button onClick={handlePostForm}>확인</button>
               <button onClick={() => onCancle()}>취소</button>
             </div>
           </div>

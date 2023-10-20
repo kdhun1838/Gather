@@ -58,7 +58,7 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
     {
       sequelize,
       modelName: "RegisterComments",
-      tableName: "comments",
+      tableName: "registercomments",
       timestamps: true,
       indexes: [
         {

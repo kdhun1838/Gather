@@ -108,9 +108,9 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     contact,
     period,
     content,
-  } = req.body.form;
-  const {userNum} = req.body;
-  console.log("body",req.body.userNum)
+  } = req.body.form.form;
+  const userNum = req.body.userNum;
+  console.log("body",req.body)
   try {
     const newRegister = await models.registers.create({
       title,

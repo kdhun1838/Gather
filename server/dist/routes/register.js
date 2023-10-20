@@ -97,9 +97,9 @@ router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, category, personnel, online, position, contact, period, content, } = req.body.form;
-    const { userNum } = req.body;
-    console.log("body", req.body.userNum);
+    const { title, category, personnel, online, position, contact, period, content, } = req.body.form.form;
+    const userNum = req.body.userNum;
+    console.log("body", req.body);
     try {
         const newRegister = yield models_1.default.registers.create({
             title,

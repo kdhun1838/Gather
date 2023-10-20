@@ -14,11 +14,14 @@ import { useNavigate } from "react-router";
 const RegisterContainer = () => {
   const [isPost, setIsPost] = useState(false);
 
-  const form = useSelector((state: RootState) => state.register);
+  const { form, userNum } = useSelector((state: RootState) => ({
+    form: state.register,
+    userNum: state.user,
+  }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("ffffffff", form.form.title);
+  console.log("ffffffff", form.form.title, userNum.user);
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {
@@ -46,18 +49,17 @@ const RegisterContainer = () => {
 
   const onPageBack = () => {
     navigate(-1);
-  }
+  };
 
   const onCancle = () => {
     setIsPost(false);
   };
 
   const onPostForm = useCallback(
-    (form: RegisterState) => {
-      dispatch(postForm(form));
-      console.log("form===", form);
+    (form: RegisterState, userNum: number) => {
+      dispatch(postForm(form, userNum));
       setIsPost(false);
-      navigate("/");
+      // navigate("/");
     },
     [dispatch, form]
   );
@@ -77,6 +79,7 @@ const RegisterContainer = () => {
         onCancle={onCancle}
         isPost={isPost}
         form={form}
+        userNum={userNum.user?.userNum}
       />
     </div>
   );

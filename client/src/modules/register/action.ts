@@ -101,10 +101,11 @@ export const getPopularList = () => ({
   payload: {},
 });
 
-export const postForm = (form: RegisterState) => ({
+export const postForm = (form: RegisterState, userNum: number) => ({
   type: POST_FORM,
   payload: {
     form,
+    userNum
   },
 });
 

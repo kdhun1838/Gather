@@ -28,7 +28,7 @@ function CommentsModel(sequelize) {
     }, {
         sequelize,
         modelName: "RegisterComments",
-        tableName: "comments",
+        tableName: "registercomments",
         timestamps: true,
         indexes: [
             {
