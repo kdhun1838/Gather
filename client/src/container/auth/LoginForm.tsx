@@ -18,13 +18,12 @@ const LoginForm = () => {
     user: state.user.user,
   }));
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
+  const onChange = (data: { key: string; value: string | number }) => {
     dispatch(
       changeField({
         name: 'login',
-        key: name,
-        value,
+        key: data.key,
+        value: String(data.value),
       })
     );
   };

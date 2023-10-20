@@ -15,7 +15,6 @@ const initialState: AuthState = {
     email: '',
     tel: '',
     age: 0,
-    grade: '',
     addr: '',
     gender: '',
   },
