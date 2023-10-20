@@ -28,7 +28,6 @@ export type registerState = {
   email: string;
   tel: string;
   age: number;
-  grade: string;
   addr: string;
   gender: string;
 };

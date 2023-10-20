@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 import { AuthState, LoginState } from '../../modules/auth/type';
+import DaumPostcode from 'react-daum-postcode';
 
 // 스타일드 컴포넌트로 스타일링된 AuthFormBlock 정의
 const AuthFormBlock = styled.div`
@@ -12,13 +13,18 @@ const AuthFormBlock = styled.div`
     color: ${palette.gray[8]};
     margin-bottom: 1rem;
   }
+  .span {
+    margin-bottom: 0.5rem;
+  }
+  .DaumPostcode {
+    width: 200px;
+    height: 200px;
+  }
 `;
 const StyledInput = styled.input`
   flex: 1;
   font-size: 1rem;
-  border: none;
-  border-bottom: 1px solid ${palette.gray[5]};
-  padding-bottom: 0.5rem;
+  padding: 0.3rem;
   outline: none;
   width: 100%;
   &:focus {
@@ -60,7 +66,7 @@ const textMap: Record<string, string> = {
 
 interface textMapProps {
   type: any;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // 수정: key 인자 제거
+  onChange: (data: { key: string; value: string | number }) => void; // 수정: key 인자 제거
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
   form: AuthState | LoginState;
@@ -73,111 +79,177 @@ const AuthForm: React.FC<textMapProps> = ({
   error,
   form,
 }) => {
+  const [isAddressModalOpen, setAddressModalOpen] = useState(false);
+  const [address, setAddress] = useState('');
+
+  const handleOpenAddressModal = () => {
+    setAddressModalOpen(true);
+  };
+  const handleCloseAddressModal = () => {
+    setAddressModalOpen(false);
+  };
+  const handleAddressComplete = (data: any) => {
+    // data에 대한 타입을 명시적으로 any 또는 실제 타입으로 지정
+    setAddress(data.address); // 선택한 주소를 저장
+    handleCloseAddressModal(); // 모달 닫기
+    onChange({ key: 'addr', value: data.address });
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAddress(value); // 주소 상태 업데이트
+    onChange({ key: name, value });
+  };
+
   const text = textMap[type];
   return (
     <AuthFormBlock>
       <h3>{text}</h3>
       <form onSubmit={onSubmit}>
-        <StyledInput
-          autoComplete="id"
-          name="id"
-          placeholder="아이디"
-          onChange={onChange}
-          // value={type === 'register' ? form.register.id : form.login.id}
-        />
-        <StyledInput
-          autoComplete="new-password"
-          name="password"
-          placeholder="비밀번호"
-          type="password"
-          onChange={onChange}
-          // value={
-          //   type === 'register' ? form.register.password : form.login.password
-          // }
-        />
-        {type === 'register' && (
+        <div className="span">
+          <span>아이디</span>
+          <StyledInput
+            autoComplete="id"
+            name="id"
+            placeholder="아이디"
+            onChange={(e) => onChange({ key: 'id', value: e.target.value })}
+            // value={type === 'register' ? form.register.id : form.login.id}
+          />
+        </div>
+        <div className="span">
+          <span>비밀번호</span>
           <StyledInput
             autoComplete="new-password"
-            name="passwordConfirm"
-            placeholder="비밀번호 확인"
+            name="password"
+            placeholder="비밀번호"
             type="password"
-            onChange={onChange}
-            // value={form.register.passwordConfirm}
+            onChange={(e) =>
+              onChange({ key: 'password', value: e.target.value })
+            }
+            // value={
+            //   type === 'register' ? form.register.password : form.login.password
+            // }
           />
+        </div>
+        {type === 'register' && (
+          <div className="span">
+            <span>비밀번호 확인</span>
+            <StyledInput
+              autoComplete="new-password"
+              name="passwordConfirm"
+              placeholder="비밀번호 확인"
+              type="password"
+              onChange={(e) =>
+                onChange({ key: 'passwordConfirm', value: e.target.value })
+              }
+              // value={form.register.passwordConfirm}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="name"
-            name="name"
-            placeholder="이름"
-            onChange={onChange}
-            // value={form.register.name}
-          />
+          <div className="span">
+            <span>이름</span>
+            <StyledInput
+              autoComplete="name"
+              name="name"
+              placeholder="이름"
+              onChange={(e) => onChange({ key: 'name', value: e.target.value })}
+              // value={form.register.name}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="nick"
-            name="nick"
-            placeholder="닉네임"
-            onChange={onChange}
-            // value={form.register.nick}
-          />
+          <div className="span">
+            <span>닉네임</span>
+            <StyledInput
+              autoComplete="nick"
+              name="nick"
+              placeholder="닉네임"
+              onChange={(e) => onChange({ key: 'nick', value: e.target.value })}
+              // value={form.register.nick}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="email"
-            name="email"
-            placeholder="E-mail"
-            onChange={onChange}
-            // value={form.register.email}
-          />
+          <div className="span">
+            <span>이메일</span>
+            <StyledInput
+              autoComplete="email"
+              name="email"
+              placeholder="E-mail"
+              onChange={(e) =>
+                onChange({ key: 'email', value: e.target.value })
+              }
+              // value={form.register.email}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="tel"
-            name="tel"
-            placeholder="전화번호"
-            onChange={onChange}
-            // value={form.register.tel}
-          />
+          <div className="span">
+            <span>전화번호</span>
+            <StyledInput
+              autoComplete="tel"
+              name="tel"
+              placeholder="전화번호"
+              onChange={(e) => onChange({ key: 'tel', value: e.target.value })}
+              // value={form.register.tel}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="age"
-            name="age"
-            placeholder="생년월일"
-            onChange={onChange}
-            // value={form.register.age}
-          />
+          <div className="span">
+            <span>생년월일</span>
+            <StyledInput
+              autoComplete="age"
+              name="age"
+              placeholder="생년월일"
+              onChange={(e) => onChange({ key: 'age', value: e.target.value })}
+              // value={form.register.age}
+            />
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="grade"
-            name="grade"
-            placeholder="학점"
-            onChange={onChange}
-            // value={form.register.grade}
-          />
+          <div className="span">
+            <span>주소</span>
+            <StyledInput
+              autoComplete="addr"
+              name="addr"
+              placeholder="주소"
+              onChange={handleAddressChange}
+              value={address}
+            />
+            <button onClick={handleOpenAddressModal}>주소찾기</button>
+          </div>
         )}
         {type === 'register' && (
-          <StyledInput
-            autoComplete="addr"
-            name="addr"
-            placeholder="주소"
-            onChange={onChange}
-            // value={form.register.grade}
-          />
-        )}
-        {type === 'register' && (
-          <StyledInput
-            autoComplete="gender"
-            name="gender"
-            placeholder="성별"
-            onChange={onChange}
-            // value={form.register.grade}
-          />
+          <div className="span">
+            <span>성별</span>
+            <StyledInput
+              autoComplete="gender"
+              name="gender"
+              placeholder="성별"
+              onChange={(e) =>
+                onChange({ key: 'gender', value: e.target.value })
+              }
+              // value={form.register.grade}
+            />
+          </div>
         )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {isAddressModalOpen && (
+          <div className="DaumPostcode">
+            <DaumPostcode
+              onComplete={handleAddressComplete}
+              autoClose
+              style={{
+                position: 'absolute',
+                zIndex: 100,
+                border: '1px solid #ccc',
+              }}
+            />
+            <button onClick={handleCloseAddressModal}>닫기</button>
+          </div>
+        )}
         <ButtonWithMarginTop>{text}</ButtonWithMarginTop>
       </form>
       <Footer>

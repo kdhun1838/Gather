@@ -1,9 +1,9 @@
-import React, { FormEvent, useState } from "react";
-import styled from "styled-components";
-import { RegisterState } from "../../modules/register/type";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { ko } from "date-fns/esm/locale"; //한국어 설정
+import React, { FormEvent, useState } from 'react';
+import styled from 'styled-components';
+import { RegisterState } from '../../modules/register/type';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { ko } from 'date-fns/esm/locale'; //한국어 설정
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -51,7 +51,7 @@ const InputForm = styled.div`
   &:nth-child(2n + 1) {
     margin-right: 40px;
   }
-  &:last-child{
+  &:last-child {
     margin-right: 0;
   }
   &.textForm {
@@ -162,11 +162,11 @@ const Register: React.FC<RegisterProps> = ({
   const [date, setIsDate] = useState<Date | null>(null);
   // const date = new Date();
   const formatDate = (date: any) => {
-    if (!date) return "";
+    if (!date) return '';
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
   return (
@@ -177,7 +177,7 @@ const Register: React.FC<RegisterProps> = ({
           <input
             type="text"
             onChange={(e) =>
-              onChangeForm({ key: "title", value: e.target.value })
+              onChangeForm({ key: 'title', value: e.target.value })
             }
           />
         </TitleForm>
@@ -186,7 +186,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>카테고리</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "category", value: e.target.value })
+                onChangeForm({ key: 'category', value: e.target.value })
               }
             >
               <option value="">카테고리</option>
@@ -200,7 +200,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>인원</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "personnel", value: e.target.value })
+                onChangeForm({ key: 'personnel', value: e.target.value })
               }
             >
               <option value="0">인원</option>
@@ -216,7 +216,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>온·오프라인</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "online", value: e.target.value })
+                onChangeForm({ key: 'online', value: e.target.value })
               }
             >
               <option value="">온·오프라인</option>
@@ -229,7 +229,7 @@ const Register: React.FC<RegisterProps> = ({
             <input
               type="text"
               onChange={(e) =>
-                onChangeForm({ key: "position", value: e.target.value })
+                onChangeForm({ key: 'position', value: e.target.value })
               }
             />
           </InputForm>
@@ -238,7 +238,7 @@ const Register: React.FC<RegisterProps> = ({
             <input
               type="text"
               onChange={(e) =>
-                onChangeForm({ key: "contact", value: e.target.value })
+                onChangeForm({ key: 'contact', value: e.target.value })
               }
             />
           </InputForm>
@@ -256,7 +256,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(selectedDate) => {
                 setIsDate(selectedDate);
                 onChangeForm({
-                  key: "period",
+                  key: 'period',
                   value: formatDate(selectedDate),
                 });
               }}
@@ -268,7 +268,7 @@ const Register: React.FC<RegisterProps> = ({
             <textarea
               rows={25}
               onChange={(e) =>
-                onChangeForm({ key: "content", value: e.target.value })
+                onChangeForm({ key: 'content', value: e.target.value })
               }
             />
           </InputForm>
