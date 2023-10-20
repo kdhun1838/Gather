@@ -3,8 +3,8 @@ import { boardsModel } from "./boards";
 import { usersModel } from "./users";
 import { registersModel } from "./registers";
 import { communitysModel } from "./communitys";
-import { CommentsModel } from "./registercomments";
 import { communityCommentsModel } from "./communityComments";
+import { CommentsModel } from "./registerComments";
 
 function initModels(sequelize: Sequelize) {
   const boards = boardsModel(sequelize);
