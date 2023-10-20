@@ -89,11 +89,11 @@ const AdminCarouselContainer = () => {
           icon: "success",
           text: "삭제 성공",
         });
+        getData();
       }
     });
   };
 
-  console.log("데이타", data);
   return (
     <div>
       <AdminCarousel
