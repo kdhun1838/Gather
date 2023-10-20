@@ -33,12 +33,16 @@ export class RegisterComments extends Model<CommentAttributes> {
   public createRegisters!: HasManyCreateAssociationMixin<Registers>;
 }
 
-export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
+export function RegisterCommentsModel(
+  sequelize: Sequelize
+): typeof RegisterComments {
   RegisterComments.init(
     {
       commentNum: {
+        autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
+        primaryKey: true,
       },
       registerNum: {
         type: DataTypes.BIGINT,
@@ -55,8 +59,8 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
     },
     {
       sequelize,
-      modelName: "Comments",
-      tableName: "comments",
+      modelName: "RegisterComments",
+      tableName: "registercomments",
       timestamps: true,
       indexes: [
         {
