@@ -10,15 +10,13 @@ function CommentsModel(sequelize) {
         commentNum: {
             type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
         },
         registerNum: {
             type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
         },
         userId: {
-            type: sequelize_1.DataTypes.BIGINT,
+            type: sequelize_1.DataTypes.STRING,
             allowNull: false,
         },
         comment: {
@@ -27,8 +25,8 @@ function CommentsModel(sequelize) {
         },
     }, {
         sequelize,
-        modelName: "RegisterComments",
-        tableName: "registercomments",
+        modelName: "Comments",
+        tableName: "comments",
         timestamps: true,
         indexes: [
             {
