@@ -23,63 +23,66 @@ interface AdminCarouselProps {
   file: File | null;
   initFile: () => void;
   getData: () => void;
+  handleDelete: (carouselNum: number) => void;
 }
-
-const columns: ColumnsType<CarouselData> = [
-  {
-    title: "번호",
-    dataIndex: "carouselNum",
-    key: "carouselNum",
-    width: "5%",
-  },
-  {
-    title: "내용",
-    dataIndex: "content",
-    key: "content",
-    width: "50%",
-  },
-  {
-    title: "작성일",
-    dataIndex: "createdAt",
-    key: "createdAt",
-    width: "10%",
-    render: (date) => changeDate(date),
-  },
-  {
-    title: "링크",
-    dataIndex: "href",
-    key: "href",
-    render: (text) => <a href={text}>{text}</a>,
-    width: "10%",
-  },
-  {
-    title: "액션",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>수정</a>
-        <a>삭제</a>
-      </Space>
-    ),
-    width: "10%",
-  },
-  {
-    title: "이미지",
-    dataIndex: "img",
-    key: "img",
-    render: (img) => (
-      <>
-        <img src={`/carousel/${img.filename}`} />
-        {img.filename}
-      </>
-    ),
-  },
-];
 
 const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [content, setContent] = useState("");
   const [link, setLink] = useState("");
+
+  const columns: ColumnsType<CarouselData> = [
+    {
+      title: "번호",
+      dataIndex: "carouselNum",
+      key: "carouselNum",
+      width: "5%",
+    },
+    {
+      title: "내용",
+      dataIndex: "content",
+      key: "content",
+      width: "50%",
+    },
+    {
+      title: "작성일",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: "10%",
+      render: (date) => changeDate(date),
+    },
+    {
+      title: "링크",
+      dataIndex: "href",
+      key: "href",
+      render: (text) => <a href={text}>{text}</a>,
+      width: "10%",
+    },
+    {
+      title: "액션",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a>수정</a>
+          <ActionButton onClick={() => props.handleDelete(record.carouselNum)}>
+            삭제
+          </ActionButton>
+        </Space>
+      ),
+      width: "10%",
+    },
+    {
+      title: "이미지",
+      dataIndex: "img",
+      key: "img",
+      render: (img) => (
+        <>
+          <ImgArea src={`/carousel/${img.filename}`} />
+        </>
+      ),
+      width: "10%",
+    },
+  ];
 
   const showModal = () => {
     setContent("");
@@ -145,6 +148,20 @@ const ButtonArea = styled.div`
   display: flex;
   justify-content: end;
   margin: 0rem 1rem 1rem 0;
+`;
+
+const ImgArea = styled.img`
+  height: 3rem;
+`;
+
+const ActionButton = styled.div`
+  color: #1677ff;
+  cursor: pointer;
+
+  &:hover {
+    color: darkblue;
+    font-weight: bold;
+  }
 `;
 
 export default AdminCarousel;

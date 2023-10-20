@@ -65,4 +65,17 @@ router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0,
         res.status(500);
     }
 }));
+router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const carouselNum = req.params.carouselNum;
+    console.log("sss");
+    try {
+        yield models_1.default.carousels.destroy({
+            where: { carouselNum },
+        });
+        res.status(200);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 exports.default = router;

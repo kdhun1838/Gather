@@ -1,11 +1,15 @@
 import React from "react";
 import AdminCarousel from "../../components/admin/AdminCarousel";
-import { getCarousel } from "../../lib/api/admin";
+import { deleteCarousel, getCarousel } from "../../lib/api/admin";
 import client from "../../lib/api/client";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const AdminCarouselContainer = () => {
   const [data, setData] = React.useState<any>(null);
   const [file, setFile] = React.useState<File | null>(null);
+  const [isDelete, setIsDelete] = React.useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -56,7 +60,39 @@ const AdminCarouselContainer = () => {
   };
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [isDelete]);
+
+  const handleDelete = async (carouselNum: number) => {
+    // const num=carouselNum;
+    Swal.fire({
+      title: "삭제하기",
+      text: "이 광고를 삭제하시겠습니까?",
+      showCancelButton: true,
+      cancelButtonText: "취소",
+      confirmButtonText: "삭제",
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        setIsDelete(!isDelete);
+        try {
+          deleteCarousel(carouselNum);
+          const updateData = data.filter(
+            (item: any) => item.carouselNum !== carouselNum
+          );
+          setData(updateData);
+        } catch (error) {
+          console.error("에러:", error);
+        }
+      },
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          text: "삭제 성공",
+        });
+      }
+    });
+  };
+
   console.log("데이타", data);
   return (
     <div>
@@ -67,6 +103,7 @@ const AdminCarouselContainer = () => {
         file={file}
         initFile={initFile}
         getData={getData}
+        handleDelete={handleDelete}
       />
     </div>
   );

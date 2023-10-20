@@ -63,4 +63,20 @@ router.get(
   }
 );
 
+router.delete(
+  "/deleteCarousel/:carouselNum",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const carouselNum = req.params.carouselNum;
+    console.log("sss");
+    try {
+      await models.carousels.destroy({
+        where: { carouselNum },
+      });
+      res.status(200);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+
 export default router;
