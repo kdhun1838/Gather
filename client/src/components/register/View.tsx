@@ -1,4 +1,9 @@
-import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEvent,
+  useState,
+} from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import HeaderContainer from "../../container/common/HeaderContainer";
@@ -18,14 +23,25 @@ const PostContainer = styled.div`
   background: #fff;
 `;
 
-const Section = styled.div`
+export const Section = styled.div`
   padding: 30px 0;
   border-bottom: 2px solid #eee;
 
   .firstInfo {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-top: 20px;
+
+    .dateView {
+      display: flex;
+      text-align: right;
+
+      p {
+        &:first-child {
+          margin-right: 20px;
+        }
+      }
+    }
   }
   .secondInfo {
     display: flex;
@@ -91,72 +107,88 @@ const BtnSection = styled.div`
   }
 `;
 type ViewProps = {
-  formData: RegisterState;
+  formData: {
+    getFormData: {
+      title: string;
+      category: string;
+      personnel: number;
+      meeting: string;
+      position: string;
+      contact: string;
+      period: string;
+      content: string;
+      view: number;
+      createdAt: string;
+    };
+  };
   onClose: (postId: number, e: FormEvent) => void;
   onDelete: (postId: number, e: FormEvent) => void;
   postId: number;
 };
 const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
-  const {
-    title,
-    category,
-    personnel,
-    meeting,
-    position,
-    contact,
-    period,
-    content,
-    view,
-  } = formData.formData;
-
+  const {getFormData} = formData;
+  const changeDate = (date: string) => {
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = newDate.getDate().toString().padStart(2, '0');
+    const hour = newDate.getHours().toString().padStart(2, '0');
+    const minute = newDate.getMinutes().toString().padStart(2, '0');
+    const second = newDate.getSeconds().toString().padStart(2, '0');
+  
+    const showDate = `${year}. ${month}. ${day} ${hour}:${minute}:${second}`;
+    return showDate;
+  };
   return (
     <PostWrap>
       <HeaderContainer />
       <PostContainer>
         <Section>
+          <h1>{getFormData?.title}</h1>
           <div className="firstInfo">
             <b>NickName</b>
-            <p>2023-10-04</p>
-            <p>조회수 {view}</p>
+            <div className="dateView">
+              <p>{changeDate(getFormData?.createdAt)}</p>
+              <p>조회수 {getFormData?.view}</p>
+            </div>
           </div>
-          <h1>{title}</h1>
         </Section>
         <Section>
           <div className="secondInfo">
             <div>
               <h3>카테고리</h3>
-              <b>{category}</b>
+              <b>{getFormData?.category}</b>
             </div>
             <div>
               <h3>모집인원</h3>
-              <b>{personnel}명</b>
+              <b>{getFormData?.personnel}명</b>
             </div>
           </div>
           <div className="secondInfo">
             <div>
               <h3>모임장소</h3>
-              <b>{meeting}</b>
+              <b>{getFormData?.meeting}</b>
             </div>
             <div>
               <h3>모집포지션</h3>
-              <b>{position}</b>
+              <b>{getFormData?.position}</b>
             </div>
           </div>
           <div className="secondInfo">
             <div>
               <h3>연락방법</h3>
               <b>
-                <a href="#">{contact}</a>
+                <a href="#">{getFormData?.contact}</a>
               </b>
             </div>
             <div>
               <h3>마감일자</h3>
-              <b>{period}</b>
+              <b>{getFormData?.period}</b>
             </div>
           </div>
         </Section>
         <Section>
-          <p className="content">{content}</p>
+          <p className="content">{getFormData?.content}</p>
         </Section>
         <Section>
           <CommentContainer />

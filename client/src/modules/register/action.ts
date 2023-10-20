@@ -39,6 +39,11 @@ export const CHANGE_COMMENT = "register/CHANGE_COMMENT" as const;
 export const [POST_COMMENT, POST_COMMENT_SUCCESS, POST_COMMENT_FAILURE] =
   createRequestActionTypes("register/POST_COMMENT" as const);
 
+export const [GET_COMMENT, GET_COMMENT_SUCCESS, GET_COMMENT_FAILURE] =
+  createRequestActionTypes("register/GET_COMMENT" as const);
+
+export const UNLOAD_COMMENT = "register/UNLOAD_COMMENT" as const;
+
 // 디스패치
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
@@ -96,10 +101,11 @@ export const getPopularList = () => ({
   payload: {},
 });
 
-export const postForm = (form: RegisterState) => ({
+export const postForm = (form: RegisterState, userNum: number) => ({
   type: POST_FORM,
   payload: {
     form,
+    userNum
   },
 });
 
@@ -138,10 +144,16 @@ export const changeComment = ({
   },
 });
 
-export const postComment = (comment: string, postId: number) => ({
+export const postComment = (comment: string, postId: number, userNum: number) => ({
   type: POST_COMMENT,
   payload: {
     comment,
     postId,
+    userNum,
   },
+});
+
+export const unloadComment = () => ({
+  type: UNLOAD_COMMENT,
+  payload: {}
 });

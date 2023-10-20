@@ -1,8 +1,8 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { RegisterComments } from "./registerComments";
 
 export interface RegisterAttributes {
   registerNum: number;
+  userNum: number;
   title: string;
   category: string;
   personnel: number;
@@ -24,6 +24,7 @@ export class Registers
   implements RegisterAttributes
 {
   public registerNum!: number;
+  public userNum!: number;
   public title!: string;
   public category!: string;
   public personnel!: number;
@@ -48,6 +49,10 @@ export function registersModel(sequelize: Sequelize): typeof Registers {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
+      },
+      userNum: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING(100),

@@ -14,6 +14,8 @@ import {
   CHANGE_COMMENT,
   POST_COMMENT,
   CHANGE_RECRUIT,
+  GET_COMMENT,
+  UNLOAD_COMMENT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -202,6 +204,12 @@ const register = (
       };
     case `${POST_COMMENT}_FAILURE`:
       return state;
+    case UNLOAD_COMMENT:
+      console.log("unload_comment action dispatched");
+      return {
+        ...state,
+        registerComment: initialState.registerComment,
+      }
     default:
       return state;
   }

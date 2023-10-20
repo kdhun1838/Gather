@@ -18,6 +18,8 @@ function initModels(sequelize: Sequelize) {
 
   registers.hasMany(registerComments, { foreignKey: "registerNum" });
   registerComments.belongsTo(registers, { foreignKey: "registerNum" });
+  users.hasMany(registerComments, { foreignKey: "userId" });
+  registerComments.belongsTo(users, { foreignKey: "userId" });
 
   users.hasMany(communityComments, { foreignKey: "userId" });
   communityComments.belongsTo(users, { foreignKey: "userId" });
