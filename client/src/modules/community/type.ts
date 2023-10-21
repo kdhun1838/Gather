@@ -8,7 +8,9 @@ import {
   initDetail,
   addFavorite,
   getPost,
-  addCommnet,
+  addComment,
+  getComments,
+  getReplys,
 } from "./action";
 
 // 타입 정의
@@ -49,10 +51,11 @@ export type CommunityState = {
 
   post: {
     getPost: any;
-    comment: any;
+    getComments: any;
+    getReply: any;
+    comment: string;
+    reply: string;
   };
-
-  comment: CommentType;
 };
 
 export type GetPostType = SortType;
@@ -67,4 +70,6 @@ export type CommunityAction =
   | ReturnType<typeof getPosts>
   | ReturnType<typeof getPost>
   | ReturnType<typeof addFavorite>
-  | ReturnType<typeof addCommnet>;
+  | ReturnType<typeof addComment>
+  | ReturnType<typeof getComments>
+  | ReturnType<typeof getReplys>;

@@ -71,23 +71,8 @@ const CommentBox = styled.div`
   padding-bottom: 80px;
 `;
 
-export type PostType = {
-  Favorite: boolean;
-  category: string;
-  communityNum: number;
-  content: string;
-  createdAt: string;
-  detail: string;
-  title: string;
-  updatedAt: string;
-  view: number;
-};
-
 type PostPropsType = {
-  post: {
-    updatedPost: PostType;
-    getComment: string[];
-  };
+  post: any;
   load: {
     [key: string]: boolean;
   };
@@ -101,8 +86,6 @@ const CommunityPost: React.FC<PostPropsType> = ({
 }) => {
   const loading = load["community/GET_POST"];
 
-  const { updatedPost } = post;
-
   if (loading) {
     return <div>글 불러오는중... </div>;
   }
@@ -111,18 +94,18 @@ const CommunityPost: React.FC<PostPropsType> = ({
     <PostContainer>
       <TitleBox>
         <div onClick={onClickBack}>뒤로가기버튼</div>
-        <Title>{updatedPost?.title}</Title>
+        <Title>{post?.title}</Title>
         <NameAndDateBox>
-          <div className="username"></div>
+          <div className="username">{post?.User?.nick}</div>
           <div className="line"></div>
-          <div className="date">{changeDate(updatedPost?.createdAt)}</div>
+          <div className="date">{changeDate(post?.createdAt)}</div>
         </NameAndDateBox>
       </TitleBox>
       <PostContentBox
-        dangerouslySetInnerHTML={{ __html: updatedPost?.content }}
+        dangerouslySetInnerHTML={{ __html: post?.content }}
       ></PostContentBox>
       <ViewAndFavoriteBox>
-        <div>조회수: {updatedPost?.view}</div>
+        <div>조회수: {post?.view}</div>
         <div>즐겨찾기 버튼</div>
       </ViewAndFavoriteBox>
       <CommentBox>
