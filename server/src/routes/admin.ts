@@ -30,16 +30,6 @@ router.post(
     if (!req.file) {
       return res.status(400).send("업로드실패");
     }
-    console.log("하하하", req.file);
-    console.log(
-      "오오오",
-      req.body.content,
-      req.body.link,
-      req.body.backgroundColor,
-      req.body.textColor,
-      req.body.onlyImg
-    );
-
     const { content, link, backgroundColor, textColor, onlyImg } = req.body;
     // const newCarousel = await models.carousels.findAll({});
 
@@ -57,7 +47,6 @@ router.post(
     if (newUpload === null) {
       res.status(400).send("등록실패하였습니다.");
     } else {
-      console.log("등록성공");
       res.status(200);
     }
   }
@@ -81,8 +70,6 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const { content, link, carouselNum, backgroundColor, textColor, onlyImg } =
       req.body;
-    console.log(req.body);
-    console.log("req.file", req.file);
 
     try {
       await models.carousels.update(
@@ -110,7 +97,6 @@ router.delete(
   "/deleteCarousel/:carouselNum",
   async (req: Request, res: Response, next: NextFunction) => {
     const carouselNum = req.params.carouselNum;
-    console.log("sss");
     try {
       await models.carousels.destroy({
         where: { carouselNum },

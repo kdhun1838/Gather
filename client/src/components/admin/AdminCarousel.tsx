@@ -53,10 +53,6 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
   const [carouselNum, setCarouselNum] = useState<number>(0);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
-  // React.useEffect(() => {
-  //   console.log("색깔", textString, "배경", backgroundString);
-  // }, [textString, backgroundString]);
-
   const columns: ColumnsType<CarouselData> = [
     {
       title: "번호",
@@ -128,7 +124,6 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
     props.upsdateOnlyImg(record.onlyImg);
     props.setBackgroundColor(record.backgroundColor);
     props.setTextColor(record.textColor);
-    console.log("record============", record);
     setModalVisible(true);
   };
 

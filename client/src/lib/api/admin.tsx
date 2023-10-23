@@ -6,6 +6,5 @@ export const getCarousel = (): Promise<AxiosResponse> => {
 };
 
 export const deleteCarousel = (carouselNum: number): Promise<AxiosResponse> => {
-  console.log("delete캐러셀 API", carouselNum);
   return client.delete(`/admin/deleteCarousel/${carouselNum}`);
 };

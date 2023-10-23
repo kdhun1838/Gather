@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ImgArea } from "../admin/AdminCarousel";
 
 const CustomFileUpload = styled.label`
   margin: 0.5rem 0 0 0;
@@ -33,7 +32,6 @@ interface ImgUploadProps {
 }
 
 const ImgUpload: React.FC<ImgUploadProps> = (props) => {
-  console.log("propsssssssssss", props);
   return (
     <div>
       <CustomFileUpload htmlFor="image-upload">이미지 선택</CustomFileUpload>

@@ -31,7 +31,6 @@ const LoginForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const logininfo = form;
-    console.log("ddddddddddd", logininfo);
     dispatch(login(form));
     // 이 부분에서 로그인 처리를 수행할 수 있습니다.
   };
@@ -42,7 +41,6 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (authError) {
-      console.log("오류 발생");
       console.log(authError);
       setError("로그인 실패");
       return;

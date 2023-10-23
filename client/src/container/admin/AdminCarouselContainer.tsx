@@ -2,7 +2,6 @@ import React from "react";
 import AdminCarousel from "../../components/admin/AdminCarousel";
 import { deleteCarousel, getCarousel } from "../../lib/api/admin";
 import client from "../../lib/api/client";
-import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import type { Color, ColorPickerProps } from "antd/lib/color-picker";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -71,8 +70,6 @@ const AdminCarouselContainer = () => {
     isUpdate: boolean,
     carouselNum: number
   ) => {
-    console.log("sss", content, link, isUpdate, carouselNum);
-
     if (isUpdate) {
       if (file) {
         const formData = new FormData();
@@ -147,7 +144,6 @@ const AdminCarouselContainer = () => {
   };
   React.useEffect(() => {
     getData();
-    console.log("데이터", data);
   }, [isDelete]);
 
   const handleDelete = async (carouselNum: number) => {

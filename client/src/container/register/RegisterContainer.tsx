@@ -6,6 +6,7 @@ import { RootState } from "../../modules";
 import { RegisterState } from "../../modules/register/type";
 import {
   changeForm,
+  getOriginalForm,
   postForm,
   unloadForm,
 } from "../../modules/register/action";
@@ -20,8 +21,6 @@ const RegisterContainer = () => {
   }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  console.log("ffffffff", form.form.title, userNum.user);
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {

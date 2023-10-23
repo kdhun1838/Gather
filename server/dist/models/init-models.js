@@ -22,6 +22,8 @@ function initModels(sequelize) {
     registerComments.belongsTo(registers, { foreignKey: "registerNum" });
     users.hasMany(registerComments, { foreignKey: "userId" });
     registerComments.belongsTo(users, { foreignKey: "userId" });
+    users.hasMany(registers, { foreignKey: "userNum" });
+    registers.belongsTo(users, { foreignKey: "userNum" });
     //------------- 커뮤니티 관계설정 --------------
     users.hasMany(communityComments, { foreignKey: "userId" });
     communityComments.belongsTo(users, { foreignKey: "userId" });

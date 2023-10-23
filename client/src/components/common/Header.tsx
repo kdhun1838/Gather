@@ -6,12 +6,11 @@ import { useLocation, useNavigate } from "react-router";
 import { Carousel } from "antd";
 import Responsive from "../../styled/Responsive";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Button from "./Button";
 import { logout } from "../../modules/user/action";
 import Logo from "../../images/Logo.png";
 import { UserState } from "../../modules/user/type";
-import { getCarousel } from "../../lib/api/admin";
 import { Spacing } from "./admin/AdminHeader";
 
 const items: TabsProps["items"] = [
@@ -47,8 +46,6 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   const [currentLocation, setCurrentLocation] = React.useState<string>(
     location.pathname
   );
-
-  console.log("캐러셀데이터", carouselData);
 
   const onChange = (key: string) => {
     navigate(key);

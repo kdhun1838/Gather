@@ -16,6 +16,7 @@ import {
   CHANGE_RECRUIT,
   GET_COMMENT,
   UNLOAD_COMMENT,
+  GET_ORIGINAL_FORM,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -58,7 +59,6 @@ const register = (
     case UNLOAD_FORM:
       return initialState;
     case INIT_SORT:
-      console.log("초기화 리듀서");
       return {
         ...state,
         list: {
@@ -168,7 +168,6 @@ const register = (
         },
       };
     case `${GET_FORM}_SUCCESS`:
-      console.log("getform", action.payload);
       return {
         ...state,
         formData: action.payload,
@@ -205,11 +204,26 @@ const register = (
     case `${POST_COMMENT}_FAILURE`:
       return state;
     case UNLOAD_COMMENT:
-      console.log("unload_comment action dispatched");
       return {
         ...state,
         registerComment: initialState.registerComment,
-      }
+      };
+    case GET_ORIGINAL_FORM:
+      const originalForm = action.payload;
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          // title: originalForm.originFormData.title,
+          // category: originalForm.originFormData.category,
+          // personnel: originalForm.originFormData.personnel,
+          // online: originalForm.originFormData.meeting,
+          // position: originalForm.originFormData.position,
+          // contact: originalForm.originFormData.contact,
+          // period: originalForm.originFormData.period,
+          // content: originalForm.originFormData.content
+        },
+      };
     default:
       return state;
   }

@@ -23,7 +23,6 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     const mainSort: string = data.mainSort || "";
     const search: string = data.search || "";
     const recruit: string = data.recruit || "";
-    console.log("recruit=============", recruit);
     const time: string = data.detailSort?.time || "";
     const view: string = data.detailSort?.view || "";
     const like: string = data.detailSort?.like || "";
@@ -43,12 +42,9 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     }
     if (recruit === "true") {
       where.state = 1;
-      console.log("true입니다");
     } else {
-      console.log("false입니다");
       where.state < 3;
     }
-    console.log("where-============", where);
 
     if (time === "newset") {
       order = [["createdAt", "DESC"]];
@@ -110,7 +106,6 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     content,
   } = req.body.form.form;
   const userNum = req.body.userNum;
-  console.log("body",req.body)
   try {
     const newRegister = await models.registers.create({
       title,
@@ -121,12 +116,11 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       contact,
       period,
       content,
-      userNum
+      userNum,
     });
     res.status(200).json(newRegister);
-    console.log("newRegister", newRegister)
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(500).json(error);
     next(error);
   }
@@ -136,10 +130,16 @@ router.get(
   "/post/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.query;
-    console.log("postId", postId);
     try {
       const getFormData = await models.registers.findOne({
         where: { registerNum: postId },
+        include: [
+          {
+            nest: true,
+            model: models.users,
+            attribute: ["name"],
+          },
+        ],
       });
       const getComment = await models.registerComments.findAll({
         where: { registerNum: postId },
@@ -152,14 +152,13 @@ router.get(
           {
             nest: true,
             model: models.users,
-            attribute: ["name"]
-          }
+            attribute: ["name"],
+          },
         ],
       });
       getFormData.view += 1;
       await getFormData.save();
       res.status(200).json({ getFormData, getComment });
-      // console.log("getCommentttttttttttttttt", getComment);
     } catch (e) {
       console.error(e);
     }
@@ -205,7 +204,6 @@ router.post(
   "/postComment/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId, userNum, comment } = req.body;
-    console.log("bodybodybodybodybodybodybodybodybody", req.body);
     try {
       const postComment = await models.registerComments.create({
         userId: userNum,
@@ -213,45 +211,44 @@ router.post(
         registerNum: postId,
       });
       res.status(200).json(postComment);
-      console.log("postCommentpostComment", postComment);
     } catch (e) {
       console.error(e);
     }
   }
 );
 
-// const updateExpiredStates = async () => {
-//   try {
-//     const currentDate = new Date();
-//     const currentDateString = new Date(
-//       currentDate.getTime() + 9 * 60 * 60 * 1000
-//     )
-//       .toISOString()
-//       .split("T")[0];
-//     const expiredRegisters = await models.registers.findAll({
-//       where: {
-//         state: {
-//           [Op.ne]: 2,
-//         },
-//         period: {
-//           [Op.lt]: currentDateString,
-//         },
-//       },
-//     });
-//     for (const register of expiredRegisters) {
-//       await register.update({ state: 2 });
-//     }
+const updateExpiredStates = async () => {
+  try {
+    const currentDate = new Date();
+    const currentDateString = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split("T")[0];
+    const expiredRegisters = await models.registers.findAll({
+      where: {
+        state: {
+          [Op.ne]: 2,
+        },
+        period: {
+          [Op.lt]: currentDateString,
+        },
+      },
+    });
+    for (const register of expiredRegisters) {
+      await register.update({ state: 2 });
+    }
 
-//     console.log(
-//       `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
-//     );
-//   } catch (e) {
-//     console.error("오류가 발생했습니다:", e);
-//   }
-// };
+    console.log(
+      `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
+    );
+  } catch (e) {
+    console.error("오류가 발생했습니다:", e);
+  }
+};
 
-// cron.schedule("27 * * * *", () => {
-//   updateExpiredStates();
-// });
+cron.schedule("27 * * * *", () => {
+  updateExpiredStates();
+});
 
 export default router;

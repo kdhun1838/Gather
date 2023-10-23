@@ -5,13 +5,16 @@ import View from "../../components/register/View";
 import { RootState } from "../../modules";
 import {
   getForm,
+  getOriginalForm,
   postClose,
   postDelete,
 } from "../../modules/register/action";
 
 const ViewContainer = () => {
-  const { formData } = useSelector((state: RootState) => state.register);
-  console.log("formData1111", formData);
+  const { formData, user } = useSelector((state: RootState) => ({
+    formData: state.register.formData,
+    user: state.user.user,
+  }));
   const dispatch = useDispatch();
   const params = useParams();
   const postId = Number(params.postId);
@@ -35,20 +38,26 @@ const ViewContainer = () => {
     [dispatch, navigate]
   );
 
+  const onGetOriginalForm = () => {
+    const originFormData = formData.getFormData;
+
+    dispatch(getOriginalForm(postId, originFormData));
+    navigate("/register");
+  };
+
   React.useEffect(() => {
     dispatch(getForm(postId));
   }, [dispatch, postId]);
 
-  React.useEffect(() => {
-    console.log("formData22222222", formData)
-  })
   return (
     <div>
       <View
         formData={formData}
         onClose={onClose}
         onDelete={onDelete}
+        onGetOriginalForm={onGetOriginalForm}
         postId={postId}
+        user={user}
       />
     </div>
   );

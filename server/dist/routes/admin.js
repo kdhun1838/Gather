@@ -37,8 +37,6 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
     if (!req.file) {
         return res.status(400).send("업로드실패");
     }
-    console.log("하하하", req.file);
-    console.log("오오오", req.body.content, req.body.link, req.body.backgroundColor, req.body.textColor, req.body.onlyImg);
     const { content, link, backgroundColor, textColor, onlyImg } = req.body;
     // const newCarousel = await models.carousels.findAll({});
     const newUpload = yield models_1.default.carousels.create({
@@ -56,7 +54,6 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
         res.status(400).send("등록실패하였습니다.");
     }
     else {
-        console.log("등록성공");
         res.status(200);
     }
 }));
@@ -72,8 +69,6 @@ router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0,
 router.post("/updateCarousel/", upload.single("file"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const { content, link, carouselNum, backgroundColor, textColor, onlyImg } = req.body;
-    console.log(req.body);
-    console.log("req.file", req.file);
     try {
         yield models_1.default.carousels.update({
             content,
@@ -94,7 +89,6 @@ router.post("/updateCarousel/", upload.single("file"), (req, res, next) => __awa
 }));
 router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const carouselNum = req.params.carouselNum;
-    console.log("sss");
     try {
         yield models_1.default.carousels.destroy({
             where: { carouselNum },

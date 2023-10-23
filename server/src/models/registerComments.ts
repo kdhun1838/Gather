@@ -8,7 +8,6 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
-import { Registers } from "./registers";
 
 interface CommentAttributes {
   commentNum: number;

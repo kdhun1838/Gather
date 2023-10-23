@@ -17,7 +17,6 @@ export const getList = (data: GetListType): Promise<AxiosResponse> => {
 };
 
 export const getPopularList = (): Promise<AxiosResponse> => {
-  console.log("API의 getPopularList");
   return client.get("/register/popularList");
 };
 

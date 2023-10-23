@@ -40,13 +40,12 @@ type CommentItem = {
   comment: string;
   createdAt: string;
   User: {
-      nick: string;
+    nick: string;
   };
 };
 
 const CommentList: React.FC<CommentListProp> = ({ formData }) => {
   const { getComment } = formData;
-    console.log("getComment?????", getComment)
   const changeDate = (date: string) => {
     const newDate = new Date(date);
     const year = newDate.getFullYear();
