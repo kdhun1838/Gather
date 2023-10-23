@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from "express";
 import models from "../models";
 import multer from "multer";
 const router = express.Router();
+
+// 캐러셀 관리
 const uniqueFileName = (name: string) => {
   const timestamp = Date.now();
   return `${timestamp}-00`;
