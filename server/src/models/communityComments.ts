@@ -1,13 +1,10 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { Users } from "./users";
-import { Communitys } from "./communitys";
 
 export interface CommunityCommentsAttributes {
   commentNum: number;
   content: string;
   userId: number;
   postId: number;
-  childComment: number;
 }
 
 export interface CommunityCreationAttributes
@@ -21,7 +18,6 @@ export class CommunityComments
   public content!: string;
   public userId!: number;
   public postId!: number;
-  public childComment!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -57,10 +53,6 @@ export function communityCommentsModel(
           model: "communitys",
           key: "communityNum",
         },
-      },
-      childComment: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
       },
     },
     {

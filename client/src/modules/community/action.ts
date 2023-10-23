@@ -1,4 +1,4 @@
-import { CommentType, CommunityState, GetPostType } from "./type";
+import { CommunityState, GetPostType } from "./type";
 import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 
 // 액션 정의 (마지막에 as const 붙이기)
@@ -7,6 +7,7 @@ export const CHANGE_SORT = "community/CHANGE_SORT_TYPE" as const;
 export const CHANGE_DETAIL_SORT = "community/CHANGE_DETAIL_SORT" as const;
 export const INIT_DETAIL_SORT = "community/INIT_DETAIL_SORT" as const;
 export const INIT_FORM = "community/INIT_FORM" as const;
+export const INIT_REPLY = "community/INIT_REPLY" as const;
 
 export const [SAVE_FORM, SAVE_FORM_SUCCESS, SAVE_FORM_FAILURE] =
   createRequestActionTypes("community/SAVE_FORM");
@@ -23,8 +24,20 @@ export const [
 export const [GET_POST, GET_POSTS_SUCCES, GET_POST_FAILURE] =
   createRequestActionTypes("community/GET_POST");
 
+export const [GET_COMMENTS, GET_COMMENTS_SUCCES, GET_COMMENTS_FAILURE] =
+  createRequestActionTypes("community/GET_COMMENTS");
+
+export const [GET_REPLYS, GET_REPLYS_SUCCES, GET_REPLYS_FAILURE] =
+  createRequestActionTypes("community/GET_REPLYS");
+
 export const [ADD_COMMENT, ADD_COMMENT_SUCCES, ADD_COMMENT_FAILURE] =
   createRequestActionTypes("community/ADD_COMMENT");
+
+export const [
+  ADD_REPLY_COMMENT,
+  ADD_REPLY_COMMENT_SUCCES,
+  ADD_REPLY_COMMENT_FAILURE,
+] = createRequestActionTypes("community/ADD_REPLY_COMMENT");
 
 export const [
   ADD_FAVORITE_POST,
@@ -88,6 +101,8 @@ export const initDetail = () => ({
   payload: {},
 });
 
+export const initReply = () => ({ type: INIT_REPLY, payload: {} });
+
 export const saveForm = (form: CommunityState) => ({
   type: SAVE_FORM,
   payload: {
@@ -99,6 +114,20 @@ export const getPosts = (data: GetPostType) => ({
   type: GET_POSTS,
   payload: {
     data,
+  },
+});
+
+export const getComments = (postId: number) => ({
+  type: GET_COMMENTS,
+  payload: {
+    postId,
+  },
+});
+
+export const getReplys = (postId: number) => ({
+  type: GET_REPLYS,
+  payload: {
+    postId,
   },
 });
 
@@ -114,12 +143,24 @@ export const getPost = (postId: number) => ({
   },
 });
 
-export const addCommnet = (data: {
+export const addComment = (data: {
   userId: number;
   postId: number;
   comment: string;
 }) => ({
   type: ADD_COMMENT,
+  payload: {
+    data,
+  },
+});
+
+export const addReply = (data: {
+  userId: number;
+  postId: number;
+  commentId: number;
+  reply: string;
+}) => ({
+  type: ADD_REPLY_COMMENT,
   payload: {
     data,
   },

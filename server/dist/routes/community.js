@@ -94,9 +94,39 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
             const getPost = yield models_1.default.communitys.findOne({
                 where: { communityNum: postId },
             });
-            const getComment = yield models_1.default.communityComments.findAll({
+            if (getPost) {
+                yield getPost.increment("view", { by: 1 });
+                // 모델 이름을 일관되게 사용합니다 (community)
+                const updatedPost = yield models_1.default.communitys.findOne({
+                    where: { communityNum: postId },
+                    nest: true,
+                    include: [
+                        {
+                            nest: true,
+                            model: models_1.default.users,
+                            attributes: ["userNum", "nick"],
+                        },
+                    ],
+                });
+                res.status(200).json(updatedPost);
+            }
+            else {
+                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+            }
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.get("/comment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.params;
+    if (postId) {
+        try {
+            const getPostComments = yield models_1.default.communityComments.findAll({
                 where: { postId },
-                nest: true,
                 include: [
                     {
                         nest: true,
@@ -105,18 +135,30 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                     },
                 ],
             });
-            console.log("getComment===========", getComment);
-            if (getPost) {
-                yield getPost.increment("view", { by: 1 });
-                // 모델 이름을 일관되게 사용합니다 (community)
-                const updatedPost = yield models_1.default.communitys.findOne({
-                    where: { communityNum: postId },
-                });
-                res.status(200).json({ updatedPost, getComment });
-            }
-            else {
-                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
-            }
+            res.status(200).json(getPostComments);
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.get("/reply/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.params;
+    if (postId) {
+        try {
+            const getReplys = yield models_1.default.communityReplys.findAll({
+                where: { postId },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
+            });
+            res.status(200).json(getReplys);
         }
         catch (e) {
             res.status(500).json(e);
@@ -165,10 +207,39 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
             userId,
             postId,
         });
-        res.status(200).json({
-            message: "성공적으로 저장되었습니다.",
-            data: newCommunityComment,
+        if (newCommunityComment) {
+            const getComments = yield models_1.default.communityComments.findAll({
+                where: {
+                    postId,
+                },
+            });
+            res.status(200).json(getComments);
+        }
+    }
+    catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+    }
+}));
+router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, postId, commentId, reply } = req.body.data.data;
+    try {
+        const newCommentReply = yield models_1.default.communityReplys.create({
+            content: reply,
+            userId,
+            postId,
+            commentId,
         });
+        if (newCommentReply) {
+            const getReply = yield models_1.default.communityReplys.findAll({
+                where: {
+                    postId,
+                    commentId,
+                },
+            });
+            res.status(200).json(getReply);
+        }
     }
     catch (e) {
         res.status(500).json(e);

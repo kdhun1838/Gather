@@ -1,21 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.communityCommentsModel = exports.CommunityComments = void 0;
+exports.communityReplysModel = exports.CommunityReplys = void 0;
 const sequelize_1 = require("sequelize");
-class CommunityComments extends sequelize_1.Model {
+class CommunityReplys extends sequelize_1.Model {
 }
-exports.CommunityComments = CommunityComments;
-function communityCommentsModel(sequelize) {
-    CommunityComments.init({
-        commentNum: {
+exports.CommunityReplys = CommunityReplys;
+function communityReplysModel(sequelize) {
+    CommunityReplys.init({
+        replyNum: {
             autoIncrement: true,
             type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
             primaryKey: true,
-        },
-        content: {
-            type: sequelize_1.DataTypes.TEXT,
-            allowNull: false,
         },
         userId: {
             type: sequelize_1.DataTypes.BIGINT,
@@ -33,30 +29,47 @@ function communityCommentsModel(sequelize) {
                 key: "communityNum",
             },
         },
+        commentId: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            references: {
+                model: "communityComments",
+                key: "commentNum",
+            },
+        },
+        content: {
+            type: sequelize_1.DataTypes.STRING(200),
+            allowNull: false,
+        },
     }, {
         sequelize,
-        modelName: "CommunityComments",
-        tableName: "communityComments",
+        modelName: "CommunityReplys",
+        tableName: "communityReplys",
         timestamps: true,
         indexes: [
             {
                 name: "PRIMARY",
                 unique: true,
                 using: "BTREE",
-                fields: [{ name: "commentNum" }],
+                fields: [{ name: "replyNum" }],
             },
             {
-                name: "userId",
+                name: "communityReply_FK",
                 using: "BTREE",
                 fields: [{ name: "userId" }],
             },
             {
-                name: "postId",
+                name: "communityReply_FK_1",
                 using: "BTREE",
                 fields: [{ name: "postId" }],
             },
+            {
+                name: "communityReply_FK_2",
+                using: "BTREE",
+                fields: [{ name: "commentId" }],
+            },
         ],
     });
-    return CommunityComments;
+    return CommunityReplys;
 }
-exports.communityCommentsModel = communityCommentsModel;
+exports.communityReplysModel = communityReplysModel;

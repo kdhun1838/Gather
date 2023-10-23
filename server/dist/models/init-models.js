@@ -8,6 +8,7 @@ const communitys_1 = require("./communitys");
 const registerComments_1 = require("./registerComments");
 const communityComments_1 = require("./communityComments");
 const carousels_1 = require("./carousels");
+const communityReplys_1 = require("./communityReplys");
 function initModels(sequelize) {
     const boards = (0, boards_1.boardsModel)(sequelize);
     const users = (0, users_1.usersModel)(sequelize);
@@ -16,18 +17,29 @@ function initModels(sequelize) {
     const communityComments = (0, communityComments_1.communityCommentsModel)(sequelize);
     const registerComments = (0, registerComments_1.RegisterCommentsModel)(sequelize);
     const carousels = (0, carousels_1.carouselModel)(sequelize);
+    const communityReplys = (0, communityReplys_1.communityReplysModel)(sequelize);
     registers.hasMany(registerComments, { foreignKey: "registerNum" });
     registerComments.belongsTo(registers, { foreignKey: "registerNum" });
     users.hasMany(registerComments, { foreignKey: "userId" });
     registerComments.belongsTo(users, { foreignKey: "userId" });
+    //------------- 커뮤니티 관계설정 --------------
     users.hasMany(communityComments, { foreignKey: "userId" });
     communityComments.belongsTo(users, { foreignKey: "userId" });
+    users.hasMany(communitys, { foreignKey: "userId" });
+    communitys.belongsTo(users, { foreignKey: "userId" });
+    users.hasMany(communityReplys, { foreignKey: "userId" });
+    communityReplys.belongsTo(users, { foreignKey: "userId" });
+    communitys.hasMany(communityComments, { foreignKey: "postId" });
+    communityComments.belongsTo(communitys, { foreignKey: "postId" });
+    communityComments.hasMany(communityReplys, { foreignKey: "commentId" });
+    communityReplys.belongsTo(communityComments, { foreignKey: "commentId" });
     return {
         boards,
         users,
         registers,
         communitys,
         communityComments,
+        communityReplys,
         registerComments,
         carousels,
     };

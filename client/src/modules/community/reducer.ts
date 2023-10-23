@@ -11,6 +11,10 @@ import {
   GET_POST,
   GET_POPULAR_POSTS,
   ADD_COMMENT,
+  INIT_REPLY,
+  ADD_REPLY_COMMENT,
+  GET_COMMENTS,
+  GET_REPLYS,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -36,12 +40,10 @@ const initialState: CommunityState = {
 
   post: {
     getPost: "",
+    getComments: "",
+    getReply: "",
     comment: "",
-  },
-
-  comment: {
-    parents: "",
-    child: "",
+    reply: "",
   },
 };
 
@@ -68,6 +70,15 @@ const community = (
               like: "",
             },
           },
+        },
+      };
+
+    case INIT_REPLY:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          reply: "",
         },
       };
 
@@ -202,11 +213,66 @@ const community = (
         },
       };
 
+    case `${GET_COMMENTS}_SUCCESS`:
+      const getComments = action.payload;
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getComments,
+        },
+      };
+
+    case `${GET_COMMENTS}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getComments: "",
+        },
+      };
+
+    case `${GET_REPLYS}_SUCCESS`:
+      const getReply = action.payload;
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply,
+        },
+      };
+
+    case `${GET_REPLYS}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply: "",
+        },
+      };
+
     case `${ADD_COMMENT}_SUCCESS`:
       return {
         ...state,
+        post: {
+          ...state.post,
+          getComments: action.payload,
+        },
       };
     case `${ADD_COMMENT}_FAILURE`:
+      return {
+        ...state,
+      };
+
+    case `${ADD_REPLY_COMMENT}_SUCCESS`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply: action.payload,
+        },
+      };
+    case `${ADD_REPLY_COMMENT}_FAILURE`:
       return {
         ...state,
       };

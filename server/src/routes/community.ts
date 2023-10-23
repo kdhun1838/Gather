@@ -105,9 +105,44 @@ router.get(
           where: { communityNum: postId },
         });
 
-        const getComment = await models.communityComments.findAll({
+        if (getPost) {
+          await getPost.increment("view", { by: 1 });
+
+          // 모델 이름을 일관되게 사용합니다 (community)
+          const updatedPost = await models.communitys.findOne({
+            where: { communityNum: postId },
+            nest: true,
+            include: [
+              {
+                nest: true,
+                model: models.users,
+                attributes: ["userNum", "nick"],
+              },
+            ],
+          });
+
+          res.status(200).json(updatedPost);
+        } else {
+          res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+        }
+      } catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+      }
+    }
+  }
+);
+
+router.get(
+  "/comment/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params;
+
+    if (postId) {
+      try {
+        const getPostComments = await models.communityComments.findAll({
           where: { postId },
-          nest: true,
           include: [
             {
               nest: true,
@@ -116,19 +151,36 @@ router.get(
             },
           ],
         });
-        console.log("getComment===========", getComment);
-        if (getPost) {
-          await getPost.increment("view", { by: 1 });
 
-          // 모델 이름을 일관되게 사용합니다 (community)
-          const updatedPost = await models.communitys.findOne({
-            where: { communityNum: postId },
-          });
+        res.status(200).json(getPostComments);
+      } catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+      }
+    }
+  }
+);
 
-          res.status(200).json({ updatedPost, getComment });
-        } else {
-          res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
-        }
+router.get(
+  "/reply/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params;
+
+    if (postId) {
+      try {
+        const getReplys = await models.communityReplys.findAll({
+          where: { postId },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
+        });
+
+        res.status(200).json(getReplys);
       } catch (e) {
         res.status(500).json(e);
         console.log(e);
@@ -189,10 +241,46 @@ router.post(
         userId,
         postId,
       });
-      res.status(200).json({
-        message: "성공적으로 저장되었습니다.",
-        data: newCommunityComment,
+
+      if (newCommunityComment) {
+        const getComments = await models.communityComments.findAll({
+          where: {
+            postId,
+          },
+        });
+
+        res.status(200).json(getComments);
+      }
+    } catch (e) {
+      res.status(500).json(e);
+      console.log(e);
+      next(e);
+    }
+  }
+);
+
+router.post(
+  "/addReply",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, postId, commentId, reply } = req.body.data.data;
+    try {
+      const newCommentReply = await models.communityReplys.create({
+        content: reply,
+        userId,
+        postId,
+        commentId,
       });
+
+      if (newCommentReply) {
+        const getReply = await models.communityReplys.findAll({
+          where: {
+            postId,
+            commentId,
+          },
+        });
+
+        res.status(200).json(getReply);
+      }
     } catch (e) {
       res.status(500).json(e);
       console.log(e);

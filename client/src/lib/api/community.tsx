@@ -25,10 +25,33 @@ export const getPost = (postId: { postId: number }): Promise<AxiosResponse> => {
   return client.get(`/community/post/${id}`);
 };
 
+export const getComments = (postId: {
+  postId: number;
+}): Promise<AxiosResponse> => {
+  const id = postId.postId;
+  return client.get(`/community/comment/${id}`);
+};
+
+export const getReplys = (postId: {
+  postId: number;
+}): Promise<AxiosResponse> => {
+  const id = postId.postId;
+  return client.get(`/community/reply/${id}`);
+};
+
 export const getPopularPosts = (): Promise<AxiosResponse> => {
   return client.get("/community/popularPosts");
 };
 
 export const addComment = (comment: string): Promise<AxiosResponse> => {
   return client.post("/community/addComment", { comment });
+};
+
+export const addReply = (data: {
+  userId: number;
+  postId: number;
+  commentId: number;
+  reply: string;
+}): Promise<AxiosResponse> => {
+  return client.post("/community/addReply", { data });
 };
