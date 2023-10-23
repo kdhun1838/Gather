@@ -164,6 +164,7 @@ export const addReply = (data: {
   postId: number;
   commentId: number;
   reply: string;
+  isfirst: boolean;
 }) => ({
   type: ADD_REPLY_COMMENT,
   payload: {

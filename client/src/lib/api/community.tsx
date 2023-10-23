@@ -50,6 +50,7 @@ export const addReply = (data: {
   postId: number;
   commentId: number;
   reply: string;
+  isfirst: boolean;
 }): Promise<AxiosResponse> => {
   return client.post("/community/addReply", { data });
 };

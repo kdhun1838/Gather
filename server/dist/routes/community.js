@@ -230,13 +230,14 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 }));
 router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, postId, commentId, reply } = req.body.data.data;
+    const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
     try {
         const newCommentReply = yield models_1.default.communityReplys.create({
             content: reply,
             userId,
             postId,
             commentId,
+            isParentsReply: isfirst,
         });
         if (newCommentReply) {
             const getReply = yield models_1.default.communityReplys.findAll({

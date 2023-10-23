@@ -147,6 +147,7 @@ type CommentPorpsType = {
     postId: number;
     commentId: number;
     reply: string;
+    isfirst: boolean;
   }) => void;
 };
 
@@ -239,6 +240,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                           postId,
                           commentId: comment?.commentNum,
                           reply,
+                          isfirst: true,
                         })
                       }
                     >
@@ -271,7 +273,14 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                         </div>
 
                         <CommentDetail>
-                          <UserNickTag to="#">@{comment.User.nick}</UserNickTag>
+                          {reply.isParentsReply === 0 ? (
+                            <UserNickTag to="#">@{reply.User.nick}</UserNickTag>
+                          ) : (
+                            <UserNickTag to="#">
+                              @{comment.User.nick}
+                            </UserNickTag>
+                          )}
+
                           {reply.content}
                         </CommentDetail>
 
@@ -295,6 +304,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                                     postId,
                                     commentId: comment?.commentNum,
                                     reply: nestedReply,
+                                    isfirst: false,
                                   })
                                 }
                               >

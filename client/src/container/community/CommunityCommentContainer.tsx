@@ -83,6 +83,7 @@ const CommunityCommentContainer = () => {
       postId: number;
       commentId: number;
       reply: string;
+      isfirst: boolean;
     }) => {
       dispatch(addReply(data));
     },
