@@ -7,16 +7,25 @@ import ImgUpload from "../common/ImgUpload";
 import type { Color, ColorPickerProps } from "antd/lib/color-picker";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { Checkbox } from "antd";
+import { CarouselDiv, CarouselImg, CarouselText } from "../common/Header";
 
-// 데이터 구조를 기존의 DataType 대신에 받아온 데이터 구조로 변경
 interface CarouselData {
   carouselNum: number;
   content: string;
-  createdAt: string;
   href: string;
   img: { url: string; filename: string }[];
+  backgroundColor: string;
+  textColor: string;
+  createdAt: string;
   updatedAt: string;
 }
+const contentStyle: React.CSSProperties = {
+  height: "5rem",
+  color: "#fff",
+  // lineHeight: "160px",
+  textAlign: "center",
+  // background: "orange",
+};
 
 const { TextArea } = Input;
 
@@ -64,7 +73,7 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
       title: "내용",
       dataIndex: "content",
       key: "content",
-      width: "50%",
+      width: "20%",
     },
     {
       title: "작성일",
@@ -97,14 +106,55 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
     },
     {
       title: "이미지",
-      dataIndex: "img",
-      key: "img",
-      render: (img) => (
-        <>
-          <ImgArea src={`/carousel/${img.filename}`} />
-        </>
+      key: "see",
+      render: (record) => (
+        <div>
+          {record.onlyImg === 0 ? (
+            <div>
+              <CarouselDiv
+                style={{
+                  ...contentStyle,
+                  backgroundColor: `${record.backgroundColor}`,
+                  // backgroundImage: `url(/carousel/${record.img.filename})`,
+                  backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
+                  width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
+                }}
+              >
+                <CarouselText
+                  style={{ color: `${record.textColor}` }}
+                  dangerouslySetInnerHTML={{
+                    __html: record.content.replace(/\n/g, "<br>"),
+                  }}
+                >
+                  {/* {record.content} */}
+                </CarouselText>
+                <CarouselImg
+                  style={{
+                    backgroundImage: `url(/carousel/${record.img.filename})`,
+                  }}
+                ></CarouselImg>
+              </CarouselDiv>
+            </div>
+          ) : (
+            <div
+              style={{
+                ...contentStyle,
+                backgroundColor: `${record.backgroundColor}`,
+                backgroundImage: `url(/carousel/${record.img.filename})`,
+                backgroundSize: "100% 100%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                width: "100%",
+                height: "5rem",
+              }}
+            ></div>
+          )}
+        </div>
       ),
-      width: "10%",
+      width: "40%",
     },
   ];
 

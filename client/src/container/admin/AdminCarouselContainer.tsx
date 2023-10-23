@@ -51,6 +51,7 @@ const AdminCarouselContainer = () => {
   const initColor = () => {
     setTextColor("#FFF");
     setBackgroundColor("#000");
+    setOnlyImg(false);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

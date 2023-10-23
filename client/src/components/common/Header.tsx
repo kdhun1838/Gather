@@ -25,7 +25,7 @@ const items: TabsProps["items"] = [
 ];
 const contentStyle: React.CSSProperties = {
   height: "320px",
-  color: "#fff",
+  color: "#000",
   lineHeight: "160px",
   textAlign: "center",
   // background: "orange",
@@ -148,12 +148,18 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
                     ...contentStyle,
                     backgroundColor: `${item.backgroundColor}`,
                     backgroundImage: `url(/carousel/${item.img.filename})`,
-                    backgroundSize: "contain",
+                    backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    width: "100%",
+                    width: "100% ",
+                    // objectFit: "fill",
+                    // height: "100%",
+                    // maxHeight: "320px",
+                    // paddingTop: "100%", // 1:1 비율을 유지하도록 높이 설정
                   }}
-                ></div>
+                >
+                  {/* <img src={} alt="" /> */}
+                </div>
               )}
             </a>
           ))}
@@ -162,18 +168,18 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   );
 };
 
-const CarouselDiv = styled.div`
+export const CarouselDiv = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 3rem 0 3rem;
 `;
 
-const CarouselText = styled.div`
-  font-size: 2rem;
+export const CarouselText = styled.div`
+  font-size: 120%;
   width: 50%;
   display: flex;
 `;
-const CarouselImg = styled.div`
+export const CarouselImg = styled.div`
   width: 40%;
   height: 100%;
   background-size: contain;
