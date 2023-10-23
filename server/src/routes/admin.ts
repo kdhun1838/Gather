@@ -31,9 +31,16 @@ router.post(
       return res.status(400).send("업로드실패");
     }
     console.log("하하하", req.file);
-    console.log("오오오", req.body.content, req.body.link);
+    console.log(
+      "오오오",
+      req.body.content,
+      req.body.link,
+      req.body.backgroundColor,
+      req.body.textColor,
+      req.body.onlyImg
+    );
 
-    const { content, link } = req.body;
+    const { content, link, backgroundColor, textColor, onlyImg } = req.body;
     // const newCarousel = await models.carousels.findAll({});
 
     const newUpload = await models.carousels.create({
@@ -43,6 +50,9 @@ router.post(
         filename: req.file.filename,
         url: `../../images/carousel/${req.file.filename}`,
       },
+      backgroundColor,
+      textColor,
+      onlyImg: Number(onlyImg),
     });
     if (newUpload === null) {
       res.status(400).send("등록실패하였습니다.");
@@ -69,7 +79,8 @@ router.post(
   "/updateCarousel/",
   upload.single("file"),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { content, link, carouselNum } = req.body;
+    const { content, link, carouselNum, backgroundColor, textColor, onlyImg } =
+      req.body;
     console.log(req.body);
     console.log("req.file", req.file);
 
@@ -82,6 +93,9 @@ router.post(
             filename: req.file?.filename,
             url: `../../images/carousel/${req.file?.filename}`,
           },
+          backgroundColor,
+          textColor,
+          onlyImg: Number(onlyImg),
         },
         { where: { carouselNum } }
       );

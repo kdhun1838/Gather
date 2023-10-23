@@ -5,6 +5,8 @@ import { changeDate } from "../community/Community";
 import { styled } from "styled-components";
 import ImgUpload from "../common/ImgUpload";
 import type { Color, ColorPickerProps } from "antd/lib/color-picker";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import { Checkbox } from "antd";
 
 // 데이터 구조를 기존의 DataType 대신에 받아온 데이터 구조로 변경
 interface CarouselData {
@@ -15,6 +17,8 @@ interface CarouselData {
   img: { url: string; filename: string }[];
   updatedAt: string;
 }
+
+const { TextArea } = Input;
 
 interface AdminCarouselProps {
   data: CarouselData[];
@@ -30,6 +34,16 @@ interface AdminCarouselProps {
   getData: () => void;
   handleDelete: (carouselNum: number) => void;
   setFile: (file: File | null) => void;
+  backgroundColor: Color | string;
+  textColor: Color | string;
+  formatHex: ColorPickerProps["format"];
+  initColor: () => void;
+  setBackgroundColor: (color: Color | string) => void;
+  setTextColor: (color: Color | string) => void;
+  setFormatHex: (format: ColorPickerProps["format"]) => void;
+  onlyImg: boolean;
+  changeOnlyImg: (e: CheckboxChangeEvent) => void;
+  upsdateOnlyImg: (onlyImg: number) => void;
 }
 
 const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
@@ -38,30 +52,10 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
   const [link, setLink] = useState<string>("");
   const [carouselNum, setCarouselNum] = useState<number>(0);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [backgroundColor, setBackgroundColor] = useState<Color | string>(
-    "#000"
-  );
-  const [textColor, setTextColor] = useState<Color | string>("#FFF");
-  const [formatHex, setFormatHex] = useState<ColorPickerProps["format"]>("hex");
 
-  const backgroundString = React.useMemo(
-    () =>
-      typeof backgroundColor === "string"
-        ? backgroundColor
-        : backgroundColor.toHexString(),
-    [backgroundColor]
-  );
-  const textString = React.useMemo(
-    () => (typeof textColor === "string" ? textColor : textColor.toHexString()),
-    [textColor]
-  );
   // React.useEffect(() => {
   //   console.log("색깔", textString, "배경", backgroundString);
   // }, [textString, backgroundString]);
-  const initColor = () => {
-    setTextColor("#FFF");
-    setBackgroundColor("#000");
-  };
 
   const columns: ColumnsType<CarouselData> = [
     {
@@ -122,7 +116,7 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
     setContent("");
     setLink("");
     props.initFile();
-    initColor();
+    props.initColor();
     setModalVisible(true);
   };
 
@@ -131,7 +125,10 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
     setLink(record.href);
     setCarouselNum(record.carouselNum);
     setIsUpdate(true);
-    console.log("record============", content, link, carouselNum);
+    props.upsdateOnlyImg(record.onlyImg);
+    props.setBackgroundColor(record.backgroundColor);
+    props.setTextColor(record.textColor);
+    console.log("record============", record);
     setModalVisible(true);
   };
 
@@ -174,7 +171,7 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Input
+        <TextArea
           placeholder="내용 입력"
           onChange={(e) => onChangeContent(e.target.value)}
           value={content}
@@ -188,14 +185,19 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
           handleFileChange={props.handleFileChange}
           file={props.file}
         />
+        <Checkbox onChange={props.changeOnlyImg} checked={props.onlyImg}>
+          이미지만 보이게하기
+        </Checkbox>
+        ;
+        <br />
         <Space>
           <span>배경색: </span>
           <Col>
             <ColorPicker
-              format={formatHex}
-              value={backgroundColor}
-              onChange={(color) => setBackgroundColor(color)}
-              onFormatChange={setFormatHex}
+              format={props.formatHex}
+              value={props.backgroundColor}
+              onChange={(color) => props.setBackgroundColor(color)}
+              onFormatChange={props.setFormatHex}
             />
           </Col>
         </Space>
@@ -204,10 +206,10 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
           <span>글자색: </span>
           <Col>
             <ColorPicker
-              format={formatHex}
-              value={textColor}
-              onChange={(color) => setTextColor(color)}
-              onFormatChange={setFormatHex}
+              format={props.formatHex}
+              value={props.textColor}
+              onChange={(color) => props.setTextColor(color)}
+              onFormatChange={props.setFormatHex}
             />
           </Col>
         </Space>

@@ -57,7 +57,7 @@ const Logo = styled.img`
   margin-top: 5px;
 `;
 
-const Spacing = styled.div`
+export const Spacing = styled.div`
   margin-left: 0.5rem;
 `;
 
@@ -100,9 +100,9 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
                 <UserHi>님 안녕하세요!</UserHi>
               </UserInfo>
               <Spacing />
-              <Button onClick={onLogout}>로그아웃</Button>
-              <Spacing />
               <Button to="/">유저페이지</Button>
+              <Spacing />
+              <Button onClick={onLogout}>로그아웃</Button>
             </div>
           ) : (
             <div className="right">

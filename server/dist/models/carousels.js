@@ -33,6 +33,10 @@ function carouselModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(100),
             allowNull: false,
         },
+        onlyImg: {
+            type: sequelize_1.DataTypes.TINYINT,
+            allowNull: false,
+        },
     }, {
         sequelize,
         modelName: "Carousels",

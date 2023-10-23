@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const models_1 = __importDefault(require("../models"));
 const multer_1 = __importDefault(require("multer"));
 const router = express_1.default.Router();
+// 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();
     return `${timestamp}-00`;
@@ -37,8 +38,8 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
         return res.status(400).send("업로드실패");
     }
     console.log("하하하", req.file);
-    console.log("오오오", req.body.content, req.body.link);
-    const { content, link } = req.body;
+    console.log("오오오", req.body.content, req.body.link, req.body.backgroundColor, req.body.textColor, req.body.onlyImg);
+    const { content, link, backgroundColor, textColor, onlyImg } = req.body;
     // const newCarousel = await models.carousels.findAll({});
     const newUpload = yield models_1.default.carousels.create({
         content,
@@ -47,6 +48,9 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
             filename: req.file.filename,
             url: `../../images/carousel/${req.file.filename}`,
         },
+        backgroundColor,
+        textColor,
+        onlyImg: Number(onlyImg),
     });
     if (newUpload === null) {
         res.status(400).send("등록실패하였습니다.");
@@ -67,7 +71,7 @@ router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0,
 }));
 router.post("/updateCarousel/", upload.single("file"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
-    const { content, link, carouselNum } = req.body;
+    const { content, link, carouselNum, backgroundColor, textColor, onlyImg } = req.body;
     console.log(req.body);
     console.log("req.file", req.file);
     try {
@@ -78,6 +82,9 @@ router.post("/updateCarousel/", upload.single("file"), (req, res, next) => __awa
                 filename: (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename,
                 url: `../../images/carousel/${(_b = req.file) === null || _b === void 0 ? void 0 : _b.filename}`,
             },
+            backgroundColor,
+            textColor,
+            onlyImg: Number(onlyImg),
         }, { where: { carouselNum } });
         res.status(200);
     }

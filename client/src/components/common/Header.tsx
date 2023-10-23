@@ -12,6 +12,7 @@ import { logout } from "../../modules/user/action";
 import Logo from "../../images/Logo.png";
 import { UserState } from "../../modules/user/type";
 import { getCarousel } from "../../lib/api/admin";
+import { Spacing } from "./admin/AdminHeader";
 
 const items: TabsProps["items"] = [
   {
@@ -76,12 +77,13 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
           <div>
             {user.user ? (
               <div className="right">
+                <UserInfo>{user.user.nick}님</UserInfo>
                 {user.user.grade > 2 ? (
-                  <Link to="/admin">관리자페이지</Link>
+                  <Button to="/admin">관리자페이지</Button>
                 ) : (
                   <div></div>
                 )}
-                <UserInfo>{user.user.id}</UserInfo>
+                <Spacing />
                 <Button onClick={onLogout}>로그아웃</Button>
               </div>
             ) : (
@@ -106,24 +108,81 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
       >
         {carouselData &&
           carouselData.map((item: any) => (
-            <div key={item.carouselNum}>
-              <div
-                style={{
-                  ...contentStyle,
-                  backgroundImage: `url(/carousel/${item.img.filename})`,
-                  backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
-                  width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
-                }}
-              ></div>
-            </div>
+            <a
+              href={
+                item.href.startsWith("http") ? item.href : `http://${item.href}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              key={item.carouselNum}
+            >
+              {item.onlyImg === 0 ? (
+                <div>
+                  <CarouselDiv
+                    style={{
+                      ...contentStyle,
+                      backgroundColor: `${item.backgroundColor}`,
+                      // backgroundImage: `url(/carousel/${item.img.filename})`,
+                      backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
+                      width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
+                    }}
+                  >
+                    <CarouselText
+                      style={{ color: `${item.textColor}` }}
+                      dangerouslySetInnerHTML={{
+                        __html: item.content.replace(/\n/g, "<br>"),
+                      }}
+                    >
+                      {/* {item.content} */}
+                    </CarouselText>
+                    <CarouselImg
+                      style={{
+                        backgroundImage: `url(/carousel/${item.img.filename})`,
+                      }}
+                    ></CarouselImg>
+                  </CarouselDiv>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    ...contentStyle,
+                    backgroundColor: `${item.backgroundColor}`,
+                    backgroundImage: `url(/carousel/${item.img.filename})`,
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                  }}
+                ></div>
+              )}
+            </a>
           ))}
       </Carousel>
     </ConfigProvider>
   );
 };
+
+const CarouselDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3rem 0 3rem;
+`;
+
+const CarouselText = styled.div`
+  font-size: 2rem;
+  width: 50%;
+  display: flex;
+`;
+const CarouselImg = styled.div`
+  width: 40%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
 
 const Wrapper = styled(Responsive)`
   > div {

@@ -4,12 +4,55 @@ import { deleteCarousel, getCarousel } from "../../lib/api/admin";
 import client from "../../lib/api/client";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import type { Color, ColorPickerProps } from "antd/lib/color-picker";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 const AdminCarouselContainer = () => {
   const [data, setData] = React.useState<any>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [isDelete, setIsDelete] = React.useState<boolean>(false);
-  const navigate = useNavigate();
+  const [backgroundColor, setBackgroundColor] = React.useState<Color | string>(
+    "#000"
+  );
+  const [textColor, setTextColor] = React.useState<Color | string>("#FFF");
+  const [formatHex, setFormatHex] =
+    React.useState<ColorPickerProps["format"]>("hex");
+  const [onlyImg, setOnlyImg] = React.useState<boolean>(false);
+
+  const changeOnlyImg = (e: CheckboxChangeEvent) => {
+    setOnlyImg(!onlyImg);
+  };
+  const upsdateOnlyImg = (onlyImg: number) => {
+    if (onlyImg === 0) {
+      setOnlyImg(false);
+    } else {
+      setOnlyImg(true);
+    }
+  };
+
+  const backgroundString = React.useMemo(
+    () =>
+      typeof backgroundColor === "string"
+        ? backgroundColor
+        : backgroundColor.toHexString(),
+    [backgroundColor]
+  );
+  const textString = React.useMemo(
+    () => (typeof textColor === "string" ? textColor : textColor.toHexString()),
+    [textColor]
+  );
+  const onlyImgToNumber = React.useCallback((only: boolean) => {
+    if (only) {
+      return "1";
+    } else {
+      return "0";
+    }
+  }, []);
+
+  const initColor = () => {
+    setTextColor("#FFF");
+    setBackgroundColor("#000");
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -37,6 +80,9 @@ const AdminCarouselContainer = () => {
         formData.append("content", content);
         formData.append("link", link);
         formData.append("carouselNum", carouselNum.toString());
+        formData.append("backgroundColor", backgroundString);
+        formData.append("textColor", textString);
+        formData.append("onlyImg", onlyImgToNumber(onlyImg));
 
         try {
           const response = await client.post(
@@ -66,6 +112,9 @@ const AdminCarouselContainer = () => {
         formData.append("file", file);
         formData.append("content", content);
         formData.append("link", link);
+        formData.append("backgroundColor", backgroundString);
+        formData.append("textColor", textString);
+        formData.append("onlyImg", onlyImgToNumber(onlyImg));
 
         try {
           const response = await client.post("/admin/uploadImg", formData, {
@@ -144,6 +193,16 @@ const AdminCarouselContainer = () => {
         getData={getData}
         handleDelete={handleDelete}
         setFile={setFile}
+        backgroundColor={backgroundColor}
+        textColor={textColor}
+        formatHex={formatHex}
+        initColor={initColor}
+        setBackgroundColor={setBackgroundColor}
+        setTextColor={setTextColor}
+        setFormatHex={setFormatHex}
+        onlyImg={onlyImg}
+        changeOnlyImg={changeOnlyImg}
+        upsdateOnlyImg={upsdateOnlyImg}
       />
     </div>
   );
