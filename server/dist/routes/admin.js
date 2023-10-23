@@ -59,8 +59,22 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
 }));
 router.get("/getCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const Carousel = yield models_1.default.carousels.findAll({});
-    res.status(200).json(Carousel);
     try {
+        res.status(200).json(Carousel);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/clickCarousel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const carouselNum = req.body.carouselNum;
+    try {
+        const data = yield models_1.default.carousels.findOne({
+            where: { carouselNum },
+        });
+        data.count += 1;
+        yield data.save();
+        res.status(200);
     }
     catch (error) {
         res.status(500);

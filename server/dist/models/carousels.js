@@ -37,6 +37,11 @@ function carouselModel(sequelize) {
             type: sequelize_1.DataTypes.TINYINT,
             allowNull: false,
         },
+        count: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            defaultValue: 0,
+        },
     }, {
         sequelize,
         modelName: "Carousels",

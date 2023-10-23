@@ -34,9 +34,14 @@ const contentStyle: React.CSSProperties = {
 interface HeaderProps {
   user: UserState;
   carouselData: any;
+  onClickCarousel: (carouselNum: number) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
+const Header: React.FC<HeaderProps> = ({
+  user,
+  carouselData,
+  onClickCarousel,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -114,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
               key={item.carouselNum}
             >
               {item.onlyImg === 0 ? (
-                <div>
+                <div onClick={() => onClickCarousel(item.carouselNum)}>
                   <CarouselDiv
                     style={{
                       ...contentStyle,
@@ -157,9 +162,8 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
                     // maxHeight: "320px",
                     // paddingTop: "100%", // 1:1 비율을 유지하도록 높이 설정
                   }}
-                >
-                  {/* <img src={} alt="" /> */}
-                </div>
+                  onClick={() => onClickCarousel(item.carouselNum)}
+                ></div>
               )}
             </a>
           ))}

@@ -56,8 +56,25 @@ router.get(
   "/getCarousel",
   async (req: Request, res: Response, next: NextFunction) => {
     const Carousel = await models.carousels.findAll({});
-    res.status(200).json(Carousel);
     try {
+      res.status(200).json(Carousel);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+
+router.post(
+  "/clickCarousel",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const carouselNum = req.body.carouselNum;
+    try {
+      const data = await models.carousels.findOne({
+        where: { carouselNum },
+      });
+      data.count += 1;
+      await data.save();
+      res.status(200);
     } catch (error) {
       res.status(500);
     }

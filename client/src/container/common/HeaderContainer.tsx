@@ -3,6 +3,7 @@ import Header from "../../components/common/Header";
 import { useSelector } from "react-redux";
 import { RootState } from "../../modules";
 import { getCarousel } from "../../lib/api/admin";
+import client from "../../lib/api/client";
 
 const HeaderContainer = () => {
   const { user } = useSelector((state: RootState) => ({
@@ -18,13 +19,22 @@ const HeaderContainer = () => {
       console.error("에러:", error);
     }
   };
+
+  const onClickCarousel = async (carouselNum: number) => {
+    await client.post("/admin/clickCarousel", { carouselNum });
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
 
   return (
     <div>
-      <Header user={user} carouselData={carouselData} />
+      <Header
+        user={user}
+        carouselData={carouselData}
+        onClickCarousel={onClickCarousel}
+      />
     </div>
   );
 };

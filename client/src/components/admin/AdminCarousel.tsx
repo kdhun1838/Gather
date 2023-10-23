@@ -73,7 +73,7 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
       title: "내용",
       dataIndex: "content",
       key: "content",
-      width: "20%",
+      width: "15%",
     },
     {
       title: "작성일",
@@ -90,6 +90,12 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
       width: "10%",
     },
     {
+      title: "클릭 횟수",
+      dataIndex: "count",
+      key: "count",
+      width: "7%",
+    },
+    {
       title: "액션",
       key: "action",
       render: (_, record) => (
@@ -102,10 +108,10 @@ const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
           </ActionButton>
         </Space>
       ),
-      width: "10%",
+      width: "8%",
     },
     {
-      title: "이미지",
+      title: "미리보기",
       key: "see",
       render: (record) => (
         <div>
