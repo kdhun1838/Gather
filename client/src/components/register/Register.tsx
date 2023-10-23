@@ -161,21 +161,21 @@ const Register: React.FC<RegisterProps> = ({
   onCancle,
   isPost,
   form,
-  userNum
+  userNum,
 }) => {
   const [date, setIsDate] = useState<Date | null>(null);
 
   const navigate = useNavigate();
-  
+
   const handlePostForm = (e: FormEvent) => {
-    if(!userNum){
+    if (!userNum) {
       e.preventDefault();
       alert("로그인이 필요합니다.");
       navigate("/login");
     } else {
       onPostForm(form, userNum);
     }
-  }
+  };
   // const date = new Date();
   const formatDate = (date: any) => {
     if (!date) return "";
@@ -196,6 +196,7 @@ const Register: React.FC<RegisterProps> = ({
             onChange={(e) =>
               onChangeForm({ key: "title", value: e.target.value })
             }
+            value={form.form.title}
           />
         </TitleForm>
         <OptionForm>
@@ -205,6 +206,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "category", value: e.target.value })
               }
+              value={form.form.category}
             >
               <option value="">카테고리</option>
               <option value="운동">운동</option>
@@ -219,6 +221,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "personnel", value: e.target.value })
               }
+              value={form.form.personnel}
             >
               <option value="0">인원</option>
               {personner.map((option) => (
@@ -235,6 +238,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "online", value: e.target.value })
               }
+              value={form.form.online}
             >
               <option value="">온·오프라인</option>
               <option value="온라인">온라인</option>
@@ -248,6 +252,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "position", value: e.target.value })
               }
+              value={form.form.position}
             />
           </InputForm>
           <InputForm>
@@ -257,6 +262,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "contact", value: e.target.value })
               }
+              value={form.form.contact}
             />
           </InputForm>
           <InputForm>
@@ -277,6 +283,7 @@ const Register: React.FC<RegisterProps> = ({
                   value: formatDate(selectedDate),
                 });
               }}
+              value={form.form.period}
               dateFormat="yyyy-MM-dd"
             />
           </InputForm>
@@ -287,6 +294,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "content", value: e.target.value })
               }
+              value={form.form.content}
             />
           </InputForm>
         </OptionForm>

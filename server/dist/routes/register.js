@@ -127,6 +127,11 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const getFormData = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
+            include: [{
+                    nest: true,
+                    model: models_1.default.users,
+                    attribute: ["name"]
+                }]
         });
         const getComment = yield models_1.default.registerComments.findAll({
             where: { registerNum: postId },

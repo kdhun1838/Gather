@@ -8,7 +8,6 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
-import { Registers } from "./registers";
 
 interface CommentAttributes {
   commentNum: number;
@@ -33,7 +32,7 @@ export class RegisterComments extends Model<CommentAttributes> {
   // public createRegisters!: HasManyCreateAssociationMixin<Registers>;
 }
 
-export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
+export function RegisterCommentsModel(sequelize: Sequelize): typeof RegisterComments {
   RegisterComments.init(
     {
       commentNum: {

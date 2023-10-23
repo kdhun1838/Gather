@@ -140,6 +140,11 @@ router.get(
     try {
       const getFormData = await models.registers.findOne({
         where: { registerNum: postId },
+        include: [{
+          nest: true,
+          model: models.users,
+          attribute: ["name"]
+        }]
       });
       const getComment = await models.registerComments.findAll({
         where: { registerNum: postId },

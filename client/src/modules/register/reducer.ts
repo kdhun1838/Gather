@@ -16,6 +16,7 @@ import {
   CHANGE_RECRUIT,
   GET_COMMENT,
   UNLOAD_COMMENT,
+  GET_ORIGINAL_FORM,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -209,6 +210,23 @@ const register = (
       return {
         ...state,
         registerComment: initialState.registerComment,
+      }
+    case GET_ORIGINAL_FORM:
+      const originalForm = action.payload;
+      console.log("origin???????????????????", originalForm)
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          title: originalForm.originFormData.title,
+          category: originalForm.originFormData.category,
+          personnel: originalForm.originFormData.personnel,
+          online: originalForm.originFormData.meeting,
+          position: originalForm.originFormData.position,
+          contact: originalForm.originFormData.contact,
+          period: originalForm.originFormData.period,
+          content: originalForm.originFormData.content
+        }
       }
     default:
       return state;

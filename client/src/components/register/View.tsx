@@ -119,23 +119,40 @@ type ViewProps = {
       content: string;
       view: number;
       createdAt: string;
+      User: {
+        nick: string;
+        userNum: number;
+      };
     };
+  };
+  user: {
+    userNum: number;
   };
   onClose: (postId: number, e: FormEvent) => void;
   onDelete: (postId: number, e: FormEvent) => void;
+  onGetOriginalForm: (postId: number, originFormData: object) => void;
   postId: number;
 };
-const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
-  const {getFormData} = formData;
+const View: React.FC<ViewProps> = ({
+  formData,
+  onClose,
+  onDelete,
+  onGetOriginalForm,
+  postId,
+  user,
+}) => {
+  const { getFormData } = formData;
+
+  console.log("aaaaa", getFormData, user);
   const changeDate = (date: string) => {
     const newDate = new Date(date);
     const year = newDate.getFullYear();
-    const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = newDate.getDate().toString().padStart(2, '0');
-    const hour = newDate.getHours().toString().padStart(2, '0');
-    const minute = newDate.getMinutes().toString().padStart(2, '0');
-    const second = newDate.getSeconds().toString().padStart(2, '0');
-  
+    const month = (newDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = newDate.getDate().toString().padStart(2, "0");
+    const hour = newDate.getHours().toString().padStart(2, "0");
+    const minute = newDate.getMinutes().toString().padStart(2, "0");
+    const second = newDate.getSeconds().toString().padStart(2, "0");
+
     const showDate = `${year}. ${month}. ${day} ${hour}:${minute}:${second}`;
     return showDate;
   };
@@ -146,7 +163,7 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
         <Section>
           <h1>{getFormData?.title}</h1>
           <div className="firstInfo">
-            <b>NickName</b>
+            <b>{getFormData?.User?.nick}</b>
             <div className="dateView">
               <p>{changeDate(getFormData?.createdAt)}</p>
               <p>조회수 {getFormData?.view}</p>
@@ -193,11 +210,13 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
         <Section>
           <CommentContainer />
         </Section>
-        <BtnSection>
-          <button onClick={(e) => onClose(postId, e)}>마감하기</button>
-          <button>수정</button>
-          <button onClick={(e) => onDelete(postId, e)}>삭제</button>
-        </BtnSection>
+        {user?.userNum === formData?.getFormData?.User.userNum && (
+          <BtnSection>
+            <button onClick={(e) => onClose(postId, e)}>마감하기</button>
+            <button onClick={() => onGetOriginalForm(postId, formData.getFormData)}>수정</button>
+            <button onClick={(e) => onDelete(postId, e)}>삭제</button>
+          </BtnSection>
+        )}
       </PostContainer>
     </PostWrap>
   );

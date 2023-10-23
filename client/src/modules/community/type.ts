@@ -1,22 +1,32 @@
-import {
-  changeForm,
-  initForm,
-  getPosts,
-  saveForm,
-  changeSortType,
-  changeDeailType,
-  initDetail,
-  addFavorite,
-  getPost,
-  addCommnet,
-} from "./action";
+// import {
+//   changeDetailSort,
+//   changeForm,
+//   changeSort,
+//   getList,
+//   postForm,
+//   unloadForm,
+//   initSort,
+//   getForm,
+//   postClose,
+//   postDelete,
+//   changeComment,
+//   postComment,
+//   changeRecruit,
+//   unloadComment,
+//   getOriginalForm,
+// } from "./action";
 
-// 타입 정의
+import { getSearchParamsForLocation } from "react-router-dom/dist/dom";
+import { changeComment, changeDetailSort, changeForm, changeRecruit, changeSort, getList, getOriginalForm, initSort, postClose, postComment, postDelete, postForm, unloadComment, unloadForm } from "../register/action";
 
 type FormType = {
-  category: string;
-  detail: string;
   title: string;
+  category: string;
+  personnel: number;
+  online: string;
+  position: string;
+  contact: string;
+  period: string;
   content: string;
 };
 
@@ -30,41 +40,58 @@ type SortType = {
   mainSort?: string;
   detailSort?: DetailType;
   search?: string;
+  recruit?: boolean;
+};
+
+type ListType = {
+  popularList: ListDetailType[];
+  sort: SortType;
+  mainList: any;
+};
+
+export type ListDetailType = {
+  registerNum: number;
+  title: string;
+  category: string;
+  personnel: number;
+  meeting: string;
+  position: string;
+  contact: string;
+  period: string;
+  content: string;
+  view: number;
+  favorite: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type CommentType = {
-  parents: any;
-  child: any;
+  comment: string;
 };
 
-export type CommunityState = {
-  [key: string]: any;
+export type RegisterState = {
   form: FormType;
-
-  main: {
-    popularPosts: any;
-    sort: SortType;
-    mainPosts: any;
-  };
-
-  post: {
-    getPost: any;
-    comment: any;
-  };
-
-  comment: CommentType;
+  list: ListType;
+  register: any;
+  formData: any;
+  registerComment: CommentType;
 };
 
-export type GetPostType = SortType;
+export type GetListType = SortType;
 
-export type CommunityAction =
+export type RegisterAction =
   | ReturnType<typeof changeForm>
-  | ReturnType<typeof changeSortType>
-  | ReturnType<typeof changeDeailType>
-  | ReturnType<typeof initForm>
-  | ReturnType<typeof initDetail>
-  | ReturnType<typeof saveForm>
-  | ReturnType<typeof getPosts>
-  | ReturnType<typeof getPost>
-  | ReturnType<typeof addFavorite>
-  | ReturnType<typeof addCommnet>;
+  | ReturnType<typeof postForm>
+  | ReturnType<typeof unloadForm>
+  | ReturnType<typeof initSort>
+  | ReturnType<typeof changeSort>
+  | ReturnType<typeof changeDetailSort>
+  | ReturnType<typeof getList>
+  | ReturnType<typeof getSearchParamsForLocation>
+  | ReturnType<typeof postClose>
+  | ReturnType<typeof postDelete>
+  | ReturnType<typeof changeComment>
+  | ReturnType<typeof postComment>
+  | ReturnType<typeof changeRecruit>
+  | ReturnType<typeof unloadComment>
+  | ReturnType<typeof getOriginalForm>

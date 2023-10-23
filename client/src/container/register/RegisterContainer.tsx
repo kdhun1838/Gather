@@ -6,6 +6,7 @@ import { RootState } from "../../modules";
 import { RegisterState } from "../../modules/register/type";
 import {
   changeForm,
+  getOriginalForm,
   postForm,
   unloadForm,
 } from "../../modules/register/action";
