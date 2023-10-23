@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const CommentBox = styled.div`
   display: flex;
@@ -82,6 +83,15 @@ const CommentDetailBox = styled.div`
 const UserNick = styled.div`
   color: #333;
   font-weight: 700;
+
+  .sameNick {
+    margin-left: 3px;
+    border: 1px solid orange;
+    color: orange;
+    padding: 2px 6px 1px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
 `;
 
 const CreatedTime = styled.div`
@@ -97,20 +107,32 @@ const CommentDetail = styled.p`
   letter-spacing: -0.004em;
   word-break: break-all;
   overflow-wrap: break-all;
+  margin-bottom: 10px;
 `;
 
 const ReplyBox = styled.div`
   margin-top: 10px;
   margin-left: 20px;
-  padding: 10px;
-  background-color: #9f9f9f;
+  padding: 10px 15px;
+  background-color: #f6f6f6;
+`;
+
+const UserNickTag = styled(Link)`
+  color: #8da2cc;
+  margin-right: 3px;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 type CommentPorpsType = {
   replys: Record<string, any>;
   comment: string;
   reply: string;
+  nestedReply: string;
+  user: any;
   postId: number;
+  commentBoxOpen: Record<number, boolean>;
   replyBoxOpen: Record<number, boolean>;
   comments: string[];
   onChangeTextArea: (data: { key: string; value: string }) => void;
@@ -119,7 +141,7 @@ type CommentPorpsType = {
     postId: number;
     comment: string;
   }) => void;
-  showReplyBox: (commentIndex: number) => void;
+  showReplyBox: (name: string, commentIndex: number) => void;
   onClickReply: (data: {
     userId: number;
     postId: number;
@@ -132,7 +154,10 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
   replys,
   comment,
   reply,
+  nestedReply,
   replyBoxOpen,
+  commentBoxOpen,
+  user,
   postId,
   comments,
   onChangeTextArea,
@@ -140,6 +165,9 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
   showReplyBox,
   onClickReply,
 }) => {
+  const userId = user?.userNum;
+  const usernick = user?.nick;
+
   return (
     <CommentBox>
       <CommentCount>
@@ -162,7 +190,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
 
       <CommentButtonBox>
         <CommentButton
-          onClick={() => onClickButton({ userId: 17, postId, comment })}
+          onClick={() => onClickButton({ userId, postId, comment })}
         >
           댓글 등록
         </CommentButton>
@@ -174,20 +202,28 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
             <Comment key={index}>
               <CommentDetailBox>
                 <div>
-                  <UserNick> {comment.User?.nick}</UserNick>
+                  <UserNick>
+                    {comment.User?.nick}
+                    {comment.User?.nick === usernick && (
+                      <span className="sameNick">작성자</span>
+                    )}
+                  </UserNick>
                   <CreatedTime> {comment?.createdAt}</CreatedTime>
                 </div>
                 <div>
-                  <button onClick={() => showReplyBox(index)}>답글</button>
+                  <button onClick={(e) => showReplyBox("comment", index)}>
+                    답글
+                  </button>
                   <button>신고</button>
                 </div>
               </CommentDetailBox>
               <CommentDetail>{comment?.content}</CommentDetail>
 
-              {replyBoxOpen[index] && (
+              {commentBoxOpen[index] && (
                 <>
                   <CommentTextArea
                     name="reply"
+                    value={reply}
                     onChange={(e) =>
                       onChangeTextArea({
                         key: e.target.name,
@@ -199,7 +235,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                     <CommentButton
                       onClick={() =>
                         onClickReply({
-                          userId: 17,
+                          userId,
                           postId,
                           commentId: comment?.commentNum,
                           reply,
@@ -214,14 +250,62 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
 
               {replys &&
                 replys?.map((reply: any, index: number) => (
-                  <>
+                  <div key={index}>
                     {reply?.commentId === comment.commentNum && (
-                      <ReplyBox key={index}>
-                        <div>{reply.createdAt}</div>
-                        <div> {reply.content}</div>
+                      <ReplyBox>
+                        <div>
+                          <UserNick>
+                            {reply.User?.nick}
+                            {reply.User?.nick === usernick && (
+                              <span className="sameNick">작성자</span>
+                            )}
+                          </UserNick>
+                          <CreatedTime>{reply.createdAt}</CreatedTime>
+                        </div>
+
+                        <div>
+                          <button onClick={() => showReplyBox("reply", index)}>
+                            답글
+                          </button>
+                          <button>신고</button>
+                        </div>
+
+                        <CommentDetail>
+                          <UserNickTag to="#">@{comment.User.nick}</UserNickTag>
+                          {reply.content}
+                        </CommentDetail>
+
+                        {replyBoxOpen[index] && (
+                          <>
+                            <CommentTextArea
+                              name="nestedReply"
+                              value={nestedReply}
+                              onChange={(e) =>
+                                onChangeTextArea({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                })
+                              }
+                            />
+                            <CommentButtonBox>
+                              <CommentButton
+                                onClick={() =>
+                                  onClickReply({
+                                    userId,
+                                    postId,
+                                    commentId: comment?.commentNum,
+                                    reply: nestedReply,
+                                  })
+                                }
+                              >
+                                답글 등록
+                              </CommentButton>
+                            </CommentButtonBox>
+                          </>
+                        )}
                       </ReplyBox>
                     )}
-                  </>
+                  </div>
                 ))}
             </Comment>
           ))}

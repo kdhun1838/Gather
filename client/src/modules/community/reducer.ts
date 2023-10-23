@@ -11,7 +11,7 @@ import {
   GET_POST,
   GET_POPULAR_POSTS,
   ADD_COMMENT,
-  INIT_REPLY,
+  INIT_POST_FORM,
   ADD_REPLY_COMMENT,
   GET_COMMENTS,
   GET_REPLYS,
@@ -44,6 +44,7 @@ const initialState: CommunityState = {
     getReply: "",
     comment: "",
     reply: "",
+    nestedReply: "",
   },
 };
 
@@ -73,14 +74,18 @@ const community = (
         },
       };
 
-    case INIT_REPLY:
-      return {
-        ...state,
-        post: {
-          ...state.post,
-          reply: "",
-        },
-      };
+    case INIT_POST_FORM:
+      if ("postInitName" in action.payload) {
+        const { postInitName } = action.payload;
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            [postInitName]: "",
+          },
+        };
+      }
+      return state;
 
     case CHANGE_FORM:
       // action.payload 객체 안에 name, key, value가 모두 존재할 경우

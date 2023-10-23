@@ -212,6 +212,13 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
                 where: {
                     postId,
                 },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
             });
             res.status(200).json(getComments);
         }
@@ -237,6 +244,13 @@ router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, f
                     postId,
                     commentId,
                 },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
             });
             res.status(200).json(getReply);
         }

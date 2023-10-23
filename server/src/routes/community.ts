@@ -247,6 +247,13 @@ router.post(
           where: {
             postId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getComments);
@@ -277,6 +284,13 @@ router.post(
             postId,
             commentId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getReply);

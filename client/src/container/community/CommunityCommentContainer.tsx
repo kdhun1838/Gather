@@ -13,13 +13,18 @@ import {
 import { useParams } from "react-router-dom";
 
 const CommunityCommentContainer = () => {
-  const { comments, comment, reply, replys } = useSelector(
+  const { comments, comment, reply, replys, user, nestedReply } = useSelector(
     (state: RootState) => ({
       comments: state.community.post.getComments,
       comment: state.community.post.comment,
       reply: state.community.post.reply,
       replys: state.community.post.getReply,
+      user: state.user.user,
+      nestedReply: state.community.post.nestedReply,
     })
+  );
+  const [commentBoxOpen, setCommentBoxOpen] = useState<Record<number, boolean>>(
+    {}
   );
   const [replyBoxOpen, setReplyBoxOpen] = useState<Record<number, boolean>>({});
 
@@ -42,18 +47,32 @@ const CommunityCommentContainer = () => {
   );
 
   const showReplyBox = useCallback(
-    (commentIndex: number) => {
-      setReplyBoxOpen((prev: Record<number, boolean>) => {
-        const newState = { ...prev };
-        newState[commentIndex] = !prev[commentIndex];
-        for (const key in newState) {
-          if (key !== commentIndex.toString()) {
-            newState[key] = false;
+    (name: string, commentIndex: number) => {
+      if (name === "comment") {
+        dispatch(initReply("reply"));
+        setCommentBoxOpen((prev: Record<number, boolean>) => {
+          const newState = { ...prev };
+          newState[commentIndex] = !prev[commentIndex];
+          for (const key in newState) {
+            if (key !== commentIndex.toString()) {
+              newState[key] = false;
+            }
           }
-        }
-        dispatch(initReply());
-        return newState;
-      });
+          return newState;
+        });
+      } else {
+        dispatch(initReply("nestedReply"));
+        setReplyBoxOpen((prev: Record<number, boolean>) => {
+          const newState = { ...prev };
+          newState[commentIndex] = !prev[commentIndex];
+          for (const key in newState) {
+            if (key !== commentIndex.toString()) {
+              newState[key] = false;
+            }
+          }
+          return newState;
+        });
+      }
     },
     [dispatch]
   );
@@ -81,8 +100,11 @@ const CommunityCommentContainer = () => {
         replys={replys}
         comment={comment}
         reply={reply}
+        nestedReply={nestedReply}
         comments={comments}
+        user={user}
         postId={postId}
+        commentBoxOpen={commentBoxOpen}
         replyBoxOpen={replyBoxOpen}
         onChangeTextArea={onChangeTextArea}
         onClickButton={onClickButton}
