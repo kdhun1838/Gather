@@ -18,7 +18,7 @@ function RegisterCommentsModel(sequelize) {
             allowNull: false,
         },
         userId: {
-            type: sequelize_1.DataTypes.STRING,
+            type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
         },
         comment: {

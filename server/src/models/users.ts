@@ -1,5 +1,5 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
-import { CommunityComments } from "./communityComments";
+import { DataTypes, Model, Sequelize } from 'sequelize';
+import { CommunityComments } from './communityComments';
 
 export interface UsersAttributes {
   userNum: number;
@@ -10,13 +10,13 @@ export interface UsersAttributes {
   email: string;
   tel: string;
   age: number;
-  grade: string;
+  grade: number;
   addr: string;
   gender: string;
 }
 
 export interface UsersCreationAttributes
-  extends Omit<UsersAttributes, "userNum"> {}
+  extends Omit<UsersAttributes, 'userNum'> {}
 
 export class Users
   extends Model<UsersAttributes, UsersCreationAttributes>
@@ -30,7 +30,7 @@ export class Users
   public email!: string;
   public tel!: string;
   public age!: number;
-  public grade!: string;
+  public grade!: number;
   public addr!: string;
   public gender!: string;
 
@@ -76,8 +76,9 @@ export function usersModel(sequelize: Sequelize): typeof Users {
         allowNull: false,
       },
       grade: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1,
       },
       addr: {
         type: DataTypes.STRING(100),
@@ -90,33 +91,33 @@ export function usersModel(sequelize: Sequelize): typeof Users {
     },
     {
       sequelize,
-      modelName: "Users",
-      tableName: "users",
+      modelName: 'Users',
+      tableName: 'users',
       timestamps: true,
       indexes: [
         {
-          name: "PRIMARY",
+          name: 'PRIMARY',
           unique: true,
-          using: "BTREE",
-          fields: [{ name: "userNum" }],
+          using: 'BTREE',
+          fields: [{ name: 'userNum' }],
         },
         {
-          name: "user_UN",
+          name: 'user_UN',
           unique: true,
-          using: "BTREE",
-          fields: ["id"],
+          using: 'BTREE',
+          fields: ['id'],
         },
         {
-          name: "user_UN1",
+          name: 'user_UN1',
           unique: true,
-          using: "BTREE",
-          fields: ["nick"],
+          using: 'BTREE',
+          fields: ['nick'],
         },
         {
-          name: "user_UN2",
+          name: 'user_UN2',
           unique: true,
-          using: "BTREE",
-          fields: ["email"],
+          using: 'BTREE',
+          fields: ['email'],
         },
       ],
     }

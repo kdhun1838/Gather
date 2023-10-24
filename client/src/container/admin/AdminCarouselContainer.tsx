@@ -1,9 +1,9 @@
-import React from "react";
-import AdminCarousel from "../../components/admin/AdminCarousel";
-import { deleteCarousel, getCarousel } from "../../lib/api/admin";
-import client from "../../lib/api/client";
-import { useNavigate } from "react-router";
-import Swal from "sweetalert2";
+import React from 'react';
+import AdminCarousel from '../../components/admin/AdminCarousel';
+import { deleteCarousel, getCarousel } from '../../lib/api/admin';
+import client from '../../lib/api/client';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
 
 const AdminCarouselContainer = () => {
   const [data, setData] = React.useState<any>(null);
@@ -23,30 +23,30 @@ const AdminCarouselContainer = () => {
   };
 
   const handleUpload = async (content: string, link: string) => {
-    console.log("sss", content, link);
+    console.log('sss', content, link);
     if (file) {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("content", content);
-      formData.append("link", link);
+      formData.append('file', file);
+      formData.append('content', content);
+      formData.append('link', link);
 
       try {
-        const response = await client.post("/admin/uploadImg", formData, {
+        const response = await client.post('/admin/uploadImg', formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         });
 
         if (response.status === 200) {
-          console.log("파일이 성공적으로 업로드되었습니다.");
+          console.log('파일이 성공적으로 업로드되었습니다.');
         } else {
-          console.error("파일 업로드 실패:", response.statusText);
+          console.error('파일 업로드 실패:', response.statusText);
         }
       } catch (error) {
-        console.error("파일 업로드 중 오류 발생:", error);
+        console.error('파일 업로드 중 오류 발생:', error);
       }
     } else {
-      alert("업로드할 파일이 선택되지 않았습니다.");
+      alert('업로드할 파일이 선택되지 않았습니다.');
     }
   };
 
@@ -55,7 +55,7 @@ const AdminCarouselContainer = () => {
       const response = await getCarousel();
       setData(response.data);
     } catch (error) {
-      console.error("에러:", error);
+      console.error('에러:', error);
     }
   };
   React.useEffect(() => {
@@ -65,11 +65,11 @@ const AdminCarouselContainer = () => {
   const handleDelete = async (carouselNum: number) => {
     // const num=carouselNum;
     Swal.fire({
-      title: "삭제하기",
-      text: "이 광고를 삭제하시겠습니까?",
+      title: '삭제하기',
+      text: '이 광고를 삭제하시겠습니까?',
       showCancelButton: true,
-      cancelButtonText: "취소",
-      confirmButtonText: "삭제",
+      cancelButtonText: '취소',
+      confirmButtonText: '삭제',
       showLoaderOnConfirm: true,
       preConfirm: () => {
         setIsDelete(!isDelete);
@@ -80,20 +80,21 @@ const AdminCarouselContainer = () => {
           );
           setData(updateData);
         } catch (error) {
-          console.error("에러:", error);
+          console.error('에러:', error);
         }
       },
     }).then((res) => {
       if (res.isConfirmed) {
         Swal.fire({
-          icon: "success",
-          text: "삭제 성공",
+          icon: 'success',
+          text: '삭제 성공',
         });
+        getData();
       }
     });
   };
 
-  console.log("데이타", data);
+  console.log('데이타', data);
   return (
     <div>
       <AdminCarousel

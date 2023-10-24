@@ -98,7 +98,7 @@ router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 email,
                 tel,
                 age: agetoNum,
-                grade: '일반유저',
+                grade: 0,
                 addr,
                 gender,
             });
@@ -141,5 +141,68 @@ router.get('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
 router.post('/logout', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.clearCookie('accessToken');
     res.status(204).json('good');
+}));
+router.post('/userupdate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, name, nick, email, tel, addr, gender } = req.body;
+    try {
+        const updateData = {
+            name,
+            nick,
+            email,
+            tel,
+            addr,
+            gender,
+        };
+        const [updateRows] = yield models_1.default.users.update(updateData, {
+            where: { id },
+        });
+        const updatedUser = yield models_1.default.users.findOne({
+            where: { id },
+        });
+        res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+router.post('/findid', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, tel } = req.body;
+    try {
+        const user = yield models_1.default.users.findOne({
+            where: { email, tel },
+        });
+        if (!user) {
+            res.status(404).json({
+                error: '해당 이메일과 번호로 등록된 사용자를 찾을 수 없습니다.',
+            });
+            return;
+        }
+        res.status(200).json({ id: user.id });
+    }
+    catch (error) {
+        console.log('ID 찾기 오류:', error);
+        res.status(500).json({ error: '서버 오류' });
+    }
+}));
+router.post('/findpassword', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    try {
+        const user = yield models_1.default.users.findOne({
+            where: { id },
+        });
+        if (!user) {
+            res.status(404).json({
+                error: '해당 아이디로 등록된 사용자를 찾을 수 없습니다.',
+            });
+            return;
+        }
+        // 비밀번호를 재설정하는 로직을 추가해야 합니다. (예: 임시 비밀번호 생성 및 이메일로 보내기)
+        // 비밀번호 재설정 기능은 보안을 고려하여 구현해야 합니다.
+        res.status(200).json({ password: user.password });
+    }
+    catch (error) {
+        console.error('비밀번호 찾기 오류:', error);
+        res.status(500).json({ error: '서버 오류' });
+    }
 }));
 exports.default = router;

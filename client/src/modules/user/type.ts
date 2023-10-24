@@ -1,4 +1,4 @@
-import { tempSetUser, check, logout } from "./action";
+import { tempSetUser, check, logout, userupdate } from './action';
 
 export type UserState = {
   user: any;
@@ -8,4 +8,5 @@ export type UserState = {
 export type UserAction =
   | ReturnType<typeof tempSetUser>
   | ReturnType<typeof check>
-  | ReturnType<typeof logout>;
+  | ReturnType<typeof logout>
+  | ReturnType<typeof userupdate>;

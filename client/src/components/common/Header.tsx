@@ -1,33 +1,33 @@
-import React from "react";
-import styled from "styled-components";
-import { ConfigProvider, Tabs } from "antd";
-import type { TabsProps } from "antd";
-import { useLocation, useNavigate } from "react-router";
-import { Carousel } from "antd";
-import Responsive from "../../styled/Responsive";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "./Button";
-import { logout } from "../../modules/user/action";
-import Logo from "../../images/Logo.png";
-import { UserState } from "../../modules/user/type";
+import React from 'react';
+import styled from 'styled-components';
+import { ConfigProvider, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { useLocation, useNavigate } from 'react-router';
+import { Carousel } from 'antd';
+import Responsive from '../../styled/Responsive';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from './Button';
+import { logout } from '../../modules/user/action';
+import Logo from '../../images/Logo.png';
+import { UserState } from '../../modules/user/type';
 
-const items: TabsProps["items"] = [
+const items: TabsProps['items'] = [
   {
-    key: "/",
-    label: "모임게시판",
+    key: '/',
+    label: '모임게시판',
   },
   {
-    key: "/community",
-    label: "커뮤니티",
+    key: '/community',
+    label: '커뮤니티',
   },
 ];
 const contentStyle: React.CSSProperties = {
-  height: "320px",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "orange",
+  height: '320px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: 'orange',
 };
 
 interface HeaderProps {
@@ -53,11 +53,11 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
       theme={{
         components: {
           Tabs: {
-            inkBarColor: "orange",
-            itemSelectedColor: "orange",
-            itemHoverColor: "orange",
-            horizontalItemMargin: "32222px",
-            cardPadding: "32",
+            inkBarColor: 'orange',
+            itemSelectedColor: 'orange',
+            itemHoverColor: 'orange',
+            horizontalItemMargin: '32222px',
+            cardPadding: '32',
           },
         },
       }}
@@ -76,6 +76,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
                   <div></div>
                 )}
                 <UserInfo>{user.user.id}</UserInfo>
+                <Button to="/mypage">마이페이지</Button>
                 <Button onClick={onLogout}>로그아웃</Button>
               </div>
             ) : (
