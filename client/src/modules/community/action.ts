@@ -7,7 +7,7 @@ export const CHANGE_SORT = "community/CHANGE_SORT_TYPE" as const;
 export const CHANGE_DETAIL_SORT = "community/CHANGE_DETAIL_SORT" as const;
 export const INIT_DETAIL_SORT = "community/INIT_DETAIL_SORT" as const;
 export const INIT_FORM = "community/INIT_FORM" as const;
-export const INIT_REPLY = "community/INIT_REPLY" as const;
+export const INIT_POST_FORM = "community/INIT_POST_FORM" as const;
 
 export const [SAVE_FORM, SAVE_FORM_SUCCESS, SAVE_FORM_FAILURE] =
   createRequestActionTypes("community/SAVE_FORM");
@@ -101,7 +101,12 @@ export const initDetail = () => ({
   payload: {},
 });
 
-export const initReply = () => ({ type: INIT_REPLY, payload: {} });
+export const initReply = (postInitName: any) => ({
+  type: INIT_POST_FORM,
+  payload: {
+    postInitName,
+  },
+});
 
 export const saveForm = (form: CommunityState) => ({
   type: SAVE_FORM,
@@ -159,6 +164,7 @@ export const addReply = (data: {
   postId: number;
   commentId: number;
   reply: string;
+  isfirst: boolean;
 }) => ({
   type: ADD_REPLY_COMMENT,
   payload: {

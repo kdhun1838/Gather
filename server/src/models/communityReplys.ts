@@ -6,6 +6,7 @@ export interface CommunityReplyAttributes {
   postId: number;
   commentId: number;
   content: string;
+  isParentsReply: boolean;
 }
 
 export interface CommunityReplyCreationAttributes
@@ -20,6 +21,7 @@ export class CommunityReplys
   public postId!: number;
   public commentId!: number;
   public content!: string;
+  public isParentsReply!: boolean;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -63,6 +65,11 @@ export function communityReplysModel(
       content: {
         type: DataTypes.STRING(200),
         allowNull: false,
+      },
+      isParentsReply: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

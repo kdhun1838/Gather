@@ -247,6 +247,13 @@ router.post(
           where: {
             postId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getComments);
@@ -262,13 +269,14 @@ router.post(
 router.post(
   "/addReply",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, postId, commentId, reply } = req.body.data.data;
+    const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
     try {
       const newCommentReply = await models.communityReplys.create({
         content: reply,
         userId,
         postId,
         commentId,
+        isParentsReply: isfirst,
       });
 
       if (newCommentReply) {
@@ -277,6 +285,13 @@ router.post(
             postId,
             commentId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getReply);

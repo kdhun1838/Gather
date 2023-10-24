@@ -11,6 +11,7 @@ import {
   addComment,
   getComments,
   getReplys,
+  initReply,
 } from "./action";
 
 // 타입 정의
@@ -55,6 +56,7 @@ export type CommunityState = {
     getReply: any;
     comment: string;
     reply: string;
+    nestedReply: string;
   };
 };
 
@@ -66,6 +68,7 @@ export type CommunityAction =
   | ReturnType<typeof changeDeailType>
   | ReturnType<typeof initForm>
   | ReturnType<typeof initDetail>
+  | ReturnType<typeof initReply>
   | ReturnType<typeof saveForm>
   | ReturnType<typeof getPosts>
   | ReturnType<typeof getPost>
