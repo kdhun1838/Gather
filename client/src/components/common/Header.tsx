@@ -125,11 +125,9 @@ const Header: React.FC<HeaderProps> = ({
                     style={{
                       ...contentStyle,
                       backgroundColor: `${item.backgroundColor}`,
-                      // backgroundImage: `url(/carousel/${item.img.filename})`,
                       backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
-                      // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
                       width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
                     }}
                   >
@@ -180,9 +178,10 @@ export const CarouselDiv = styled.div`
 `;
 
 export const CarouselText = styled.div`
-  font-size: 120%;
+  font-size: 2rem;
   width: 50%;
   display: flex;
+  line-height: 3.5rem;
 `;
 export const CarouselImg = styled.div`
   width: 40%;
