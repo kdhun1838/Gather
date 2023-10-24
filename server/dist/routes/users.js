@@ -14,11 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-const models_1 = __importDefault(require("../models")); // 수정된 부분: Users 클래스를 가져옴
-/* GET users listing. */
+const models_1 = __importDefault(require("../models"));
 router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const usersData = yield models_1.default.users.findAll({}); // Users 클래스를 사용
+        const usersData = yield models_1.default.users.findAll({
+            attributes: [
+                "userNum",
+                "id",
+                "name",
+                "nick",
+                "email",
+                "tel",
+                "age",
+                "grade",
+                "addr",
+                "gender",
+                "createdAt",
+                "updatedAt",
+            ],
+        });
+        console.log("하하하", usersData);
         res.status(200).json(usersData);
     }
     catch (err) {

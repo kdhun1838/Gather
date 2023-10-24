@@ -7,7 +7,6 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
 import boardsRouter from "./routes/boards";
 import registerRouter from "./routes/register";
@@ -33,7 +32,6 @@ app.use(
   })
 );
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/boards", boardsRouter);
 app.use("/register", registerRouter);

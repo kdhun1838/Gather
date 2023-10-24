@@ -98,7 +98,7 @@ router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 email,
                 tel,
                 age: agetoNum,
-                grade: 0,
+                grade: 1,
                 addr,
                 gender,
             });
