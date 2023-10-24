@@ -25,7 +25,7 @@ const items: TabsProps["items"] = [
 ];
 const contentStyle: React.CSSProperties = {
   height: "320px",
-  color: "#fff",
+  color: "#000",
   lineHeight: "160px",
   textAlign: "center",
 };
@@ -33,9 +33,14 @@ const contentStyle: React.CSSProperties = {
 interface HeaderProps {
   user: UserState;
   carouselData: any;
+  onClickCarousel: (carouselNum: number) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
+const Header: React.FC<HeaderProps> = ({
+  user,
+  carouselData,
+  onClickCarousel,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -75,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
               <div className="right">
                 <UserInfo>{user.user.nick}님</UserInfo>
                 {user.user.grade > 2 ? (
-                  <Button to="/admin">관리자페이지</Button>
+                  <Button to="/admin/home">관리자페이지</Button>
                 ) : (
                   <div></div>
                 )}
@@ -115,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
               key={item.carouselNum}
             >
               {item.onlyImg === 0 ? (
-                <div>
+                <div onClick={() => onClickCarousel(item.carouselNum)}>
                   <CarouselDiv
                     style={{
                       ...contentStyle,
@@ -149,11 +154,16 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
                     ...contentStyle,
                     backgroundColor: `${item.backgroundColor}`,
                     backgroundImage: `url(/carousel/${item.img.filename})`,
-                    backgroundSize: "contain",
+                    backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    width: "100%",
+                    width: "100% ",
+                    // objectFit: "fill",
+                    // height: "100%",
+                    // maxHeight: "320px",
+                    // paddingTop: "100%", // 1:1 비율을 유지하도록 높이 설정
                   }}
+                  onClick={() => onClickCarousel(item.carouselNum)}
                 ></div>
               )}
             </a>
@@ -163,18 +173,18 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   );
 };
 
-const CarouselDiv = styled.div`
+export const CarouselDiv = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 3rem 0 3rem;
 `;
 
-const CarouselText = styled.div`
-  font-size: 2rem;
+export const CarouselText = styled.div`
+  font-size: 120%;
   width: 50%;
   display: flex;
 `;
-const CarouselImg = styled.div`
+export const CarouselImg = styled.div`
   width: 40%;
   height: 100%;
   background-size: contain;

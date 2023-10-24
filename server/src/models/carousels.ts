@@ -8,6 +8,7 @@ export interface CarouselsAttributes {
   backgroundColor: string;
   textColor: string;
   onlyImg: number;
+  count: number;
 }
 
 export interface CarouselsCreationAttributes
@@ -24,6 +25,7 @@ export class Carousels
   public backgroundColor!: string;
   public textColor!: string;
   public onlyImg!: number;
+  public count!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -61,6 +63,11 @@ export function carouselModel(sequelize: Sequelize): typeof Carousels {
       onlyImg: {
         type: DataTypes.TINYINT,
         allowNull: false,
+      },
+      count: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

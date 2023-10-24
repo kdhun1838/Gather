@@ -1,12 +1,12 @@
 import React from "react";
-import AdminCarousel from "../../components/admin/AdminCarousel";
-import { deleteCarousel, getCarousel } from "../../lib/api/admin";
-import client from "../../lib/api/client";
+import AdminCarouselManage from "../../../components/admin/carousel/AdminCarouselManage";
+import { deleteCarousel, getCarousel } from "../../../lib/api/admin";
+import client from "../../../lib/api/client";
 import Swal from "sweetalert2";
 import type { Color, ColorPickerProps } from "antd/lib/color-picker";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
-const AdminCarouselContainer = () => {
+const AdminCarouselManageContainer = () => {
   const [data, setData] = React.useState<any>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [isDelete, setIsDelete] = React.useState<boolean>(false);
@@ -51,6 +51,7 @@ const AdminCarouselContainer = () => {
   const initColor = () => {
     setTextColor("#FFF");
     setBackgroundColor("#000");
+    setOnlyImg(false);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +181,7 @@ const AdminCarouselContainer = () => {
 
   return (
     <div>
-      <AdminCarousel
+      <AdminCarouselManage
         data={data}
         handleFileChange={handleFileChange}
         handleUpload={handleUpload}
@@ -204,4 +205,4 @@ const AdminCarouselContainer = () => {
   );
 };
 
-export default AdminCarouselContainer;
+export default AdminCarouselManageContainer;
