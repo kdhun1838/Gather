@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Comment from "../../components/register/Comment";
@@ -7,11 +7,13 @@ import { RootState } from "../../modules";
 import {
   changeComment,
   getForm,
+  getOriginalComment,
   postComment,
   unloadComment,
 } from "../../modules/register/action";
 
 const CommentContainer = () => {
+  const [onModify, setOnModify] = useState(false);
   const { registerComment, formData, userId } = useSelector(
     (state: RootState) => ({
       registerComment: state.register.registerComment,
@@ -19,7 +21,6 @@ const CommentContainer = () => {
       userId: state.user,
     })
   );
-  console.log("registerCom??????", userId);
   const params = useParams();
   const postId = Number(params.postId);
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const CommentContainer = () => {
     },
     [dispatch]
   );
-  
+
   const onPostComment = useCallback(
     (comment: string, postId: number, userId: number) => {
       dispatch(postComment(comment, postId, userId));
@@ -42,6 +43,12 @@ const CommentContainer = () => {
     [dispatch]
   );
 
+  const onGetOriginalComment = (commentItem: object) => {
+    const originComment = formData.getComment;
+    setOnModify(true);
+    dispatch(getOriginalComment(commentItem));
+  };
+
   return (
     <div>
       <Comment
@@ -51,7 +58,14 @@ const CommentContainer = () => {
         postId={postId}
         userId={userId.user?.userNum}
       />
-      <CommentList formData={formData} />
+      <CommentList
+        onGetOriginalComment={onGetOriginalComment}
+        onChangeComment={onChangeComment}
+        formData={formData}
+        userId={userId.user?.userNum}
+        onModify={onModify}
+        comment={registerComment.comment}
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import { changeDate } from "../community/Community";
 
@@ -9,29 +9,53 @@ const ListWrap = styled.div`
 `;
 
 const List = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
   .basicInfo {
-    display: flex;
-
+    position: relative;
     b {
-      margin-right: 30px;
+      font-size: 20px;
       width: 100px;
+    }
+    span {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    .commentBtn {
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      button {
+        &:last-child {
+          margin-right: 5px;
+        }
+      }
     }
   }
 
-  span {
-    font-size: 14px;
-    color: #aaa;
+  p {
+    font-size: 22px;
   }
 `;
 
 type CommentListProp = {
+  onGetOriginalComment: (originComment: object) => void;
+  onChangeComment: (data: { key: string; value: string | number }) => void;
   formData: {
     getComment: CommentItem[];
   };
+  userId: number;
+  onModify: boolean;
+  comment: string;
 };
 
 type CommentItem = {
@@ -41,10 +65,19 @@ type CommentItem = {
   createdAt: string;
   User: {
     nick: string;
+    userNum: number;
   };
 };
 
-const CommentList: React.FC<CommentListProp> = ({ formData }) => {
+const CommentList: React.FC<CommentListProp> = ({
+  onGetOriginalComment,
+  onChangeComment,
+  formData,
+  userId,
+  onModify,
+  comment
+}) => {
+  const [editCommentId, setEditCommentId] = useState<number | null>(null);
   const { getComment } = formData;
   const changeDate = (date: string) => {
     const newDate = new Date(date);
@@ -58,6 +91,17 @@ const CommentList: React.FC<CommentListProp> = ({ formData }) => {
     const showDate = `${year}. ${month}. ${day} ${hour}:${minute}:${second}`;
     return showDate;
   };
+
+  const handleEditComment = (commentItem: object, commentNum: number) => {
+    onGetOriginalComment(commentItem);
+    setEditCommentId(commentNum);
+  }
+
+  const handleChangeComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    onChangeComment({key: "comment", value: value});
+}
+
   return (
     <ListWrap>
       {getComment &&
@@ -65,9 +109,27 @@ const CommentList: React.FC<CommentListProp> = ({ formData }) => {
           <List key={commentItem.commentNum}>
             <div className="basicInfo">
               <b>{commentItem.User.nick}</b>
-              <p>{commentItem.comment}</p>
+              <span>{changeDate(commentItem.createdAt)}</span>
+              {commentItem.User.userNum === userId && (
+                <div className="commentBtn">
+                  <button>삭제</button>
+                  <button onClick={() => handleEditComment(commentItem, commentItem.commentNum)}>
+                    수정
+                  </button>
+                </div>
+              )}
             </div>
-            <span>{changeDate(commentItem.createdAt)}</span>
+            {onModify && commentItem.commentNum === editCommentId ? (
+              <textarea
+              rows={5}
+              onChange={(e) =>
+                handleChangeComment(e)
+              }
+              value={comment}
+            />
+            ) : (
+              <p>{commentItem.comment}</p>
+            )}
           </List>
         ))}
     </ListWrap>

@@ -192,6 +192,28 @@ router.post("/postComment/:postId", (req, res, next) => __awaiter(void 0, void 0
         console.error(e);
     }
 }));
+router.post("/modifyForm/:postId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, category, personnel, online, position, contact, period, content, } = req.body.form.form;
+    const postId = req.body.postId;
+    console.log("modifyReq.Body??????????", req.body, title);
+    try {
+        const modifyForm = yield models_1.default.registers.update({
+            title,
+            category,
+            personnel,
+            meeting: online,
+            position,
+            contact,
+            period,
+            content,
+        }, { where: { registerNum: postId } });
+        res.status(200).json(modifyForm);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json(e);
+    }
+}));
 const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const currentDate = new Date();

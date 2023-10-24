@@ -130,7 +130,7 @@ type ViewProps = {
   };
   onClose: (postId: number, e: FormEvent) => void;
   onDelete: (postId: number, e: FormEvent) => void;
-  onGetOriginalForm: (postId: number, originFormData: object) => void;
+  onGetOriginalForm: (originFormData: object) => void;
   postId: number;
 };
 const View: React.FC<ViewProps> = ({
@@ -212,9 +212,7 @@ const View: React.FC<ViewProps> = ({
         {user?.userNum === formData?.getFormData?.User.userNum && (
           <BtnSection>
             <button onClick={(e) => onClose(postId, e)}>마감하기</button>
-            <button
-              onClick={() => onGetOriginalForm(postId, formData.getFormData)}
-            >
+            <button onClick={() => onGetOriginalForm(formData.getFormData)}>
               수정
             </button>
             <button onClick={(e) => onDelete(postId, e)}>삭제</button>

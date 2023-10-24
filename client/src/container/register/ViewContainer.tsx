@@ -41,7 +41,7 @@ const ViewContainer = () => {
   const onGetOriginalForm = () => {
     const originFormData = formData.getFormData;
 
-    dispatch(getOriginalForm(postId, originFormData));
+    dispatch(getOriginalForm(originFormData));
     navigate("/register");
   };
 

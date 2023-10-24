@@ -1,4 +1,4 @@
-import { RegisterState, RegisterAction, ListDetailType } from "./type";
+import { RegisterState, RegisterAction, ListDetailType, OriginalFormType, OriginalCommentType } from "./type";
 import {
   CHANGE_DETAIL_SORT_FORM,
   CHANGE_FORM,
@@ -17,6 +17,10 @@ import {
   GET_COMMENT,
   UNLOAD_COMMENT,
   GET_ORIGINAL_FORM,
+  MODIFY_FORM,
+  MODIFY_FORM_SUCCESS,
+  MODIFY_FORM_FAILURE,
+  GET_ORIGINAL_COMMENT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -29,6 +33,7 @@ const initialState: RegisterState = {
     contact: "",
     period: "",
     content: "",
+    originalPostId: NaN,
   },
   list: {
     popularList: [],
@@ -209,21 +214,41 @@ const register = (
         registerComment: initialState.registerComment,
       };
     case GET_ORIGINAL_FORM:
-      const originalForm = action.payload;
+      const originalForm: OriginalFormType = action.payload as OriginalFormType;
       return {
         ...state,
         form: {
           ...state.form,
-          // title: originalForm.originFormData.title,
-          // category: originalForm.originFormData.category,
-          // personnel: originalForm.originFormData.personnel,
-          // online: originalForm.originFormData.meeting,
-          // position: originalForm.originFormData.position,
-          // contact: originalForm.originFormData.contact,
-          // period: originalForm.originFormData.period,
-          // content: originalForm.originFormData.content
+          title: originalForm.originFormData.title,
+          category: originalForm.originFormData.category,
+          personnel: originalForm.originFormData.personnel,
+          online: originalForm.originFormData.meeting,
+          position: originalForm.originFormData.position,
+          contact: originalForm.originFormData.contact,
+          period: originalForm.originFormData.period,
+          content: originalForm.originFormData.content,
+          originalPostId: originalForm.originFormData.registerNum,
         },
       };
+    case MODIFY_FORM_SUCCESS:
+      return {
+        ...state,
+        form: {
+          ...state.form
+        }
+      }
+    case MODIFY_FORM_FAILURE:
+      return state;
+    case GET_ORIGINAL_COMMENT:
+      const originalComment: OriginalCommentType = action.payload as OriginalCommentType;
+      console.log("originalComment???", originalComment)
+      return {
+        ...state,
+        registerComment: {
+          ...state.registerComment,
+          comment: originalComment.commentItem.comment,
+        }
+      }
     default:
       return state;
   }

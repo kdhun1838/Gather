@@ -217,6 +217,40 @@ router.post(
   }
 );
 
+router.post("/modifyForm/:postId", async (req: Request, res: Response) => {
+  const {
+    title,
+    category,
+    personnel,
+    online,
+    position,
+    contact,
+    period,
+    content,
+  } = req.body.form.form;
+  const postId = req.body.postId;
+  console.log("modifyReq.Body??????????", req.body, title);
+  try {
+    const modifyForm = await models.registers.update(
+      {
+        title,
+        category,
+        personnel,
+        meeting: online,
+        position,
+        contact,
+        period,
+        content,
+      },
+      { where: { registerNum: postId } }
+    );
+    res.status(200).json(modifyForm);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json(e);
+  }
+});
+
 const updateExpiredStates = async () => {
   try {
     const currentDate = new Date();
