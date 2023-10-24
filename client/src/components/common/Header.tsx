@@ -28,7 +28,6 @@ const contentStyle: React.CSSProperties = {
   color: "#fff",
   lineHeight: "160px",
   textAlign: "center",
-  // background: "orange",
 };
 
 interface HeaderProps {
@@ -80,6 +79,8 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
                 ) : (
                   <div></div>
                 )}
+                <Spacing />
+                <Button to="/mypage">마이페이지</Button>
                 <Spacing />
                 <Button onClick={onLogout}>로그아웃</Button>
               </div>

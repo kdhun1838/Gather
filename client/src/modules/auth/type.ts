@@ -1,4 +1,4 @@
-import { changeField, initializeForm, login, signup } from "./action";
+import { changeField, initializeForm, login, signup } from './action';
 
 export type AuthAction =
   | ReturnType<typeof changeField>
@@ -31,5 +31,3 @@ export type registerState = {
   addr: string;
   gender: string;
 };
-
-type authState = {};

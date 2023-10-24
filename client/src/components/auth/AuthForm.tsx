@@ -242,6 +242,9 @@ const AuthForm: React.FC<textMapProps> = ({
               onComplete={handleAddressComplete}
               autoClose
               style={{
+                width: '400px',
+                height: '300px',
+                top: '40px',
                 position: 'absolute',
                 zIndex: 100,
                 border: '1px solid #ccc',
@@ -254,7 +257,11 @@ const AuthForm: React.FC<textMapProps> = ({
       </form>
       <Footer>
         {type === 'login' ? (
-          <Link to="/signup">회원가입</Link>
+          <div>
+            <button>아이디찾기</button>
+            <button>비번찾기</button>
+            <Link to="/signup">회원가입</Link>
+          </div>
         ) : (
           <Link to="/login">로그인</Link>
         )}
