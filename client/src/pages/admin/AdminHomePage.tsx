@@ -1,12 +1,15 @@
 import React from "react";
-import AdminHeaderContainer from "../../container/admin/AdminHeaderContainer";
+import AdminHeaderContainer from "../../container/common/AdminHeaderContainer";
 import styled from "styled-components";
+import AdminHomeContainer from "../../container/admin/home/AdminHomeContainer";
 
 const AdminHomePage: React.FC = () => {
   return (
     <div>
       <AdminHeaderContainer />
-      <AdminBody>dd</AdminBody>
+      <AdminBody>
+        <AdminHomeContainer />
+      </AdminBody>
     </div>
   );
 };

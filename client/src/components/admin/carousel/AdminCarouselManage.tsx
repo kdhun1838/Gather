@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Col, Table, Space, Button, Modal, Input, ColorPicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { changeDate } from "../community/Community";
+import { changeDate } from "../../community/Community";
 import { styled } from "styled-components";
-import ImgUpload from "../common/ImgUpload";
+import ImgUpload from "../../common/ImgUpload";
 import type { Color, ColorPickerProps } from "antd/lib/color-picker";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { Checkbox } from "antd";
-import { CarouselDiv, CarouselImg, CarouselText } from "../common/Header";
+import { CarouselDiv, CarouselImg, CarouselText } from "../../common/Header";
 
 interface CarouselData {
   carouselNum: number;
@@ -55,7 +55,7 @@ interface AdminCarouselProps {
   upsdateOnlyImg: (onlyImg: number) => void;
 }
 
-const AdminCarousel: React.FC<AdminCarouselProps> = (props) => {
+const AdminCarouselManage: React.FC<AdminCarouselProps> = (props) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
   const [link, setLink] = useState<string>("");
@@ -289,4 +289,4 @@ const ActionButton = styled.div`
   }
 `;
 
-export default AdminCarousel;
+export default AdminCarouselManage;

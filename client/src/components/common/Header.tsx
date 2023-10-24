@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({
               <div className="right">
                 <UserInfo>{user.user.nick}님</UserInfo>
                 {user.user.grade > 2 ? (
-                  <Button to="/admin">관리자페이지</Button>
+                  <Button to="/admin/home">관리자페이지</Button>
                 ) : (
                   <div></div>
                 )}
