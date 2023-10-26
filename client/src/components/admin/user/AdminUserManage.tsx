@@ -156,6 +156,13 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       ...getColumnSearchProps("name"),
     },
     {
+      title: "닉네임",
+      dataIndex: "nick",
+      key: "nick",
+      width: "10%",
+      ...getColumnSearchProps("nick"),
+    },
+    {
       title: "나이",
       dataIndex: "age",
       key: "age",
@@ -216,30 +223,18 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       title: "정보수정 / 회원탈퇴 / 등급UP&Down(최고관리자만 가능)",
       key: "action",
       render: (_, record) => (
-        <Space size="middle">
-          <ActionButton>정보 수정</ActionButton>
-          {record.grade < 3 && props.user.userNum !== record.userNum ? (
-            <ActionButton onClick={() => props.handleDelete(record.userNum)}>
-              회원 탈퇴
-            </ActionButton>
-          ) : (
-            <></>
-          )}
-          {props.user.grade === 3 ? (
-            record.grade === 2 ? (
-              <ActionButton
-                onClick={() =>
-                  props.handleGradeUpdate(
-                    record.userNum,
-                    record.grade,
-                    record.id
-                  )
-                }
-              >
-                등급 Down
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Space size="middle">
+            <ActionButton>정보 수정</ActionButton>
+            {record.grade < 3 && props.user.userNum !== record.userNum ? (
+              <ActionButton onClick={() => props.handleDelete(record.userNum)}>
+                회원 탈퇴
               </ActionButton>
             ) : (
-              record.grade === 1 && (
+              <></>
+            )}
+            {props.user.grade === 3 ? (
+              record.grade === 2 ? (
                 <ActionButton
                   onClick={() =>
                     props.handleGradeUpdate(
@@ -249,14 +244,28 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
                     )
                   }
                 >
-                  등급 Up
+                  등급 Down
                 </ActionButton>
+              ) : (
+                record.grade === 1 && (
+                  <ActionButton
+                    onClick={() =>
+                      props.handleGradeUpdate(
+                        record.userNum,
+                        record.grade,
+                        record.id
+                      )
+                    }
+                  >
+                    등급 Up
+                  </ActionButton>
+                )
               )
-            )
-          ) : null}
-        </Space>
+            ) : null}
+          </Space>
+        </div>
       ),
-      width: "25%",
+      width: "20%",
     },
   ];
 
