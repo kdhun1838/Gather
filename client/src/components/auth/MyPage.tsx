@@ -49,24 +49,69 @@ const StyledInput = styled.input`
   border: 1px solid rbg(225, 226, 227);
 `;
 
-const MyPage: React.FC = () => {
+type MyPageProps = {
+  user: any;
+  onSubmit: (formdata: any) => Promise<void>;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const MyPage: React.FC<MyPageProps> = ({
+  user,
+  onSubmit,
+  handleInputChange,
+}) => {
+  const handleProfileSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSubmit(user);
+  };
   return (
     <MyPagediv>
       <Nickname>환영합니다</Nickname>
       <form>
         <Inputnick>이름</Inputnick>
-        <StyledInput />
+        <StyledInput
+          name="name"
+          value={user.name}
+          onChange={handleInputChange}
+        />
         <Inputnick>닉네임</Inputnick>
-        <StyledInput />
+        <StyledInput
+          name="nick"
+          value={user.nick}
+          onChange={handleInputChange}
+        />
         <Inputnick>이메일</Inputnick>
-        <StyledInput />
+        <StyledInput
+          name="email"
+          value={user.email}
+          onChange={handleInputChange}
+        />
         <Inputnick>전화번호</Inputnick>
-        <StyledInput />
+        <StyledInput name="tel" value={user.tel} onChange={handleInputChange} />
         <Inputnick>주소</Inputnick>
-        <StyledInput />
+        <StyledInput
+          name="addr"
+          value={user.addr}
+          onChange={handleInputChange}
+        />
         <Inputnick>성별</Inputnick>
-        <StyledInput />
-        <Button>프로필 저장</Button>
+        <div>
+          <input
+            type="radio"
+            name="gender"
+            value={'남'}
+            onChange={handleInputChange}
+          />
+          남
+          <input
+            type="radio"
+            name="gender"
+            value={'여'}
+            onChange={handleInputChange}
+          />
+          여
+        </div>
+        <Button onClick={handleProfileSave}>프로필 저장</Button>
         <Button>회원탈퇴</Button>
       </form>
     </MyPagediv>

@@ -5,6 +5,7 @@ import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 import { AuthState, LoginState } from '../../modules/auth/type';
 import DaumPostcode from 'react-daum-postcode';
+import { Checkbox } from 'antd';
 
 // 스타일드 컴포넌트로 스타일링된 AuthFormBlock 정의
 const AuthFormBlock = styled.div`
@@ -223,16 +224,38 @@ const AuthForm: React.FC<textMapProps> = ({
         )}
         {type === 'register' && (
           <div className="span">
-            <span>성별</span>
+            <span>상세주소</span>
             <StyledInput
-              autoComplete="gender"
+              autoComplete="addr_detail"
+              name="addr_detail"
+              placeholder="상세주소"
+              onChange={(e) =>
+                onChange({ key: 'addr_detail', value: e.target.value })
+              }
+            />
+          </div>
+        )}
+        {type === 'register' && (
+          <div className="span">
+            <div>성별</div>
+            <input
+              type="radio"
               name="gender"
-              placeholder="성별"
               onChange={(e) =>
                 onChange({ key: 'gender', value: e.target.value })
               }
-              // value={form.register.grade}
+              value={'남'}
             />
+            남
+            <input
+              type="radio"
+              name="gender"
+              onChange={(e) =>
+                onChange({ key: 'gender', value: e.target.value })
+              }
+              value={'여'}
+            />
+            여
           </div>
         )}
         {error && <ErrorMessage>{error}</ErrorMessage>}

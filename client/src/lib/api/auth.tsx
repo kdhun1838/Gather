@@ -16,5 +16,6 @@ export const check = () => client.get("/auth/check");
 export const logout = () => client.post("/auth/logout");
 
 export const userupdate = (user: UserState) => {
+  console.log("userupdate==========>");
   return client.post("/auth/userupdate", user);
 };
