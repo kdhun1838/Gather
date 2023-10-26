@@ -85,6 +85,12 @@ export type ListDetailType = {
   updatedAt: Date;
 };
 
+export type ListDetailTypeWithUser = ListDetailType & {
+  id: string;
+  nick: string;
+  name: string;
+};
+
 export type CommentType = {
   comment: string;
 };

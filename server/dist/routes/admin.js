@@ -113,6 +113,7 @@ router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void
         res.status(500);
     }
 }));
+//유저관리
 router.delete("/deleteUser/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userNum = req.params.userNum;
     try {
@@ -145,3 +146,46 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 exports.default = router;
+//모임게시판 관리
+router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("getRegister백");
+    try {
+        const data = yield models_1.default.registers.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ["id", "nick", "name"],
+                },
+            ],
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                category: item.category,
+                contact: item.contact,
+                content: item.content,
+                createdAt: item.createdAt,
+                favorite: item.favorite,
+                meeting: item.meeting,
+                period: item.period,
+                personnel: item.personnel,
+                position: item.position,
+                registerNum: item.registerNum,
+                state: item.state,
+                title: item.title,
+                updatedAt: item.updatedAt,
+                userNum: item.userNum,
+                view: item.view,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));

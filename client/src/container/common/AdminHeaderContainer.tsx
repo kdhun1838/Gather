@@ -14,7 +14,6 @@ const AdminHeaderContainer: React.FC = () => {
 
   React.useEffect(() => {
     const grade = user.user.grade;
-    console.log("grade", grade);
 
     if (grade === 1) {
       alert("관리자만 접근이 가능합니다");

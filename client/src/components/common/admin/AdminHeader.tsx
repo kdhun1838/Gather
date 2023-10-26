@@ -145,13 +145,11 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
   useEffect(() => {
     const pathname = location.pathname;
     const splitPathName = pathname.split(/(?=\/)/g);
-    console.log("pathname", pathname, "splitPathname", splitPathName);
 
     const openKey = [
       `${splitPathName[0]}${splitPathName[1]}`,
       `${splitPathName[0]}${splitPathName[1]}${splitPathName[2]}`,
     ];
-    console.log("오픈키", openKey);
 
     setOpenKeys(openKey);
   }, [location.pathname]);

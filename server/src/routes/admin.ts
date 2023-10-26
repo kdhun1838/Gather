@@ -125,6 +125,8 @@ router.delete(
   }
 );
 
+//유저관리
+
 router.delete("/deleteUser/:userNum", async (req: Request, res: Response) => {
   const userNum = req.params.userNum;
   try {
@@ -162,3 +164,50 @@ router.post("/updateUserGrade", async (req: Request, res: Response) => {
 });
 
 export default router;
+
+//모임게시판 관리
+
+router.get("/getRegister", async (req: Request, res: Response) => {
+  console.log("getRegister백");
+  try {
+    const data = await models.registers.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ["id", "nick", "name"],
+        },
+      ],
+    });
+
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        category: item.category,
+        contact: item.contact,
+        content: item.content,
+        createdAt: item.createdAt,
+        favorite: item.favorite,
+        meeting: item.meeting,
+        period: item.period,
+        personnel: item.personnel,
+        position: item.position,
+        registerNum: item.registerNum,
+        state: item.state,
+        title: item.title,
+        updatedAt: item.updatedAt,
+        userNum: item.userNum,
+        view: item.view,
+      };
+
+      return restOfData;
+    });
+
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
+  }
+});
