@@ -125,4 +125,40 @@ router.delete(
   }
 );
 
+router.delete("/deleteUser/:userNum", async (req: Request, res: Response) => {
+  const userNum = req.params.userNum;
+  try {
+    await models.users.destroy({
+      where: { userNum: Number(userNum) },
+    });
+    res.status(200);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.post("/updateUserGrade", async (req: Request, res: Response) => {
+  const { userNum, grade } = req.body;
+  console.log("백 userNum", userNum, "grade", grade);
+  try {
+    if (grade === 2) {
+      await models.users.update(
+        {
+          grade: 1,
+        },
+        { where: { userNum: Number(userNum) } }
+      );
+    } else if (grade === 1) {
+      await models.users.update(
+        {
+          grade: 2,
+        },
+        { where: { userNum: Number(userNum) } }
+      );
+    }
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 export default router;

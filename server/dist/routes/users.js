@@ -33,7 +33,6 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
                 "updatedAt",
             ],
         });
-        console.log("하하하", usersData);
         res.status(200).json(usersData);
     }
     catch (err) {

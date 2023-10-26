@@ -2,14 +2,27 @@ import React from "react";
 import AdminHeaderContainer from "../../container/common/AdminHeaderContainer";
 import { AdminBody } from "./AdminHomePage";
 import AdminCarouselChartContainer from "../../container/admin/carousel/AdminCarouselChartContainer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../modules";
 
 const AdminCarouselChartPage = () => {
+  const { user } = useSelector((state: RootState) => ({
+    user: state.user,
+  }));
   return (
     <div>
-      <AdminHeaderContainer />
-      <AdminBody>
-        <AdminCarouselChartContainer />
-      </AdminBody>
+      {user.user.grade !== 1 ? (
+        <>
+          <AdminHeaderContainer />
+          <AdminBody>
+            <AdminCarouselChartContainer />
+          </AdminBody>
+        </>
+      ) : (
+        <>
+          <AdminHeaderContainer />
+        </>
+      )}
     </div>
   );
 };

@@ -113,4 +113,35 @@ router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void
         res.status(500);
     }
 }));
+router.delete("/deleteUser/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userNum = req.params.userNum;
+    try {
+        yield models_1.default.users.destroy({
+            where: { userNum: Number(userNum) },
+        });
+        res.status(200);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userNum, grade } = req.body;
+    console.log("백 userNum", userNum, "grade", grade);
+    try {
+        if (grade === 2) {
+            yield models_1.default.users.update({
+                grade: 1,
+            }, { where: { userNum: Number(userNum) } });
+        }
+        else if (grade === 1) {
+            yield models_1.default.users.update({
+                grade: 2,
+            }, { where: { userNum: Number(userNum) } });
+        }
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 exports.default = router;

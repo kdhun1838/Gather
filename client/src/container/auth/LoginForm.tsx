@@ -4,19 +4,23 @@ import { RootState } from "../../modules";
 import { changeField, initializeForm, login } from "../../modules/auth/action";
 import AuthForm from "../../components/auth/AuthForm";
 import { check, tempSetUser } from "../../modules/user/action";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { Loadinggif } from "../../images/loading.gif";
 
 const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { form, auth, authError, user } = useSelector((state: RootState) => ({
-    form: state.auth.login,
-    auth: state.auth.auth,
-    authError: state.auth.authError,
-    user: state.user.user,
-  }));
+  const { form, auth, authError, user, loading } = useSelector(
+    (state: RootState) => ({
+      form: state.auth.login,
+      auth: state.auth.auth,
+      authError: state.auth.authError,
+      user: state.user.user,
+      loading: state.loading["auth/LOGIN"],
+    })
+  );
 
   const onChange = (data: { key: string; value: string | number }) => {
     dispatch(
@@ -34,7 +38,9 @@ const LoginForm = () => {
     dispatch(login(form));
     // 이 부분에서 로그인 처리를 수행할 수 있습니다.
   };
-
+  useEffect(() => {
+    console.log("로딩", loading);
+  }, [loading]);
   useEffect(() => {
     dispatch(initializeForm(form));
   }, [dispatch]);
@@ -63,14 +69,32 @@ const LoginForm = () => {
   }, [navigate, user]);
 
   return (
-    <AuthForm
-      type="login"
-      onChange={onChange}
-      onSubmit={onSubmit}
-      error={error}
-      form={form}
-    />
+    <>
+      {loading ? (
+        <Loading>
+          <LoadingImage src="loading.gif" alt="로딩 중" />
+        </Loading>
+      ) : (
+        <AuthForm
+          type="login"
+          onChange={onChange}
+          onSubmit={onSubmit}
+          error={error}
+          form={form}
+        />
+      )}
+    </>
   );
 };
+
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoadingImage = styled.img`
+  /* 로딩 이미지의 스타일을 여기에 적용하세요 */
+`;
 
 export default LoginForm;

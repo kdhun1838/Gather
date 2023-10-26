@@ -7,6 +7,7 @@ import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { UserDetail } from "../../../modules/user/type";
 import { changeDate } from "../../community/Community";
+import styled from "styled-components";
 
 interface DataType {
   key: number;
@@ -24,6 +25,8 @@ type DataIndex = keyof DataType;
 interface AdminUserProps {
   data: UserDetail[];
   user: any;
+  handleDelete: (userNum: number) => void;
+  handleGradeUpdate: (userNum: number, grade: number, id: string) => void;
 }
 
 const AdminUserManage: React.FC<AdminUserProps> = (props) => {
@@ -140,15 +143,15 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
   const columns: ColumnsType<any> = [
     {
       title: "아이디",
-      dataIndex: "id", // props.data에서 가져오는 필드에 맞게 수정
-      key: "id", // props.data에서 가져오는 필드에 맞게 수정
+      dataIndex: "id",
+      key: "id",
       width: "10%",
       ...getColumnSearchProps("id"),
     },
     {
       title: "이름",
-      dataIndex: "name", // props.data에서 가져오는 필드에 맞게 수정
-      key: "name", // props.data에서 가져오는 필드에 맞게 수정
+      dataIndex: "name",
+      key: "name",
       width: "10%",
       ...getColumnSearchProps("name"),
     },
@@ -165,7 +168,6 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       key: "gender",
       width: "5%",
       sorter: (a, b) => {
-        // "여"이면 -1, "남"이면 1, 같으면 0을 반환하여 정렬합니다.
         if (a.gender === b.gender) return 0;
         if (a.gender === "여") return -1;
         if (b.gender === "여") return 1;
@@ -210,9 +212,65 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
         }
       },
     },
+    {
+      title: "정보수정 / 회원탈퇴 / 등급UP&Down(최고관리자만 가능)",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <ActionButton>정보 수정</ActionButton>
+          {record.grade < 3 && props.user.userNum !== record.userNum ? (
+            <ActionButton onClick={() => props.handleDelete(record.userNum)}>
+              회원 탈퇴
+            </ActionButton>
+          ) : (
+            <></>
+          )}
+          {props.user.grade === 3 ? (
+            record.grade === 2 ? (
+              <ActionButton
+                onClick={() =>
+                  props.handleGradeUpdate(
+                    record.userNum,
+                    record.grade,
+                    record.id
+                  )
+                }
+              >
+                등급 Down
+              </ActionButton>
+            ) : (
+              record.grade === 1 && (
+                <ActionButton
+                  onClick={() =>
+                    props.handleGradeUpdate(
+                      record.userNum,
+                      record.grade,
+                      record.id
+                    )
+                  }
+                >
+                  등급 Up
+                </ActionButton>
+              )
+            )
+          ) : null}
+        </Space>
+      ),
+      width: "25%",
+    },
   ];
 
   return <Table columns={columns} dataSource={props.data} />;
 };
+
+const ActionButton = styled.div`
+  color: #1677ff;
+  cursor: pointer;
+
+  &:hover {
+    color: darkblue;
+    font-weight: bold;
+  }
+`;
 
 export default AdminUserManage;

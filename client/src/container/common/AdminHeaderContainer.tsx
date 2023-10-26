@@ -12,13 +12,29 @@ const AdminHeaderContainer: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const grade = user.user.grade;
+    console.log("grade", grade);
+
+    if (grade === 1) {
+      alert("관리자만 접근이 가능합니다");
+      navigate("/");
+    }
+  }, [navigate, user.user.grade]);
+
   const onLogout = () => {
     navigate("/");
     dispatch(logout(user));
   };
   return (
     <div>
-      <AdminHeader user={user.user} onLogout={onLogout} />
+      {user.user.grade !== 1 ? (
+        <>
+          <AdminHeader user={user.user} onLogout={onLogout} />
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

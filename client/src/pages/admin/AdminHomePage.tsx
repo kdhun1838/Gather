@@ -2,14 +2,28 @@ import React from "react";
 import AdminHeaderContainer from "../../container/common/AdminHeaderContainer";
 import styled from "styled-components";
 import AdminHomeContainer from "../../container/admin/home/AdminHomeContainer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../modules";
 
 const AdminHomePage: React.FC = () => {
+  const { user } = useSelector((state: RootState) => ({
+    user: state.user,
+  }));
+
   return (
     <div>
-      <AdminHeaderContainer />
-      <AdminBody>
-        <AdminHomeContainer />
-      </AdminBody>
+      {user.user.grade !== 1 ? (
+        <>
+          <AdminHeaderContainer />
+          <AdminBody>
+            <AdminHomeContainer />
+          </AdminBody>
+        </>
+      ) : (
+        <>
+          <AdminHeaderContainer />
+        </>
+      )}
     </div>
   );
 };
