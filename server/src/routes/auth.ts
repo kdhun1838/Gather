@@ -79,8 +79,18 @@ router.post(
 router.post(
   '/signup',
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, password, name, nick, email, tel, age, addr, gender } =
-      req.body;
+    const {
+      id,
+      password,
+      name,
+      nick,
+      email,
+      tel,
+      age,
+      addr,
+      gender,
+      addr_detail,
+    } = req.body;
     console.log('register==================', req.body);
     const agetoNum = +age;
     try {
@@ -102,7 +112,7 @@ router.post(
           tel,
           age: agetoNum,
           grade: 1,
-          addr,
+          addr: addr + addr_detail,
           gender,
         });
 

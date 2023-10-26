@@ -77,7 +77,7 @@ router.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 }));
 router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, password, name, nick, email, tel, age, addr, gender } = req.body;
+    const { id, password, name, nick, email, tel, age, addr, gender, addr_detail, } = req.body;
     console.log('register==================', req.body);
     const agetoNum = +age;
     try {
@@ -98,8 +98,8 @@ router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 email,
                 tel,
                 age: agetoNum,
-                grade: 0,
-                addr,
+                grade: 1,
+                addr: addr + addr_detail,
                 gender,
             });
             const accessToken = jsonwebtoken_1.default.sign({
