@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ConfigProvider, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
@@ -11,6 +11,7 @@ import Button from './Button';
 import { logout } from '../../modules/user/action';
 import Logo from '../../images/Logo.png';
 import { UserState } from '../../modules/user/type';
+import { FaCaretDown } from 'react-icons/fa';
 
 const items: TabsProps['items'] = [
   {
@@ -44,6 +45,12 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   const [currentLocation, setCurrentLocation] = React.useState<string>(
     location.pathname
   );
+  const [isUserListOpen, setUserListOpen] = useState(false);
+
+  const toggleUserList = () => {
+    setUserListOpen(!isUserListOpen); // Step 2
+  };
+
   const onChange = (key: string) => {
     navigate(key);
     setCurrentLocation(location.pathname);
@@ -75,9 +82,30 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
                 ) : (
                   <div></div>
                 )}
-                <UserInfo>{user.user.id}</UserInfo>
-                <Button to="/mypage">마이페이지</Button>
-                <Button onClick={onLogout}>로그아웃</Button>
+                <div className="userlist" onClick={toggleUserList}>
+                  <UserInfo>{user.user.id}</UserInfo>
+                  <svg
+                    stoke-width="0"
+                    viewBox="0 0 24 24"
+                    height="16px"
+                    width="16px"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <FaCaretDown></FaCaretDown>
+                  </svg>
+                </div>
+                {isUserListOpen && (
+                  <Userlist>
+                    <ul>
+                      <li>내 작성글</li>
+                      <li>내 관심글</li>
+                      <li>
+                        <Link to="/mypage">설정</Link>
+                      </li>
+                      <li onClick={onLogout}>로그아웃</li>
+                    </ul>
+                  </Userlist>
+                )}
               </div>
             ) : (
               <div className="right">
@@ -132,6 +160,11 @@ const Wrapper = styled(Responsive)`
     justify-content: center;
     align-items: center;
   }
+  .userlist {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -147,6 +180,30 @@ const UserInfo = styled.div`
 
 const LogoBlock = styled.img`
   height: 5.5rem;
+`;
+
+const Userlist = styled.div`
+  position: absolute;
+  top: 5%;
+  margin-top: 1rem;
+  right: 0px;
+  ul {
+    position: relative;
+    z-index: 5;
+    width: 12rem;
+    background: rgb(255, 255, 255);
+    border: 0.5px solid rgba(37, 53, 90, 0.1);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 10px;
+    list-style: none;
+    display: block;
+  }
+  ul li {
+    padding: 0.75rem 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+    cursor: pointer;
+  }
 `;
 
 export default Header;

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Header from '../common/Header';
+import DaumPostcode from 'react-daum-postcode';
 
 const MyPagediv = styled.div`
   width: 100%;
@@ -12,7 +13,6 @@ const MyPagediv = styled.div`
   align-items: center;
   padding: 16px;
   margin: 0 auto;
-  border: 1px solid black;
 
   form {
     width: 100%;
@@ -64,6 +64,39 @@ const MyPage: React.FC<MyPageProps> = ({
     e.preventDefault();
     onSubmit(user);
   };
+
+  const [isAddressModalOpen, setAddressModalOpen] = useState(false);
+  const [address, setAddress] = useState('');
+
+  const handleOpenAddressModal = () => {
+    setAddressModalOpen(true);
+  };
+  const handleCloseAddressModal = () => {
+    setAddressModalOpen(false);
+  };
+  const handleAddressComplete = (data: any) => {
+    // data에 대한 타입을 명시적으로 any 또는 실제 타입으로 지정
+    setAddress(data.address); // 선택한 주소를 저장
+    handleCloseAddressModal(); // 모달 닫기
+    handleInputChange({
+      target: {
+        name: 'addr',
+        value: data.address,
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setAddress(value);
+    handleInputChange({
+      target: {
+        name: name,
+        value: value,
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
   return (
     <MyPagediv>
       <Nickname>환영합니다</Nickname>
@@ -72,19 +105,19 @@ const MyPage: React.FC<MyPageProps> = ({
         <StyledInput
           name="name"
           value={user.name}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e)}
         />
         <Inputnick>닉네임</Inputnick>
         <StyledInput
           name="nick"
           value={user.nick}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e)}
         />
         <Inputnick>이메일</Inputnick>
         <StyledInput
           name="email"
           value={user.email}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange(e)}
         />
         <Inputnick>전화번호</Inputnick>
         <StyledInput name="tel" value={user.tel} onChange={handleInputChange} />
@@ -92,7 +125,15 @@ const MyPage: React.FC<MyPageProps> = ({
         <StyledInput
           name="addr"
           value={user.addr}
-          onChange={handleInputChange}
+          onChange={(e) => handleAddressChange(e)}
+        />
+        <div>
+          <button onClick={handleOpenAddressModal}>주소찾기</button>
+        </div>
+        <Inputnick>상세주소</Inputnick>
+        <StyledInput
+          name="addr_detail"
+          onChange={(e) => handleInputChange(e)}
         />
         <Inputnick>성별</Inputnick>
         <div>
@@ -100,17 +141,34 @@ const MyPage: React.FC<MyPageProps> = ({
             type="radio"
             name="gender"
             value={'남'}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e)}
           />
           남
           <input
             type="radio"
             name="gender"
             value={'여'}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e)}
           />
           여
         </div>
+        {isAddressModalOpen && (
+          <div className="DaumPostcode">
+            <DaumPostcode
+              onComplete={handleAddressComplete}
+              autoClose
+              style={{
+                width: '400px',
+                height: '300px',
+                top: '40px',
+                position: 'absolute',
+                zIndex: 100,
+                border: '1px solid #ccc',
+              }}
+            />
+            <button onClick={handleCloseAddressModal}>닫기</button>
+          </div>
+        )}
         <Button onClick={handleProfileSave}>프로필 저장</Button>
         <Button>회원탈퇴</Button>
       </form>
