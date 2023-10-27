@@ -13,7 +13,7 @@ import { RegisterState } from "../../modules/register/type";
 
 const PostWrap = styled.div`
   width: 100%;
-  height: 100vh;
+  max-height: 200vh;
   background: #fff;
 `;
 const PostContainer = styled.div`
@@ -132,6 +132,7 @@ type ViewProps = {
   onDelete: (postId: number, e: FormEvent) => void;
   onGetOriginalForm: (originFormData: object) => void;
   postId: number;
+  isAdmin?: boolean;
 };
 const View: React.FC<ViewProps> = ({
   formData,
@@ -140,6 +141,7 @@ const View: React.FC<ViewProps> = ({
   onGetOriginalForm,
   postId,
   user,
+  isAdmin,
 }) => {
   const { getFormData } = formData;
 
@@ -157,7 +159,7 @@ const View: React.FC<ViewProps> = ({
   };
   return (
     <PostWrap>
-      <HeaderContainer />
+      {isAdmin ? <></> : <HeaderContainer />}
       <PostContainer>
         <Section>
           <h1>{getFormData?.title}</h1>
@@ -207,9 +209,9 @@ const View: React.FC<ViewProps> = ({
           <p className="content">{getFormData?.content}</p>
         </Section>
         <Section>
-          <CommentContainer />
+          <CommentContainer isAdmin={isAdmin} />
         </Section>
-        {user?.userNum === formData?.getFormData?.User.userNum && (
+        {user?.userNum === formData?.getFormData?.User.userNum || isAdmin ? (
           <BtnSection>
             <button onClick={(e) => onClose(postId, e)}>마감하기</button>
             <button onClick={() => onGetOriginalForm(formData.getFormData)}>
@@ -217,6 +219,8 @@ const View: React.FC<ViewProps> = ({
             </button>
             <button onClick={(e) => onDelete(postId, e)}>삭제</button>
           </BtnSection>
+        ) : (
+          <></>
         )}
       </PostContainer>
     </PostWrap>

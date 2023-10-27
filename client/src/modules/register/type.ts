@@ -81,6 +81,7 @@ export type ListDetailType = {
   content: string;
   view: number;
   favorite: number;
+  state: number;
   createdAt: Date;
   updatedAt: Date;
 };

@@ -5,7 +5,6 @@ import { ListDetailTypeWithUser } from "../../../modules/register/type";
 
 const AdminRegisterManageContainer = () => {
   const [data, setData] = React.useState<ListDetailTypeWithUser[]>([]);
-
   const getData = async () => {
     try {
       const response = await getRegister();
@@ -15,13 +14,12 @@ const AdminRegisterManageContainer = () => {
       console.error(error);
     }
   };
-
   React.useEffect(() => {
     getData();
   }, []);
   return (
     <div>
-      <AdminRegisterManage data={data} />
+      <AdminRegisterManage data={data} getData={getData} />
     </div>
   );
 };
