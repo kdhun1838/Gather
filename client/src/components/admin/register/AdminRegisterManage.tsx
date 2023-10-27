@@ -7,6 +7,7 @@ import type { FilterConfirmProps } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
 import AdminRegisterModal from "./AdminRegisterModal";
 import AdminRegisterModalContainer from "../../../container/admin/register/AdminRegisterModalContainer";
+import { changeDate } from "../../community/Community";
 
 interface OwnProps {
   data: ListDetailTypeWithUser[];
@@ -191,14 +192,14 @@ const AdminRegisterManage: React.FC<OwnProps> = (props) => {
       filterSearch: true,
       onFilter: (value: any, record) =>
         record.category.toString().includes(value),
-      width: "15%",
+      width: "8%",
     },
     {
       title: "제목",
       dataIndex: "title",
       key: "title",
       ...getColumnSearchProps("title"),
-      width: "30%",
+      width: "27%",
     },
     {
       title: "인원",
@@ -216,6 +217,20 @@ const AdminRegisterManage: React.FC<OwnProps> = (props) => {
       width: "10%",
     },
     {
+      title: "작성일",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: "10%",
+      sorter: (a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateA - dateB;
+      },
+      render: (text, record) => {
+        return changeDate(record.createdAt.toString());
+      },
+    },
+    {
       title: "모집상태",
       dataIndex: "state",
       filters: [
@@ -230,7 +245,12 @@ const AdminRegisterManage: React.FC<OwnProps> = (props) => {
       ],
       filterSearch: true,
       onFilter: (value: any, record) => record.state === value,
-      render: (_, record) => (record.state === 1 ? "모집중" : "모집완료"),
+      render: (_, record) =>
+        record.state === 1 ? (
+          <div style={{ fontWeight: "bold", color: "green" }}>모집중</div>
+        ) : (
+          <div style={{ fontWeight: "bold", color: "red" }}>모집완료</div>
+        ),
       width: "10%",
     },
     {
@@ -243,12 +263,12 @@ const AdminRegisterManage: React.FC<OwnProps> = (props) => {
             자세히보기
           </Button>
           <Modal
-            // title="Basic Modal"
+            title={null}
             open={isModalOpen}
             // onOk={handleOk}
             onCancel={handleCancel}
-            width="80%"
-            style={{ maxHeight: "8000vh" }}
+            width="70%"
+            style={{ maxHeight: "800vh", minWidth: "70%" }}
             footer={null}
           >
             <AdminRegisterModalContainer

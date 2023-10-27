@@ -155,10 +155,33 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
 router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
-        const postClose = yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
+        const post = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
         });
-        res.status(200).json(postClose);
+        if (!post) {
+            return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+        }
+        if (post.state === 1) {
+            yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
+                where: { registerNum: postId },
+            });
+        }
+        else if (post.state === 2) {
+            yield models_1.default.registers.update({ state: 1, updatedAt: new Date() }, {
+                where: { registerNum: postId },
+            });
+        }
+        const updatedPost = yield models_1.default.registers.findOne({
+            where: { registerNum: postId },
+        });
+        res.status(200).json(updatedPost);
+        // const postClose = await models.registers.update(
+        //   { state: 2, updatedAt: new Date() },
+        //   {
+        //     where: { registerNum: postId },
+        //   }
+        // );
+        // res.status(200).json(postClose);
     }
     catch (e) {
         console.error(e);

@@ -153,6 +153,7 @@ type RegisterProps = {
   form: RegisterState;
   userNum: number;
   originalPostId: number;
+  isAdmin?: boolean;
 };
 
 const personner = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -168,6 +169,7 @@ const Register: React.FC<RegisterProps> = ({
   form,
   userNum,
   originalPostId,
+  isAdmin,
 }) => {
   const [date, setIsDate] = useState<Date | null>(null);
   const {
@@ -190,8 +192,8 @@ const Register: React.FC<RegisterProps> = ({
       alert("로그인이 필요합니다.");
       navigate("/login");
     } else if (originalPostId) {
-      onModifyForm(form, postId)
-      console.log("what???????", postId)
+      onModifyForm(form, postId);
+      console.log("what???????", postId);
     } else {
       onPostForm(form, userNum);
     }
@@ -208,7 +210,7 @@ const Register: React.FC<RegisterProps> = ({
 
   return (
     <>
-      <HeaderContainer />
+      {isAdmin ? <></> : <HeaderContainer />}
       <StyleForm>
         <TitleForm>
           <h3>제목</h3>

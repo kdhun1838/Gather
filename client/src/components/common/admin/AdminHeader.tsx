@@ -150,8 +150,8 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
       `${splitPathName[0]}${splitPathName[1]}`,
       `${splitPathName[0]}${splitPathName[1]}${splitPathName[2]}`,
     ];
-
     setOpenKeys(openKey);
+    setCurrent(openKey[1]);
   }, [location.pathname]);
 
   const onClick: MenuProps["onClick"] = (e) => {

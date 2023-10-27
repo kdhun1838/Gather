@@ -17,7 +17,6 @@ interface OwnProps {
 }
 
 const CommentContainer: React.FC<OwnProps> = ({ isAdmin }) => {
-  console.log("isAdmin", isAdmin);
   const [onModify, setOnModify] = useState(false);
   const { registerComment, formData, userId } = useSelector(
     (state: RootState) => ({

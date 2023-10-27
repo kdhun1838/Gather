@@ -22,7 +22,6 @@ const AdminRegisterModalContainer: React.FC<OwnProps> = ({
   handleCancel,
   getData,
 }) => {
-  console.log("postId===", postId);
   const { formData, user } = useSelector((state: RootState) => ({
     formData: state.register.formData,
     user: state.user.user,
@@ -31,14 +30,23 @@ const AdminRegisterModalContainer: React.FC<OwnProps> = ({
   const navigate = useNavigate();
 
   const onClose = React.useCallback(
-    (postId: Number) => {
+    (postId: Number, state: number) => {
       dispatch(postClose(postId));
-      alert("마감되었습니다.");
+      if (state === 1) {
+        alert("마감되었습니다.");
+      } else {
+        alert("모집중으로 변경되었습니다.");
+      }
+
       handleCancel();
       getData();
     },
     [dispatch]
   );
+
+  React.useEffect(() => {
+    dispatch(getForm(postId));
+  }, [dispatch, postId]);
 
   const onDelete = React.useCallback(
     (postId: Number) => {
@@ -52,9 +60,8 @@ const AdminRegisterModalContainer: React.FC<OwnProps> = ({
 
   const onGetOriginalForm = () => {
     const originFormData = formData.getFormData;
-
     dispatch(getOriginalForm(originFormData));
-    navigate("/admin/register/manage");
+    navigate("/admin/register/manage/update");
   };
 
   React.useEffect(() => {

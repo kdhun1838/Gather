@@ -118,6 +118,7 @@ type ViewProps = {
       period: string;
       content: string;
       view: number;
+      state: number;
       createdAt: string;
       User: {
         nick: string;
@@ -128,7 +129,7 @@ type ViewProps = {
   user: {
     userNum: number;
   };
-  onClose: (postId: number, e: FormEvent) => void;
+  onClose: (postId: number, state: number) => void;
   onDelete: (postId: number, e: FormEvent) => void;
   onGetOriginalForm: (originFormData: object) => void;
   postId: number;
@@ -213,7 +214,19 @@ const View: React.FC<ViewProps> = ({
         </Section>
         {user?.userNum === formData?.getFormData?.User.userNum || isAdmin ? (
           <BtnSection>
-            <button onClick={(e) => onClose(postId, e)}>마감하기</button>
+            {formData?.getFormData?.state === 2 ? (
+              <button
+                onClick={() => onClose(postId, formData?.getFormData?.state)}
+              >
+                모집중으로 변경
+              </button>
+            ) : (
+              <button
+                onClick={(e) => onClose(postId, formData?.getFormData?.state)}
+              >
+                마감하기
+              </button>
+            )}
             <button onClick={() => onGetOriginalForm(formData.getFormData)}>
               수정
             </button>
