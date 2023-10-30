@@ -13,6 +13,8 @@ import registerRouter from "./routes/register";
 import communityRouter from "./routes/community";
 import authRouter from "./routes/auth";
 import adminRouter from "./routes/admin";
+import models from "./models";
+import { countVisitors } from "./middleware/countvisitor";
 
 // import { sequelize } from "../dist/models";
 
@@ -64,5 +66,49 @@ app.use(
 app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 포트에서 대기 중");
 });
+
+// async function countVisitors(
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> {
+//   if (!req.cookies.count) {
+//     console.log("카운터");
+//     res.cookie("count", "", { maxAge: 86400000, httpOnly: true }); // 24 hours in milliseconds
+
+//     const now = new Date();
+//     const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+
+//     if (date !== req.cookies.countDate) {
+//       res.cookie("countDate", date, { maxAge: 86400000, httpOnly: true }); // 24 hours in milliseconds
+
+//       try {
+//         const [visitor, created] = await models.visitors.findOrCreate({
+//           where: { name: "vistors" },
+//           defaults: {
+//             total_count: 1,
+//             today_count: 1,
+//             date: date,
+//           },
+//         });
+//         console.log("created=========", created);
+
+//         if (!created) {
+//           visitor.total_count++;
+//           if (visitor.date === date) {
+//             visitor.today_count++;
+//           } else {
+//             visitor.today_count = 1;
+//             visitor.date = date;
+//           }
+//           await visitor.save();
+//         }
+//       } catch (error) {
+//         return next(error);
+//       }
+//     }
+//   }
+//   next();
+// }
 
 export default app;

@@ -3,6 +3,7 @@ const router = express.Router();
 import models from "../models";
 import { Op } from "sequelize";
 import cron from "node-cron";
+import { countVisitors } from "../middleware/countvisitor";
 
 type QueryData = {
   mainSort: string;
@@ -73,6 +74,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 
 router.get(
   "/popularList",
+  countVisitors,
   async (req: Request, res: Response, next: NextFunction) => {
     const today = new Date();
     today.setHours(today.getHours() + 9);

@@ -7,6 +7,7 @@ import { RegisterCommentsModel } from "./registerComments";
 import { communityCommentsModel } from "./communityComments";
 import { carouselModel } from "./carousels";
 import { communityReplysModel } from "./communityReplys";
+import { visitorModel } from "./visitors";
 
 function initModels(sequelize: Sequelize) {
   const boards = boardsModel(sequelize);
@@ -17,6 +18,7 @@ function initModels(sequelize: Sequelize) {
   const registerComments = RegisterCommentsModel(sequelize);
   const carousels = carouselModel(sequelize);
   const communityReplys = communityReplysModel(sequelize);
+  const visitors = visitorModel(sequelize);
 
   registers.hasMany(registerComments, { foreignKey: "registerNum" });
   registerComments.belongsTo(registers, { foreignKey: "registerNum" });
@@ -50,6 +52,7 @@ function initModels(sequelize: Sequelize) {
     communityReplys,
     registerComments,
     carousels,
+    visitors,
   };
 }
 

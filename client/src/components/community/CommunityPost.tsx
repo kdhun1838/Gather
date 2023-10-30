@@ -77,12 +77,14 @@ type PostPropsType = {
     [key: string]: boolean;
   };
   onClickBack: () => void;
+  isAdmin?: boolean;
 };
 
 const CommunityPost: React.FC<PostPropsType> = ({
   post,
   load,
   onClickBack,
+  isAdmin,
 }) => {
   const loading = load["community/GET_POST"];
 

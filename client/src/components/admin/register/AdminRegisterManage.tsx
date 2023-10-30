@@ -1,11 +1,10 @@
 import React from "react";
 import { ListDetailTypeWithUser } from "../../../modules/register/type";
-import type { ColumnsType, TableProps, ColumnType } from "antd/es/table";
+import type { ColumnsType, ColumnType } from "antd/es/table";
 import Highlighter from "react-highlight-words";
 import { Button, Input, Space, Table, Modal, InputRef } from "antd";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
-import AdminRegisterModal from "./AdminRegisterModal";
 import AdminRegisterModalContainer from "../../../container/admin/register/AdminRegisterModalContainer";
 import { changeDate } from "../../community/Community";
 

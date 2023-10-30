@@ -148,7 +148,6 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
 exports.default = router;
 //모임게시판 관리
 router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("getRegister백");
     try {
         const data = yield models_1.default.registers.findAll({
             include: [
@@ -180,6 +179,43 @@ router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, funct
                 updatedAt: item.updatedAt,
                 userNum: item.userNum,
                 view: item.view,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+// 커뮤니티 관리
+router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("getCommunity백");
+    try {
+        const data = yield models_1.default.communitys.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ["id", "nick", "name"],
+                },
+            ],
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                communityNum: item.communityNum,
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                userNum: item.userId,
+                title: item.title,
+                category: item.category,
+                content: item.content,
+                detail: item.detail,
+                view: item.view,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
             };
             return restOfData;
         });

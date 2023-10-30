@@ -29,3 +29,10 @@ export const updateUserGrade = (
 export const getRegister = (): Promise<AxiosResponse> => {
   return client.get("/admin/getRegister");
 };
+
+// 커뮤니티게시판 관리
+
+export const getCommunityWithUser = (): Promise<AxiosResponse> => {
+  console.log("API");
+  return client.get("/admin/getCommunity");
+};

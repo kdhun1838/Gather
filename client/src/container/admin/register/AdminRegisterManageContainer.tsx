@@ -8,7 +8,6 @@ const AdminRegisterManageContainer = () => {
   const getData = async () => {
     try {
       const response = await getRegister();
-      console.log("response=========", response.data);
       setData(response.data);
     } catch (error) {
       console.error(error);

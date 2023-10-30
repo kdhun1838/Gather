@@ -168,7 +168,6 @@ export default router;
 //모임게시판 관리
 
 router.get("/getRegister", async (req: Request, res: Response) => {
-  console.log("getRegister백");
   try {
     const data = await models.registers.findAll({
       include: [
@@ -201,6 +200,47 @@ router.get("/getRegister", async (req: Request, res: Response) => {
         updatedAt: item.updatedAt,
         userNum: item.userNum,
         view: item.view,
+      };
+
+      return restOfData;
+    });
+
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+// 커뮤니티 관리
+
+router.get("/getCommunity", async (req: Request, res: Response) => {
+  console.log("getCommunity백");
+  try {
+    const data = await models.communitys.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ["id", "nick", "name"],
+        },
+      ],
+    });
+
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        communityNum: item.communityNum,
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        userNum: item.userId,
+        title: item.title,
+        category: item.category,
+        content: item.content,
+        detail: item.detail,
+        view: item.view,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
       };
 
       return restOfData;

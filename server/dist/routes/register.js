@@ -17,6 +17,7 @@ const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
 const sequelize_1 = require("sequelize");
 const node_cron_1 = __importDefault(require("node-cron"));
+const countvisitor_1 = require("../middleware/countvisitor");
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
@@ -73,7 +74,7 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: "에러" });
     }
 }));
-router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/popularList", countvisitor_1.countVisitors, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const today = new Date();
     today.setHours(today.getHours() + 9);
     try {
@@ -175,13 +176,6 @@ router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void
             where: { registerNum: postId },
         });
         res.status(200).json(updatedPost);
-        // const postClose = await models.registers.update(
-        //   { state: 2, updatedAt: new Date() },
-        //   {
-        //     where: { registerNum: postId },
-        //   }
-        // );
-        // res.status(200).json(postClose);
     }
     catch (e) {
         console.error(e);

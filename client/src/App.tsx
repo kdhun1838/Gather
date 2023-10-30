@@ -19,6 +19,7 @@ import AdminRegisterChartPage from "./pages/admin/AdminRegisterChartPage";
 import AdminCommunityManagePage from "./pages/admin/AdminCommunityManagePage";
 import AdminCommunityChartPage from "./pages/admin/AdminCommunityChartPage";
 import AdminRegisterManageUpdatePage from "./pages/admin/AdminRegisterManageUpdatePage";
+import AdminCommunityManageDetailPage from "./pages/admin/AdminCommunityManageDetailPage";
 
 const App: React.FC = () => {
   return (
@@ -52,6 +53,10 @@ const App: React.FC = () => {
         <Route
           path="/admin/community/manage"
           element={<AdminCommunityManagePage />}
+        />
+        <Route
+          path="/admin/community/manage/detail/:postId"
+          element={<AdminCommunityManageDetailPage />}
         />
         <Route
           path="/admin/community/chart"

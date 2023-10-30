@@ -62,6 +62,21 @@ export type CommunityState = {
 
 export type GetPostType = SortType;
 
+export type CommunityTypeWithUser = {
+  communityNum: number;
+  id: string;
+  nick: string;
+  name: string;
+  userNum: number;
+  title: string;
+  category: string;
+  content: string;
+  detail: string;
+  view: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type CommunityAction =
   | ReturnType<typeof changeForm>
   | ReturnType<typeof changeSortType>
