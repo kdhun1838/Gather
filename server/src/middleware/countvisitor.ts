@@ -71,6 +71,7 @@ export const countVisitors = async (
         data.user_count++;
         data.visitor_count--;
         data.save();
+
         res.cookie("isCounted", 1, {
           expires: today,
           httpOnly: true,

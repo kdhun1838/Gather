@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initModels = void 0;
-const boards_1 = require("./boards");
 const users_1 = require("./users");
 const registers_1 = require("./registers");
 const communitys_1 = require("./communitys");
@@ -11,7 +10,6 @@ const carousels_1 = require("./carousels");
 const communityReplys_1 = require("./communityReplys");
 const visitors_1 = require("./visitors");
 function initModels(sequelize) {
-    const boards = (0, boards_1.boardsModel)(sequelize);
     const users = (0, users_1.usersModel)(sequelize);
     const registers = (0, registers_1.registersModel)(sequelize);
     const communitys = (0, communitys_1.communitysModel)(sequelize);
@@ -38,7 +36,6 @@ function initModels(sequelize) {
     communityComments.hasMany(communityReplys, { foreignKey: "commentId" });
     communityReplys.belongsTo(communityComments, { foreignKey: "commentId" });
     return {
-        boards,
         users,
         registers,
         communitys,

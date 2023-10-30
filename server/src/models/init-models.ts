@@ -1,5 +1,4 @@
 import { Sequelize } from "sequelize";
-import { boardsModel } from "./boards";
 import { usersModel } from "./users";
 import { registersModel } from "./registers";
 import { communitysModel } from "./communitys";
@@ -10,7 +9,6 @@ import { communityReplysModel } from "./communityReplys";
 import { visitorModel } from "./visitors";
 
 function initModels(sequelize: Sequelize) {
-  const boards = boardsModel(sequelize);
   const users = usersModel(sequelize);
   const registers = registersModel(sequelize);
   const communitys = communitysModel(sequelize);
@@ -44,7 +42,6 @@ function initModels(sequelize: Sequelize) {
   communityReplys.belongsTo(communityComments, { foreignKey: "commentId" });
 
   return {
-    boards,
     users,
     registers,
     communitys,
