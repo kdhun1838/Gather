@@ -9,12 +9,14 @@ import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { Checkbox } from "antd";
 import { CarouselDiv, CarouselImg, CarouselText } from "../../common/Header";
 
-interface CarouselData {
+export interface CarouselData {
   carouselNum: number;
   content: string;
   href: string;
-  img: { url: string; filename: string }[];
+  img: { url: string; filename: string };
   backgroundColor: string;
+  count: number;
+  onlyImg: number;
   textColor: string;
   createdAt: string;
   updatedAt: string;

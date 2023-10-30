@@ -15,7 +15,69 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const models_1 = __importDefault(require("../models"));
 const multer_1 = __importDefault(require("multer"));
+const sequelize_1 = require("sequelize");
 const router = express_1.default.Router();
+//메인
+router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("탑인포 빽");
+    try {
+        const userData = yield models_1.default.users.findAndCountAll({
+            attributes: {
+                exclude: ["password"],
+            },
+            nest: true,
+        });
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const userDataToday = yield models_1.default.users.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        userData.today = userDataToday;
+        const registerData = yield models_1.default.registers.findAndCountAll({
+            nest: true,
+        });
+        const registerDataToday = yield models_1.default.registers.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        registerData.today = registerDataToday;
+        const communityData = yield models_1.default.communitys.findAndCountAll({
+            nest: true,
+        });
+        const communityDataToday = yield models_1.default.communitys.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        communityData.today = communityDataToday;
+        const carouselData = yield models_1.default.carousels.findAndCountAll({
+            nest: true,
+        });
+        const carouselDataToday = yield models_1.default.carousels.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        carouselData.today = carouselDataToday;
+        res
+            .status(200)
+            .json({ userData, registerData, communityData, carouselData });
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 // 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();

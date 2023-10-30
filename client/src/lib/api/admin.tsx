@@ -1,6 +1,11 @@
 import client from "./client";
 import { AxiosResponse } from "axios";
 
+//메인
+export const getTopInfo = (): Promise<AxiosResponse> => {
+  return client.get("/admin/topInfo");
+};
+
 //캐러셀관리
 export const getCarousel = (): Promise<AxiosResponse> => {
   return client.get("/admin/getCarousel");

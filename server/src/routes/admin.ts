@@ -1,7 +1,74 @@
 import express, { Request, Response, NextFunction } from "express";
 import models from "../models";
 import multer from "multer";
+import { Op } from "sequelize";
 const router = express.Router();
+
+//메인
+router.get("/topInfo", async (req: Request, res: Response) => {
+  console.log("탑인포 빽");
+  try {
+    const userData = await models.users.findAndCountAll({
+      attributes: {
+        exclude: ["password"],
+      },
+      nest: true,
+    });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const userDataToday = await models.users.count({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+    });
+    userData.today = userDataToday;
+
+    const registerData = await models.registers.findAndCountAll({
+      nest: true,
+    });
+    const registerDataToday = await models.registers.count({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+    });
+    registerData.today = registerDataToday;
+
+    const communityData = await models.communitys.findAndCountAll({
+      nest: true,
+    });
+    const communityDataToday = await models.communitys.count({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+    });
+    communityData.today = communityDataToday;
+
+    const carouselData = await models.carousels.findAndCountAll({
+      nest: true,
+    });
+    const carouselDataToday = await models.carousels.count({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+    });
+    carouselData.today = carouselDataToday;
+
+    res
+      .status(200)
+      .json({ userData, registerData, communityData, carouselData });
+  } catch (error) {
+    res.status(500);
+  }
+});
 
 // 캐러셀 관리
 const uniqueFileName = (name: string) => {
