@@ -81,8 +81,15 @@ export type ListDetailType = {
   content: string;
   view: number;
   favorite: number;
+  state: number;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type ListDetailTypeWithUser = ListDetailType & {
+  id: string;
+  nick: string;
+  name: string;
 };
 
 export type CommentType = {

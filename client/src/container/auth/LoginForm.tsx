@@ -87,14 +87,12 @@ const LoginForm = () => {
   );
 };
 
-const Loading = styled.div`
+export const Loading = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const LoadingImage = styled.img`
-  /* 로딩 이미지의 스타일을 여기에 적용하세요 */
-`;
+export const LoadingImage = styled.img``;
 
 export default LoginForm;

@@ -12,7 +12,11 @@ import {
   unloadComment,
 } from "../../modules/register/action";
 
-const CommentContainer = () => {
+interface OwnProps {
+  isAdmin?: boolean;
+}
+
+const CommentContainer: React.FC<OwnProps> = ({ isAdmin }) => {
   const [onModify, setOnModify] = useState(false);
   const { registerComment, formData, userId } = useSelector(
     (state: RootState) => ({
@@ -51,13 +55,19 @@ const CommentContainer = () => {
 
   return (
     <div>
-      <Comment
-        onChangeComment={onChangeComment}
-        onPostComment={onPostComment}
-        comment={registerComment.comment}
-        postId={postId}
-        userId={userId.user?.userNum}
-      />
+      {isAdmin ? (
+        <></>
+      ) : (
+        <>
+          <Comment
+            onChangeComment={onChangeComment}
+            onPostComment={onPostComment}
+            comment={registerComment.comment}
+            postId={postId}
+            userId={userId.user?.userNum}
+          />
+        </>
+      )}
       <CommentList
         onGetOriginalComment={onGetOriginalComment}
         onChangeComment={onChangeComment}

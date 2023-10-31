@@ -1,6 +1,11 @@
 import client from "./client";
 import { AxiosResponse } from "axios";
 
+//메인
+export const getTopInfo = (): Promise<AxiosResponse> => {
+  return client.get("/admin/topInfo");
+};
+
 //캐러셀관리
 export const getCarousel = (): Promise<AxiosResponse> => {
   return client.get("/admin/getCarousel");
@@ -11,9 +16,6 @@ export const deleteCarousel = (carouselNum: number): Promise<AxiosResponse> => {
 };
 
 //유저관리
-// export const getUser = (): Promise<AxiosResponse> => {
-//   return client.get("/admin/getUser");
-// };
 
 export const deleteUser = (userNum: number): Promise<AxiosResponse> => {
   console.log("유저삭제API", userNum);
@@ -24,6 +26,18 @@ export const updateUserGrade = (
   userNum: number,
   grade: number
 ): Promise<AxiosResponse> => {
-  console.log("유저등급API", userNum, grade);
   return client.post("/admin/updateUserGrade", { userNum, grade });
+};
+
+// 모임게시판관리
+
+export const getRegister = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getRegister");
+};
+
+// 커뮤니티게시판 관리
+
+export const getCommunityWithUser = (): Promise<AxiosResponse> => {
+  console.log("API");
+  return client.get("/admin/getCommunity");
 };

@@ -8,11 +8,12 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import usersRouter from "./routes/users";
-import boardsRouter from "./routes/boards";
 import registerRouter from "./routes/register";
 import communityRouter from "./routes/community";
 import authRouter from "./routes/auth";
 import adminRouter from "./routes/admin";
+import models from "./models";
+import { countVisitors } from "./middleware/countvisitor";
 
 // import { sequelize } from "../dist/models";
 
@@ -33,7 +34,6 @@ app.use(
 );
 
 app.use("/users", usersRouter);
-app.use("/boards", boardsRouter);
 app.use("/register", registerRouter);
 app.use("/community", communityRouter);
 app.use("/auth", authRouter);

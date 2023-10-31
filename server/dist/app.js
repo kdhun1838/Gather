@@ -35,7 +35,6 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const users_1 = __importDefault(require("./routes/users"));
-const boards_1 = __importDefault(require("./routes/boards"));
 const register_1 = __importDefault(require("./routes/register"));
 const community_1 = __importDefault(require("./routes/community"));
 const auth_1 = __importDefault(require("./routes/auth"));
@@ -54,7 +53,6 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 app.use("/users", users_1.default);
-app.use("/boards", boards_1.default);
 app.use("/register", register_1.default);
 app.use("/community", community_1.default);
 app.use("/auth", auth_1.default);

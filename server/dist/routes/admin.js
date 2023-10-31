@@ -15,7 +15,69 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const models_1 = __importDefault(require("../models"));
 const multer_1 = __importDefault(require("multer"));
+const sequelize_1 = require("sequelize");
 const router = express_1.default.Router();
+//메인
+router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("탑인포 빽");
+    try {
+        const userData = yield models_1.default.users.findAndCountAll({
+            attributes: {
+                exclude: ["password"],
+            },
+            nest: true,
+        });
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const userDataToday = yield models_1.default.users.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        userData.today = userDataToday;
+        const registerData = yield models_1.default.registers.findAndCountAll({
+            nest: true,
+        });
+        const registerDataToday = yield models_1.default.registers.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        registerData.today = registerDataToday;
+        const communityData = yield models_1.default.communitys.findAndCountAll({
+            nest: true,
+        });
+        const communityDataToday = yield models_1.default.communitys.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        communityData.today = communityDataToday;
+        const carouselData = yield models_1.default.carousels.findAndCountAll({
+            nest: true,
+        });
+        const carouselDataToday = yield models_1.default.carousels.count({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.gte]: today,
+                },
+            },
+        });
+        carouselData.today = carouselDataToday;
+        res
+            .status(200)
+            .json({ userData, registerData, communityData, carouselData });
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 // 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();
@@ -113,6 +175,7 @@ router.delete("/deleteCarousel/:carouselNum", (req, res, next) => __awaiter(void
         res.status(500);
     }
 }));
+//유저관리
 router.delete("/deleteUser/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userNum = req.params.userNum;
     try {
@@ -145,3 +208,82 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 exports.default = router;
+//모임게시판 관리
+router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield models_1.default.registers.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ["id", "nick", "name"],
+                },
+            ],
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                category: item.category,
+                contact: item.contact,
+                content: item.content,
+                createdAt: item.createdAt,
+                favorite: item.favorite,
+                meeting: item.meeting,
+                period: item.period,
+                personnel: item.personnel,
+                position: item.position,
+                registerNum: item.registerNum,
+                state: item.state,
+                title: item.title,
+                updatedAt: item.updatedAt,
+                userNum: item.userNum,
+                view: item.view,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+// 커뮤니티 관리
+router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("getCommunity백");
+    try {
+        const data = yield models_1.default.communitys.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ["id", "nick", "name"],
+                },
+            ],
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                communityNum: item.communityNum,
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                userNum: item.userId,
+                title: item.title,
+                category: item.category,
+                content: item.content,
+                detail: item.detail,
+                view: item.view,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));

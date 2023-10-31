@@ -3,6 +3,7 @@ const router = express.Router();
 import models from "../models";
 import { Op } from "sequelize";
 import cron from "node-cron";
+import { countVisitors } from "../middleware/countvisitor";
 
 type QueryData = {
   mainSort: string;
@@ -73,6 +74,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 
 router.get(
   "/popularList",
+  countVisitors,
   async (req: Request, res: Response, next: NextFunction) => {
     const today = new Date();
     today.setHours(today.getHours() + 9);
@@ -170,13 +172,31 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
-      const postClose = await models.registers.update(
-        { state: 2, updatedAt: new Date() },
-        {
-          where: { registerNum: postId },
-        }
-      );
-      res.status(200).json(postClose);
+      const post = await models.registers.findOne({
+        where: { registerNum: postId },
+      });
+      if (!post) {
+        return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+      }
+      if (post.state === 1) {
+        await models.registers.update(
+          { state: 2, updatedAt: new Date() },
+          {
+            where: { registerNum: postId },
+          }
+        );
+      } else if (post.state === 2) {
+        await models.registers.update(
+          { state: 1, updatedAt: new Date() },
+          {
+            where: { registerNum: postId },
+          }
+        );
+      }
+      const updatedPost = await models.registers.findOne({
+        where: { registerNum: postId },
+      });
+      res.status(200).json(updatedPost);
     } catch (e) {
       console.error(e);
       res.status(500).json(e);

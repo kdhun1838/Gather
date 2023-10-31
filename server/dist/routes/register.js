@@ -17,6 +17,7 @@ const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
 const sequelize_1 = require("sequelize");
 const node_cron_1 = __importDefault(require("node-cron"));
+const countvisitor_1 = require("../middleware/countvisitor");
 router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
@@ -73,7 +74,7 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: "에러" });
     }
 }));
-router.get("/popularList", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/popularList", countvisitor_1.countVisitors, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const today = new Date();
     today.setHours(today.getHours() + 9);
     try {
@@ -155,10 +156,26 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
 router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
-        const postClose = yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
+        const post = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
         });
-        res.status(200).json(postClose);
+        if (!post) {
+            return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+        }
+        if (post.state === 1) {
+            yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
+                where: { registerNum: postId },
+            });
+        }
+        else if (post.state === 2) {
+            yield models_1.default.registers.update({ state: 1, updatedAt: new Date() }, {
+                where: { registerNum: postId },
+            });
+        }
+        const updatedPost = yield models_1.default.registers.findOne({
+            where: { registerNum: postId },
+        });
+        res.status(200).json(updatedPost);
     }
     catch (e) {
         console.error(e);
