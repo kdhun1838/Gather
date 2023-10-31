@@ -1,4 +1,4 @@
-import { CommunityState, CommunityAction } from "./type";
+import { CommunityState, CommunityAction, FormType } from "./type";
 import {
   CHANGE_FORM,
   CHANGE_SORT,
@@ -15,6 +15,9 @@ import {
   ADD_REPLY_COMMENT,
   GET_COMMENTS,
   GET_REPLYS,
+  GET_EDIT_POST,
+  EDIT_POST,
+  DELETE_POST,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -167,6 +170,48 @@ const community = (
           ...state.main,
           mainPosts: null,
         },
+      };
+
+    // 포스트 수정 관련
+    case `${GET_EDIT_POST}_SUCCESS`:
+      console.log(action.payload);
+      const form = action.payload as FormType;
+      return {
+        ...state,
+        form,
+      };
+    case `${GET_EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+      };
+
+    case `${EDIT_POST}_SUCCESS`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: action.payload,
+        },
+      };
+
+    case `${EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: "",
+        },
+      };
+
+    // 포스트 삭제 관련
+    case `${DELETE_POST}_SUCCESS`:
+      return {
+        ...state,
+      };
+
+    case `${DELETE_POST}_FAILURE`:
+      return {
+        ...state,
       };
 
     // 인기 게시물 불러오기

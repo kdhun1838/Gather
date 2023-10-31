@@ -1,20 +1,28 @@
 import { FormEvent, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommunityWrite from "../../components/community/CommunityWrite";
-import { changeForm, initForm, saveForm } from "../../modules/community/action";
+import {
+  changeForm,
+  editPost,
+  getEditPost,
+} from "../../modules/community/action";
 import { RootState } from "../../modules";
-import { useNavigate } from "react-router";
-import { CommunityState } from "../../modules/community/type";
+import { useNavigate, useParams } from "react-router";
+import CommunityEdit from "../../components/community/CommunityEdit";
+import { FormType } from "../../modules/community/type";
 
-const CommunityWriteContainer = () => {
+interface OwnProps {
+  isAdmin?: boolean;
+}
+
+const CommunityEditContainer: React.FC<OwnProps> = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const param = useParams();
 
-  const form = useSelector((state: RootState) => state.community);
-  const user = useSelector((state: RootState) => state.user.user);
+  const postId = param.postId || "";
+  const form = useSelector((state: RootState) => state.community.form);
 
-  const { category, title, content } = form.form || "";
-  const userId = user.userNum || "";
+  const { category, title, content } = form || "";
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string }) => {
@@ -33,7 +41,7 @@ const CommunityWriteContainer = () => {
   }, [content, title, navigate]);
 
   const onSubmit = useCallback(
-    (e: FormEvent, form: CommunityState) => {
+    (e: FormEvent, form: Record<string, string>) => {
       //새로고침 로직삭제
       e.preventDefault();
 
@@ -46,20 +54,24 @@ const CommunityWriteContainer = () => {
         console.log("내용을 적어주세요.");
       } else {
         console.log("제출가능");
-        dispatch(saveForm(form, userId));
-        navigate("/community");
+        dispatch(editPost(form as FormType, postId));
+        if (props.isAdmin) {
+          navigate(`/admin/community/manage/detail/${postId}`);
+        } else {
+          navigate(`/community/${postId}`);
+        }
       }
     },
-    [category, title, content, dispatch, navigate, userId]
+    [category, title, content, dispatch, postId, navigate]
   );
 
   useEffect(() => {
-    dispatch(initForm());
-  }, [dispatch]);
+    dispatch(getEditPost(postId));
+  }, []);
 
   return (
     <div>
-      <CommunityWrite
+      <CommunityEdit
         onChangeForm={onChangeForm}
         form={form}
         onCancel={onCancel}
@@ -69,4 +81,4 @@ const CommunityWriteContainer = () => {
   );
 };
 
-export default CommunityWriteContainer;
+export default CommunityEditContainer;

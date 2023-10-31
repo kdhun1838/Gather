@@ -2,12 +2,15 @@ import { useCallback, useEffect } from "react";
 import CommunityPost from "../../../components/community/CommunityPost";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../modules";
-import { getPost } from "../../../modules/community/action";
+import { deletePost, getPost } from "../../../modules/community/action";
 import { useNavigate, useParams } from "react-router-dom";
 
 const AdminCommunityManageDetailContainer: React.FC = () => {
-  const post = useSelector((state: RootState) => state.community.post.getPost);
-  const load = useSelector((state: RootState) => state.loading);
+  const { post, load, user } = useSelector((state: RootState) => ({
+    post: state.community.post.getPost,
+    load: state.loading,
+    user: state.user.user,
+  }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -16,6 +19,14 @@ const AdminCommunityManageDetailContainer: React.FC = () => {
   const onClickBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
+  const onClickPostEdit = useCallback(() => {
+    navigate(`/admin/community/manage/edit/${postId}`);
+  }, [navigate, postId]);
+
+  const onClickDeletPost = useCallback(() => {
+    dispatch(deletePost(postId));
+    navigate("/admin/community/manage");
+  }, [dispatch, navigate, postId]);
 
   useEffect(() => {
     dispatch(getPost(postId));
@@ -27,6 +38,9 @@ const AdminCommunityManageDetailContainer: React.FC = () => {
       load={load}
       onClickBack={onClickBack}
       isAdmin={true}
+      onClickPostEdit={onClickPostEdit}
+      onClickDeletPost={onClickDeletPost}
+      user={user}
     />
   );
 };

@@ -32,9 +32,14 @@ const NameAndDateBox = styled.div`
   padding-bottom: 32px;
   border-bottom: 3px solid #f2f2f2;
   display: flex;
-  grid-gap: 15px;
+  justify-content: space-between;
   gap: 15px;
   align-items: center;
+
+  div {
+    display: flex;
+    gap: 15px;
+  }
 
   .date {
     font-size: 18px;
@@ -73,20 +78,28 @@ const CommentBox = styled.div`
 
 type PostPropsType = {
   post: any;
+  user: Record<string, string>;
   load: {
     [key: string]: boolean;
   };
   onClickBack: () => void;
   isAdmin?: boolean;
+  onClickPostEdit: () => void;
+  onClickDeletPost: () => void;
 };
 
 const CommunityPost: React.FC<PostPropsType> = ({
+  user,
   post,
   load,
   onClickBack,
   isAdmin,
+  onClickPostEdit,
+  onClickDeletPost,
 }) => {
   const loading = load["community/GET_POST"];
+
+  const { userNum } = user || "";
 
   if (loading) {
     return <div>글 불러오는중... </div>;
@@ -98,9 +111,21 @@ const CommunityPost: React.FC<PostPropsType> = ({
         <div onClick={onClickBack}>뒤로가기버튼</div>
         <Title>{post?.title}</Title>
         <NameAndDateBox>
-          <div className="username">{post?.User?.nick}</div>
-          <div className="line"></div>
-          <div className="date">{changeDate(post?.createdAt)}</div>
+          <div>
+            <div className="username">{post?.User?.nick}</div>
+            <div className="line"></div>
+            <div className="date">{changeDate(post?.createdAt)}</div>
+          </div>
+          <div>
+            {post?.User?.userNum === userNum ||
+              (isAdmin && (
+                <>
+                  <div onClick={onClickDeletPost}>삭제</div>
+                  <div className="line"></div>
+                  <div onClick={onClickPostEdit}>수정</div>
+                </>
+              ))}
+          </div>
         </NameAndDateBox>
       </TitleBox>
       <PostContentBox

@@ -10,6 +10,7 @@ import ViewPage from "./pages/Register/ViewPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import AdminHomePage from "./pages/admin/AdminHomePage";
+
 import AdminCarouselManagePage from "./pages/admin/AdminCarouselManagePage";
 import AdminCarouselChartPage from "./pages/admin/AdminCarouselChartPage";
 import AdminUserChartPage from "./pages/admin/AdminUserChartPage";
@@ -20,6 +21,8 @@ import AdminCommunityManagePage from "./pages/admin/AdminCommunityManagePage";
 import AdminCommunityChartPage from "./pages/admin/AdminCommunityChartPage";
 import AdminRegisterManageUpdatePage from "./pages/admin/AdminRegisterManageUpdatePage";
 import AdminCommunityManageDetailPage from "./pages/admin/AdminCommunityManageDetailPage";
+import CommunityEditPage from "./pages/community/CommunityEditPage";
+import AdminCommunityManageEditPage from "./pages/admin/AdminCommunityManageEditPage";
 
 const App: React.FC = () => {
   return (
@@ -33,6 +36,7 @@ const App: React.FC = () => {
         <Route path="/register/:postId" element={<ViewPage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/community/write" element={<CommunityWritePage />} />
+        <Route path="/community/edit/:postId" element={<CommunityEditPage />} />
         <Route path="/community/:postId" element={<CommunityPostPage />} />
         {/* 관리자페이지 */}
         <Route path="/admin/home" element={<AdminHomePage />} />
@@ -57,6 +61,10 @@ const App: React.FC = () => {
         <Route
           path="/admin/community/manage/detail/:postId"
           element={<AdminCommunityManageDetailPage />}
+        />
+        <Route
+          path="/admin/community/manage/edit/:postId"
+          element={<AdminCommunityManageEditPage />}
         />
         <Route
           path="/admin/community/chart"
