@@ -5,7 +5,6 @@ import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 import { AuthState, LoginState } from '../../modules/auth/type';
 import DaumPostcode from 'react-daum-postcode';
-import { Checkbox } from 'antd';
 
 // 스타일드 컴포넌트로 스타일링된 AuthFormBlock 정의
 const AuthFormBlock = styled.div`
