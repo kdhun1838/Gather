@@ -17,7 +17,7 @@ const models_1 = __importDefault(require("../models"));
 const countVisitors = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("카운트");
     const now = new Date();
-    const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+    const date = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
     let today = new Date();
     today.setHours(23, 59, 59, 0);
     try {
