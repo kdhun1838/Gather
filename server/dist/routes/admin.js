@@ -19,7 +19,6 @@ const sequelize_1 = require("sequelize");
 const router = express_1.default.Router();
 //메인
 router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("탑인포 빽");
     try {
         const userData = yield models_1.default.users.findAndCountAll({
             attributes: {
@@ -73,6 +72,16 @@ router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res
             .status(200)
             .json({ userData, registerData, communityData, carouselData });
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.get("/visitor", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("방문자백");
+    try {
+        const data = yield models_1.default.visitors.findAll({});
+        res.status(200).json(data);
     }
     catch (error) {
         res.status(500);

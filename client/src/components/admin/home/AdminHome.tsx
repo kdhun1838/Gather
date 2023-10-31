@@ -16,6 +16,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { RiAdminFill } from "react-icons/ri";
+import AdminHomeVisitorContainer from "../../../container/admin/home/visitor/AdminHomeVisitorContainer";
 
 interface BoxProps {
   height?: number;
@@ -157,7 +158,9 @@ const AdminHome: React.FC<OwnProps> = (props) => {
               </Row>
               <Row>
                 <Col span={24}>
-                  <Box height={20}>방문자 차트</Box>
+                  <Box height={20}>
+                    <AdminHomeVisitorContainer />
+                  </Box>
                 </Col>
               </Row>
               <Row gutter={[16, 16]}>

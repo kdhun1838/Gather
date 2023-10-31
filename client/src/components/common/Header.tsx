@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
       <Wrapper>
         <div>
           <Link to="/">
-            <LogoBlock src={Logo} />
+            <LogoBlock src="/Logo.png" />
           </Link>
           <div>
             {user.user ? (

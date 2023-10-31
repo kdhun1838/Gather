@@ -6,6 +6,10 @@ export const getTopInfo = (): Promise<AxiosResponse> => {
   return client.get("/admin/topInfo");
 };
 
+export const getVisitor = (): Promise<AxiosResponse> => {
+  return client.get("/admin/visitor");
+};
+
 //캐러셀관리
 export const getCarousel = (): Promise<AxiosResponse> => {
   return client.get("/admin/getCarousel");

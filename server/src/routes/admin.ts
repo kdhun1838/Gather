@@ -6,7 +6,6 @@ const router = express.Router();
 
 //메인
 router.get("/topInfo", async (req: Request, res: Response) => {
-  console.log("탑인포 빽");
   try {
     const userData = await models.users.findAndCountAll({
       attributes: {
@@ -65,6 +64,17 @@ router.get("/topInfo", async (req: Request, res: Response) => {
     res
       .status(200)
       .json({ userData, registerData, communityData, carouselData });
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.get("/visitor", async (req: Request, res: Response) => {
+  console.log("방문자백");
+  try {
+    const data = await models.visitors.findAll({});
+
+    res.status(200).json(data);
   } catch (error) {
     res.status(500);
   }
