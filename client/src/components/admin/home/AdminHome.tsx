@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { RiAdminFill } from "react-icons/ri";
 import AdminHomeVisitorContainer from "../../../container/admin/home/visitor/AdminHomeVisitorContainer";
+import AdminHomeRegisterContainer from "../../../container/admin/home/register/AdminHomeRegisterContainer";
 
 interface BoxProps {
   height?: number;
@@ -165,7 +166,9 @@ const AdminHome: React.FC<OwnProps> = (props) => {
               </Row>
               <Row gutter={[16, 16]}>
                 <Col span={12}>
-                  <Box height={20}>모임 추이</Box>
+                  <Box height={20}>
+                    <AdminHomeRegisterContainer />
+                  </Box>
                 </Col>
                 <Col span={12}>
                   <Box height={20}>커뮤니티 추이</Box>
