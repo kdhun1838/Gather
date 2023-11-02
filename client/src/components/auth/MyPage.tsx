@@ -52,12 +52,14 @@ const StyledInput = styled.input`
 type MyPageProps = {
   user: any;
   onSubmit: (formdata: any) => Promise<void>;
+  onDel: () => Promise<void>;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const MyPage: React.FC<MyPageProps> = ({
   user,
   onSubmit,
+  onDel,
   handleInputChange,
 }) => {
   const handleProfileSave = (e: React.MouseEvent) => {
@@ -128,7 +130,14 @@ const MyPage: React.FC<MyPageProps> = ({
           onChange={(e) => handleAddressChange(e)}
         />
         <div>
-          <button onClick={handleOpenAddressModal}>주소찾기</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleOpenAddressModal();
+            }}
+          >
+            주소찾기
+          </button>
         </div>
         <Inputnick>상세주소</Inputnick>
         <StyledInput
@@ -170,7 +179,14 @@ const MyPage: React.FC<MyPageProps> = ({
           </div>
         )}
         <Button onClick={handleProfileSave}>프로필 저장</Button>
-        <Button>회원탈퇴</Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            onDel();
+          }}
+        >
+          회원탈퇴
+        </Button>
       </form>
     </MyPagediv>
   );

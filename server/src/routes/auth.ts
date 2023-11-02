@@ -172,14 +172,14 @@ router.post(
 router.post(
   '/userupdate',
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, name, nick, email, tel, addr, gender } = req.body;
+    const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
     try {
       const updateData = {
         name,
         nick,
         email,
         tel,
-        addr,
+        addr: addr + addr_detail,
         gender,
       };
       const [updateRows] = await models.users.update(updateData, {
@@ -189,6 +189,21 @@ router.post(
         where: { id },
       });
       res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+);
+
+router.post(
+  '/userdel',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userNum } = req.body;
+    try {
+      const delData = await models.users.destroy({ where: { userNum } });
+      res.status(200).json(delData);
+      res.clearCookie('accessToken');
+      res.status(204).json('good');
     } catch (error) {
       res.status(500).json(error);
     }

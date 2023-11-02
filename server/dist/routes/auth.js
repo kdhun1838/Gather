@@ -143,14 +143,14 @@ router.post('/logout', (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     res.status(204).json('good');
 }));
 router.post('/userupdate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, name, nick, email, tel, addr, gender } = req.body;
+    const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
     try {
         const updateData = {
             name,
             nick,
             email,
             tel,
-            addr,
+            addr: addr + addr_detail,
             gender,
         };
         const [updateRows] = yield models_1.default.users.update(updateData, {
@@ -160,6 +160,18 @@ router.post('/userupdate', (req, res, next) => __awaiter(void 0, void 0, void 0,
             where: { id },
         });
         res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+router.post('/userdel', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userNum } = req.body;
+    try {
+        const delData = yield models_1.default.users.destroy({ where: { userNum } });
+        res.status(200).json(delData);
+        res.clearCookie('accessToken');
+        res.status(204).json('good');
     }
     catch (error) {
         res.status(500).json(error);

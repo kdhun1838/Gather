@@ -1,4 +1,4 @@
-import { TEMP_SET_USER, CHECK, LOGOUT, USER_UPDATE } from './action';
+import { TEMP_SET_USER, CHECK, LOGOUT, USER_UPDATE, USER_DEL } from './action';
 import { UserState, UserAction } from './type';
 
 const initialState: UserState = {
@@ -36,6 +36,16 @@ function user(state: UserState = initialState, action: UserAction) {
         user: action.payload,
       };
     case `${USER_UPDATE}_FAILURE`:
+      return {
+        ...state,
+        userError: action.payload,
+      };
+    case `${USER_DEL}_SUCCESS`:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case `${USER_DEL}_FAILURE`:
       return {
         ...state,
         userError: action.payload,

@@ -20,3 +20,8 @@ export const userupdate = (user: UserState) => {
   console.log('userupdate==========>');
   return client.post('/auth/userupdate', user);
 };
+
+export const userdel = (user: UserState) => {
+  console.log('userdel=========>');
+  return client.post('/auth/userdel', user);
+};

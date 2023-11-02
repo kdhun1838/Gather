@@ -7,6 +7,8 @@ export const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] =
 export const LOGOUT = 'user/LOGOUT' as const;
 export const [USER_UPDATE, USER_UPDATE_SUCCESS, USER_UPDATE_FAILURE] =
   createRequestActionTypes('user/USER_UPDATE');
+export const [USER_DEL, USER_DEL_SUCCESS, USER_DEL_FAILURE] =
+  createRequestActionTypes('user/USER_DEL');
 
 export const tempSetUser = (user: UserState) => ({
   type: TEMP_SET_USER,
@@ -25,5 +27,10 @@ export const logout = (user: UserState) => ({
 
 export const userupdate = (user: UserState) => ({
   type: USER_UPDATE,
+  payload: user,
+});
+
+export const userdel = (user: UserState) => ({
+  type: USER_DEL,
   payload: user,
 });
