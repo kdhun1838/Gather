@@ -26,6 +26,7 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
       const userNum: number = Number(props.uNum);
       console.log(userNum);
       getUserDetail(userNum).then((response) => {
+        console.log("dddd", response.data);
         setFormData(response.data);
       });
     }

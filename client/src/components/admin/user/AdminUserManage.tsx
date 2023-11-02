@@ -37,7 +37,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const searchInput = useRef<InputRef>(null);
   const [uNum, setUNum] = React.useState<number>(0);
-
+  console.log("isModalOpen", isModalOpen);
   const showModal = (num: number) => {
     setUNum(num);
     setIsModalOpen(true);

@@ -87,6 +87,79 @@ router.get("/visitor", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500);
     }
 }));
+router.get("/weekRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("모임추이 백");
+    try {
+        const currentDate = new Date();
+        const oneWeekAgo = new Date(currentDate);
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+        const registerData = yield models_1.default.registers.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const registerFormatData = registerData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const communityData = yield models_1.default.communitys.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const communityFormatData = communityData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const userData = yield models_1.default.users.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const userFormatData = userData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const dateCounts = {};
+        for (let i = new Date(oneWeekAgo); i <= currentDate; i.setDate(i.getDate() + 1)) {
+            const formattedDate = new Date(i.getTime()).toISOString().slice(0, 10);
+            dateCounts[formattedDate] = {
+                registerDataCount: registerFormatData.filter((item) => item.createdAt === formattedDate).length,
+                communityDataCount: communityFormatData.filter((item) => item.createdAt === formattedDate).length,
+                userDataCount: userFormatData.filter((item) => item.createdAt === formattedDate).length,
+            };
+        }
+        let totalRegisterDataCount = 0;
+        let totalCommunityDataCount = 0;
+        let totalUserDataCount = 0;
+        for (let i = 0; i < 7; i++) {
+            const formattedDate = new Date(oneWeekAgo.getTime() + i * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .slice(0, 10);
+            totalRegisterDataCount += dateCounts[formattedDate].registerDataCount;
+            totalCommunityDataCount += dateCounts[formattedDate].communityDataCount;
+            totalUserDataCount += dateCounts[formattedDate].userDataCount;
+        }
+        const result = Object.keys(dateCounts)
+            .sort()
+            .reverse()
+            .map((date) => ({
+            date,
+            registerDataCount: dateCounts[date].registerDataCount,
+            communityDataCount: dateCounts[date].communityDataCount,
+            userDataCount: dateCounts[date].userDataCount,
+        }));
+        result.push({
+            date: "최근 7일 합계",
+            registerDataCount: totalRegisterDataCount,
+            communityDataCount: totalCommunityDataCount,
+            userDataCount: totalUserDataCount,
+        });
+        console.log("result", result);
+        res.status(200).json(result);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}));
 // 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();
@@ -216,7 +289,6 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500);
     }
 }));
-exports.default = router;
 router.get("/getUserDetail/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("디테일 백", req.params.userNum);
     const userNum = req.params.userNum;
@@ -225,7 +297,7 @@ router.get("/getUserDetail/:userNum", (req, res) => __awaiter(void 0, void 0, vo
         const data = {
             id: User.id,
             name: User.name,
-            nick: User.email,
+            nick: User.nick,
             email: User.email,
             tel: User.tel,
             age: User.age,
@@ -318,3 +390,4 @@ router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500);
     }
 }));
+exports.default = router;

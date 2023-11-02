@@ -10,6 +10,11 @@ export const getVisitor = (): Promise<AxiosResponse> => {
   return client.get("/admin/visitor");
 };
 
+export const getWeekRegister = (): Promise<AxiosResponse> => {
+  console.log("getWeekRegister API");
+  return client.get("/admin/weekRegister");
+};
+
 //캐러셀관리
 export const getCarousel = (): Promise<AxiosResponse> => {
   return client.get("/admin/getCarousel");

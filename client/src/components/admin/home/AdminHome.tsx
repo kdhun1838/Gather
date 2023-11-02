@@ -165,18 +165,17 @@ const AdminHome: React.FC<OwnProps> = (props) => {
                 </Col>
               </Row>
               <Row gutter={[16, 16]}>
-                <Col span={12}>
+                <Col span={24}>
                   <Box height={20}>
-                    <AdminHomeRegisterContainer />
+                    <AdminHomeRegisterContainer
+                      registerInfo={props.registerInfo}
+                    />
                   </Box>
-                </Col>
-                <Col span={12}>
-                  <Box height={20}>커뮤니티 추이</Box>
                 </Col>
               </Row>
             </Col>
             <Col span={6}>
-              <Row gutter={[16, 0]}>
+              <Row gutter={[0, 0]}>
                 <Col span={24}>
                   <Box height={20}>
                     <AdminMember>
@@ -215,7 +214,9 @@ const AdminHome: React.FC<OwnProps> = (props) => {
                   </Box>
                 </Col>
                 <Col span={24}>
-                  <Box height={27}>운영진 현황</Box>
+                  <Box height={31} style={{ background: "#fff790" }}>
+                    ㅇㅇ
+                  </Box>
                 </Col>
               </Row>
             </Col>
