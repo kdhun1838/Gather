@@ -242,6 +242,28 @@ router.post("/updateUserGrade", async (req: Request, res: Response) => {
 
 export default router;
 
+router.get("/getUserDetail/:userNum", async (req: Request, res: Response) => {
+  console.log("디테일 백", req.params.userNum);
+  const userNum = req.params.userNum;
+  try {
+    const User = await models.users.findOne({ where: { userNum } });
+    const data = {
+      id: User.id,
+      name: User.name,
+      nick: User.email,
+      email: User.email,
+      tel: User.tel,
+      age: User.age,
+      grade: User.grade,
+      addr: User.addr,
+      gender: User.gender,
+    };
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 //모임게시판 관리
 
 router.get("/getRegister", async (req: Request, res: Response) => {

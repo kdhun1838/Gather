@@ -1,6 +1,6 @@
 import React from "react";
-import AdminHomeVisitor from "../../../../components/admin/home/visitor/AdminHomeVisitor";
 import { getVisitor } from "../../../../lib/api/admin";
+import AdminHomeVisitor from "../../../../components/admin/home/visitor/AdminHomeVisitor";
 
 const AdminHomeVisitorContainer = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -26,7 +26,7 @@ const AdminHomeVisitorContainer = () => {
 
   return (
     <div>
-      <AdminHomeVisitor data={data} loading={loading} />
+      <AdminHomeVisitor />
     </div>
   );
 };

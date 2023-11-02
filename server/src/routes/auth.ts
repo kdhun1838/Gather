@@ -174,6 +174,7 @@ router.post(
   "/userupdate",
   async (req: Request, res: Response, next: NextFunction) => {
     const { id, name, nick, email, tel, addr, gender } = req.body;
+    console.log("req.body", req.body);
     try {
       const updateData = {
         name,

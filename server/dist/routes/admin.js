@@ -217,6 +217,28 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 exports.default = router;
+router.get("/getUserDetail/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("디테일 백", req.params.userNum);
+    const userNum = req.params.userNum;
+    try {
+        const User = yield models_1.default.users.findOne({ where: { userNum } });
+        const data = {
+            id: User.id,
+            name: User.name,
+            nick: User.email,
+            email: User.email,
+            tel: User.tel,
+            age: User.age,
+            grade: User.grade,
+            addr: User.addr,
+            gender: User.gender,
+        };
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 //모임게시판 관리
 router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

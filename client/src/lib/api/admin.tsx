@@ -33,6 +33,11 @@ export const updateUserGrade = (
   return client.post("/admin/updateUserGrade", { userNum, grade });
 };
 
+export const getUserDetail = (userNum: number): Promise<AxiosResponse> => {
+  console.log("유저디테일 api", userNum);
+  return client.get(`/admin/getUserDetail/${userNum}`);
+};
+
 // 모임게시판관리
 
 export const getRegister = (): Promise<AxiosResponse> => {
