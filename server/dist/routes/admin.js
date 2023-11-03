@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const models_1 = __importDefault(require("../models"));
 const multer_1 = __importDefault(require("multer"));
 const sequelize_1 = require("sequelize");
+const node_cron_1 = __importDefault(require("node-cron"));
 const router = express_1.default.Router();
 //메인
 router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -163,7 +164,7 @@ router.get("/weekRegister", (req, res) => __awaiter(void 0, void 0, void 0, func
 // 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();
-    return `${timestamp}-00`;
+    return `${timestamp}-00.jpg`;
 };
 const storage = multer_1.default.diskStorage({
     destination(req, file, done) {
@@ -390,4 +391,34 @@ router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500);
     }
 }));
+const createOrUpdateVisitorRecord = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentDate = new Date();
+        const currentDateString = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0];
+        const existingRecord = yield models_1.default.visitors.findOne({
+            where: { date: currentDateString },
+        });
+        if (existingRecord) {
+            console.log(`이미 레코드가 존재합니다. date: ${currentDateString}`);
+        }
+        else {
+            const newVisitorRecord = {
+                visitor_count: 0,
+                user_count: 0,
+                total_count: 0,
+                date: currentDateString,
+            };
+            yield models_1.default.visitors.create(newVisitorRecord);
+            console.log(`새로운 레코드를 추가했습니다. date: ${currentDateString}`);
+        }
+    }
+    catch (e) {
+        console.error("오류가 발생했습니다:", e);
+    }
+});
+node_cron_1.default.schedule("0 0 * * *", () => {
+    createOrUpdateVisitorRecord();
+});
 exports.default = router;

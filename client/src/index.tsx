@@ -11,11 +11,11 @@ import createSagaMiddleware from "@redux-saga/core";
 import { tempSetUser, check } from "./modules/user/action";
 
 const sagaMiddleWare = createSagaMiddleware();
-// const store = legacy_createStore(
-//   rootReducer,
-//   composeWithDevTools(applyMiddleware(sagaMiddleWare))
-// );
-const store = legacy_createStore(rootReducer, applyMiddleware(sagaMiddleWare));
+const store = legacy_createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(sagaMiddleWare))
+);
+// const store = legacy_createStore(rootReducer, applyMiddleware(sagaMiddleWare));
 // const { user } = useSelector((state: RootState) => ({
 //   user: state.user.user,
 // }));

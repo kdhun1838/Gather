@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { RiAdminFill } from "react-icons/ri";
 import AdminHomeVisitorContainer from "../../../container/admin/home/visitor/AdminHomeVisitorContainer";
 import AdminHomeRegisterContainer from "../../../container/admin/home/register/AdminHomeRegisterContainer";
+import AdminHomeMessageContainer from "../../../container/admin/home/message/AdminHomeMessageContainer";
 
 interface BoxProps {
   height?: number;
@@ -214,8 +215,8 @@ const AdminHome: React.FC<OwnProps> = (props) => {
                   </Box>
                 </Col>
                 <Col span={24}>
-                  <Box height={31} style={{ background: "#fff790" }}>
-                    ㅇㅇ
+                  <Box height={31} style={{ background: "#fdf8af" }}>
+                    <AdminHomeMessageContainer />
                   </Box>
                 </Col>
               </Row>

@@ -3,6 +3,8 @@ import models from "../models";
 import multer from "multer";
 import { Op } from "sequelize";
 import moment from "moment";
+import cron from "node-cron";
+
 const router = express.Router();
 
 interface DateCounts {
@@ -194,7 +196,7 @@ router.get("/weekRegister", async (req, res) => {
 // 캐러셀 관리
 const uniqueFileName = (name: string) => {
   const timestamp = Date.now();
-  return `${timestamp}-00`;
+  return `${timestamp}-00.jpg`;
 };
 
 const storage = multer.diskStorage({
@@ -458,6 +460,40 @@ router.get("/getCommunity", async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500);
   }
+});
+
+const createOrUpdateVisitorRecord = async () => {
+  try {
+    const currentDate = new Date();
+    const currentDateString = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split("T")[0];
+    const existingRecord = await models.visitors.findOne({
+      where: { date: currentDateString },
+    });
+
+    if (existingRecord) {
+      console.log(`이미 레코드가 존재합니다. date: ${currentDateString}`);
+    } else {
+      const newVisitorRecord = {
+        visitor_count: 0,
+        user_count: 0,
+        total_count: 0,
+        date: currentDateString,
+      };
+
+      await models.visitors.create(newVisitorRecord);
+      console.log(`새로운 레코드를 추가했습니다. date: ${currentDateString}`);
+    }
+  } catch (e) {
+    console.error("오류가 발생했습니다:", e);
+  }
+};
+
+cron.schedule("0 0 * * *", () => {
+  createOrUpdateVisitorRecord();
 });
 
 export default router;
