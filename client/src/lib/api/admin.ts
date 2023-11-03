@@ -11,8 +11,20 @@ export const getVisitor = (): Promise<AxiosResponse> => {
 };
 
 export const getWeekRegister = (): Promise<AxiosResponse> => {
-  console.log("getWeekRegister API");
   return client.get("/admin/weekRegister");
+};
+
+export const getMessages = (): Promise<AxiosResponse> => {
+  console.log("메시지API");
+  return client.get("/admin/getMessages");
+};
+
+export const postMessages = (
+  text: string,
+  userId: string
+): Promise<AxiosResponse> => {
+  console.log("포스트메시지 API");
+  return client.post("/admin/postMessages", { text, userId });
 };
 
 //캐러셀관리
@@ -27,7 +39,6 @@ export const deleteCarousel = (carouselNum: number): Promise<AxiosResponse> => {
 //유저관리
 
 export const deleteUser = (userNum: number): Promise<AxiosResponse> => {
-  console.log("유저삭제API", userNum);
   return client.delete(`/admin/deleteUser/${userNum}`);
 };
 
@@ -39,7 +50,6 @@ export const updateUserGrade = (
 };
 
 export const getUserDetail = (userNum: number): Promise<AxiosResponse> => {
-  console.log("유저디테일 api", userNum);
   return client.get(`/admin/getUserDetail/${userNum}`);
 };
 

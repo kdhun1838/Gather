@@ -19,6 +19,29 @@ const sequelize_1 = require("sequelize");
 const node_cron_1 = __importDefault(require("node-cron"));
 const router = express_1.default.Router();
 //메인
+router.get("/getMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const messages = yield models_1.default.messages.findAll({});
+        res.status(200).json(messages);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/postMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("req.body===", req.body);
+        const { text, userId } = req.body;
+        const data = yield models_1.default.messages.create({
+            content: text,
+            userId,
+        });
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = yield models_1.default.users.findAndCountAll({
@@ -89,7 +112,6 @@ router.get("/visitor", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 router.get("/weekRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("모임추이 백");
     try {
         const currentDate = new Date();
         const oneWeekAgo = new Date(currentDate);
@@ -153,7 +175,6 @@ router.get("/weekRegister", (req, res) => __awaiter(void 0, void 0, void 0, func
             communityDataCount: totalCommunityDataCount,
             userDataCount: totalUserDataCount,
         });
-        console.log("result", result);
         res.status(200).json(result);
     }
     catch (error) {
@@ -273,7 +294,6 @@ router.delete("/deleteUser/:userNum", (req, res) => __awaiter(void 0, void 0, vo
 }));
 router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userNum, grade } = req.body;
-    console.log("백 userNum", userNum, "grade", grade);
     try {
         if (grade === 2) {
             yield models_1.default.users.update({
@@ -291,7 +311,6 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 router.get("/getUserDetail/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("디테일 백", req.params.userNum);
     const userNum = req.params.userNum;
     try {
         const User = yield models_1.default.users.findOne({ where: { userNum } });
@@ -356,7 +375,6 @@ router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 // 커뮤니티 관리
 router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("getCommunity백");
     try {
         const data = yield models_1.default.communitys.findAll({
             include: [

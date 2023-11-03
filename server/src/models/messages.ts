@@ -4,6 +4,7 @@ export interface MessagesAttributes {
   messageNum: number;
   content: string;
   userId: string;
+  state: number;
 }
 
 export interface MessagesCreationAttributes
@@ -16,6 +17,7 @@ export class Messages
   public messageNum!: number;
   public content!: string;
   public userId!: string;
+  public state!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -41,6 +43,11 @@ export function messagesModel(sequelize: Sequelize): typeof Messages {
           model: "users",
           key: "id",
         },
+      },
+      state: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

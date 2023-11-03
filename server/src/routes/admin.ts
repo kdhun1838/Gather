@@ -15,6 +15,29 @@ interface DateCounts {
   };
 }
 //메인
+router.get("/getMessages", async (req: Request, res: Response) => {
+  try {
+    const messages = await models.messages.findAll({});
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.post("/postMessages", async (req: Request, res: Response) => {
+  try {
+    console.log("req.body===", req.body);
+    const { text, userId } = req.body;
+    const data = await models.messages.create({
+      content: text,
+      userId,
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 router.get("/topInfo", async (req: Request, res: Response) => {
   try {
     const userData = await models.users.findAndCountAll({
@@ -90,7 +113,6 @@ router.get("/visitor", async (req: Request, res: Response) => {
   }
 });
 router.get("/weekRegister", async (req, res) => {
-  console.log("모임추이 백");
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
@@ -183,8 +205,6 @@ router.get("/weekRegister", async (req, res) => {
       communityDataCount: totalCommunityDataCount,
       userDataCount: totalUserDataCount,
     });
-
-    console.log("result", result);
 
     res.status(200).json(result);
   } catch (error) {
@@ -331,7 +351,6 @@ router.delete("/deleteUser/:userNum", async (req: Request, res: Response) => {
 
 router.post("/updateUserGrade", async (req: Request, res: Response) => {
   const { userNum, grade } = req.body;
-  console.log("백 userNum", userNum, "grade", grade);
   try {
     if (grade === 2) {
       await models.users.update(
@@ -354,7 +373,6 @@ router.post("/updateUserGrade", async (req: Request, res: Response) => {
 });
 
 router.get("/getUserDetail/:userNum", async (req: Request, res: Response) => {
-  console.log("디테일 백", req.params.userNum);
   const userNum = req.params.userNum;
   try {
     const User = await models.users.findOne({ where: { userNum } });
@@ -424,7 +442,6 @@ router.get("/getRegister", async (req: Request, res: Response) => {
 // 커뮤니티 관리
 
 router.get("/getCommunity", async (req: Request, res: Response) => {
-  console.log("getCommunity백");
   try {
     const data = await models.communitys.findAll({
       include: [

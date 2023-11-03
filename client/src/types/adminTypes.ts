@@ -62,3 +62,12 @@ export interface CarouselInfo {
   rows: CarouselData[];
   today: number;
 }
+
+export interface MessageType {
+  messageNum: number;
+  content: string;
+  userId: string;
+  state: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
