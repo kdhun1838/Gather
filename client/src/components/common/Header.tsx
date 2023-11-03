@@ -172,7 +172,7 @@ const Header: React.FC<HeaderProps> = ({
                     </CarouselText>
                     <CarouselImg
                       style={{
-                        backgroundImage: `url(/carousel/${item.img.filename})`,
+                        backgroundImage: `url(/${item.img.filename})`,
                       }}
                     ></CarouselImg>
                   </CarouselDiv>
@@ -182,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({
                   style={{
                     ...contentStyle,
                     backgroundColor: `${item.backgroundColor}`,
-                    backgroundImage: `url(/carousel/${item.img.filename})`,
+                    backgroundImage: `url(/${item.img.filename})`,
                     backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",

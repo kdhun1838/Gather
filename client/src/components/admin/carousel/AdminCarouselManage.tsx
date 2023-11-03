@@ -141,7 +141,7 @@ const AdminCarouselManage: React.FC<AdminCarouselProps> = (props) => {
                 </CarouselText>
                 <CarouselImg
                   style={{
-                    backgroundImage: `url(/carousel/${record.img.filename})`,
+                    backgroundImage: `url(/${record.img.filename})`,
                   }}
                 ></CarouselImg>
               </CarouselDiv>
@@ -151,7 +151,7 @@ const AdminCarouselManage: React.FC<AdminCarouselProps> = (props) => {
               style={{
                 ...contentStyle,
                 backgroundColor: `${record.backgroundColor}`,
-                backgroundImage: `url(/carousel/${record.img.filename})`,
+                backgroundImage: `url(/${record.img.filename})`,
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

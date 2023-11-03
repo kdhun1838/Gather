@@ -199,7 +199,7 @@ const uniqueFileName = (name: string) => {
 
 const storage = multer.diskStorage({
   destination(req, file, done) {
-    done(null, "../client/public/carousel");
+    done(null, "../client/public");
   },
   filename(req, file, done) {
     done(null, uniqueFileName(file.originalname));
@@ -226,7 +226,7 @@ router.post(
       href: link,
       img: {
         filename: req.file.filename,
-        url: `../../images/carousel/${req.file.filename}`,
+        url: `../../images/${req.file.filename}`,
       },
       backgroundColor,
       textColor,
