@@ -196,11 +196,11 @@ const Home: React.FC<CommunityPropType> = ({
                         <DeadLine>마감되었습니다</DeadLine>
                       )}
                     </DateBox>
-                    <FavoriteBox
+                    {/* <FavoriteBox
                       onClick={() => onClickAddFavoritePost(post.registerNum)}
                     >
                       ⭐
-                    </FavoriteBox>
+                    </FavoriteBox> */}
                   </PostBox>
                 );
               })}

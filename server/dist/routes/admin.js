@@ -21,7 +21,19 @@ const router = express_1.default.Router();
 //메인
 router.get("/getMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const messages = yield models_1.default.messages.findAll({});
+        const messages = yield models_1.default.messages.findAll({
+            where: {
+                state: 0,
+            },
+            include: [
+                {
+                    model: models_1.default.users,
+                    attributes: ["nick", "grade"],
+                },
+            ],
+            order: [["createdAt", "DESC"]],
+            limit: 6,
+        });
         res.status(200).json(messages);
     }
     catch (error) {
@@ -30,13 +42,25 @@ router.get("/getMessages", (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 router.post("/postMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("req.body===", req.body);
-        const { text, userId } = req.body;
+        const { text, userNum } = req.body;
         const data = yield models_1.default.messages.create({
             content: text,
-            userId,
+            userNum,
         });
         res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/postDelete/:messageNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const messageNum = req.params.messageNum;
+        console.log("번호", messageNum);
+        const deleteData = yield models_1.default.messages.update({ state: 1 }, {
+            where: { messageNum },
+        });
+        res.status(200).json(deleteData);
     }
     catch (error) {
         res.status(500);

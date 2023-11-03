@@ -163,7 +163,6 @@ const HomeSearch: React.FC<HomeSearchType> = ({
             <SearchButton type="reset" object={time} isHome={true} />
             <SearchButton type="reset" object={view} isHome={true} />
             <SearchButton type="reset" object={like} isHome={true} />
-            <ClickButton img="⭐" value="즐겨찾기" isFilter={false} />
             <ClickButton img="" value="모집중만보기" isFilter={true} />
           </SortType>
           <div>

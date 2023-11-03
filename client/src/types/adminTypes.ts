@@ -66,8 +66,12 @@ export interface CarouselInfo {
 export interface MessageType {
   messageNum: number;
   content: string;
-  userId: string;
+  userNum: number;
   state: number;
   createdAt: Date;
   updatedAt: Date;
+  User: {
+    grade: number;
+    nick: string;
+  };
 }

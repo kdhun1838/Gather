@@ -17,7 +17,19 @@ interface DateCounts {
 //메인
 router.get("/getMessages", async (req: Request, res: Response) => {
   try {
-    const messages = await models.messages.findAll({});
+    const messages = await models.messages.findAll({
+      where: {
+        state: 0,
+      },
+      include: [
+        {
+          model: models.users,
+          attributes: ["nick", "grade"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+      limit: 6,
+    });
     res.status(200).json(messages);
   } catch (error) {
     res.status(500);
@@ -26,13 +38,30 @@ router.get("/getMessages", async (req: Request, res: Response) => {
 
 router.post("/postMessages", async (req: Request, res: Response) => {
   try {
-    console.log("req.body===", req.body);
-    const { text, userId } = req.body;
+    const { text, userNum } = req.body;
     const data = await models.messages.create({
       content: text,
-      userId,
+      userNum,
     });
     res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.post("/postDelete/:messageNum", async (req: Request, res: Response) => {
+  try {
+    const messageNum = req.params.messageNum;
+    console.log("번호", messageNum);
+
+    const deleteData = await models.messages.update(
+      { state: 1 },
+      {
+        where: { messageNum },
+      }
+    );
+
+    res.status(200).json(deleteData);
   } catch (error) {
     res.status(500);
   }

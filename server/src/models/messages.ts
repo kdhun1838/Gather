@@ -3,7 +3,7 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 export interface MessagesAttributes {
   messageNum: number;
   content: string;
-  userId: string;
+  userNum: number;
   state: number;
 }
 
@@ -16,7 +16,7 @@ export class Messages
 {
   public messageNum!: number;
   public content!: string;
-  public userId!: string;
+  public userNum!: number;
   public state!: number;
 
   public readonly createdAt!: Date;
@@ -36,12 +36,12 @@ export function messagesModel(sequelize: Sequelize): typeof Messages {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
-      userId: {
-        type: DataTypes.STRING(100),
+      userNum: {
+        type: DataTypes.BIGINT,
         allowNull: false,
         references: {
           model: "users",
-          key: "id",
+          key: "userNum",
         },
       },
       state: {
@@ -61,11 +61,6 @@ export function messagesModel(sequelize: Sequelize): typeof Messages {
           unique: true,
           using: "BTREE",
           fields: [{ name: "messageNum" }],
-        },
-        {
-          name: "userId",
-          using: "BTREE",
-          fields: [{ name: "userId" }],
         },
       ],
     }

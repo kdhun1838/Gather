@@ -28,8 +28,8 @@ function initModels(sequelize: Sequelize) {
   registers.belongsTo(users, { foreignKey: "userNum" });
 
   // 유저테이블 & 메시지테이블 관게설정
-  users.hasMany(messages, { foreignKey: "userId" });
-  messages.belongsTo(users, { foreignKey: "userId" });
+  messages.belongsTo(users, { foreignKey: "userNum" });
+  users.hasMany(messages, { foreignKey: "userNum" });
   //------------- 커뮤니티 관계설정 --------------
   users.hasMany(communityComments, { foreignKey: "userId" });
   communityComments.belongsTo(users, { foreignKey: "userId" });

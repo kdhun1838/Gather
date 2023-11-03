@@ -17,12 +17,12 @@ function messagesModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(255),
             allowNull: false,
         },
-        userId: {
-            type: sequelize_1.DataTypes.STRING(100),
+        userNum: {
+            type: sequelize_1.DataTypes.BIGINT,
             allowNull: false,
             references: {
                 model: "users",
-                key: "id",
+                key: "userNum",
             },
         },
         state: {
@@ -41,11 +41,6 @@ function messagesModel(sequelize) {
                 unique: true,
                 using: "BTREE",
                 fields: [{ name: "messageNum" }],
-            },
-            {
-                name: "userId",
-                using: "BTREE",
-                fields: [{ name: "userId" }],
             },
         ],
     });

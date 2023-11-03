@@ -21,10 +21,14 @@ export const getMessages = (): Promise<AxiosResponse> => {
 
 export const postMessages = (
   text: string,
-  userId: string
+  userNum: number
 ): Promise<AxiosResponse> => {
   console.log("포스트메시지 API");
-  return client.post("/admin/postMessages", { text, userId });
+  return client.post("/admin/postMessages", { text, userNum });
+};
+
+export const deleteMessages = (messageNum: number): Promise<AxiosResponse> => {
+  return client.post(`/admin/postDelete/${messageNum}`);
 };
 
 //캐러셀관리
