@@ -13,9 +13,12 @@ import {
   postComment,
   changeRecruit,
   unloadComment,
+  getOriginalForm,
+  modifyForm,
+  getOriginalComment,
 } from "./action";
 
-type FormType = {
+export type FormType = {
   title: string;
   category: string;
   personnel: number;
@@ -24,6 +27,7 @@ type FormType = {
   contact: string;
   period: string;
   content: string;
+  originalPostId: number;
 };
 
 type DetailType = {
@@ -45,6 +49,26 @@ type ListType = {
   mainList: any;
 };
 
+export type OriginalFormType = {
+  originFormData: {
+    title: string;
+    category: string;
+    personnel: number;
+    meeting: string;
+    position: string;
+    contact: string;
+    period: string;
+    content: string;
+    registerNum: number;
+  };
+};
+
+export type OriginalCommentType = {
+  commentItem: {
+    comment: string;
+  };
+};
+
 export type ListDetailType = {
   registerNum: number;
   title: string;
@@ -57,8 +81,15 @@ export type ListDetailType = {
   content: string;
   view: number;
   favorite: number;
+  state: number;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type ListDetailTypeWithUser = ListDetailType & {
+  id: string;
+  nick: string;
+  name: string;
 };
 
 export type CommentType = {
@@ -90,3 +121,6 @@ export type RegisterAction =
   | ReturnType<typeof postComment>
   | ReturnType<typeof changeRecruit>
   | ReturnType<typeof unloadComment>
+  | ReturnType<typeof getOriginalForm>
+  | ReturnType<typeof modifyForm>
+  | ReturnType<typeof getOriginalComment>;

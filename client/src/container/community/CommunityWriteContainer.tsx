@@ -11,8 +11,10 @@ const CommunityWriteContainer = () => {
   const navigate = useNavigate();
 
   const form = useSelector((state: RootState) => state.community);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const { category, title, content } = form.form || "";
+  const userId = user.userNum || "";
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string }) => {
@@ -44,11 +46,11 @@ const CommunityWriteContainer = () => {
         console.log("내용을 적어주세요.");
       } else {
         console.log("제출가능");
-        dispatch(saveForm(form));
+        dispatch(saveForm(form, userId));
         navigate("/community");
       }
     },
-    [category, title, content, dispatch, navigate]
+    [category, title, content, dispatch, navigate, userId]
   );
 
   useEffect(() => {

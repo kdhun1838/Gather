@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MyPage from '../../components/auth/MyPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
-import { userupdate, check, userdel } from '../../modules/user/action';
+import { userupdate, check, userdel, logout } from '../../modules/user/action';
 import Swal from 'sweetalert2';
 import { createGlobalStyle } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +37,9 @@ const MyPageForm = () => {
       showLoaderOnConfirm: true,
       preConfirm: () => {
         dispatch(userupdate(formdata));
+        setTimeout(() => {
+          dispatch(check(user));
+        }, 200);
       },
     }).then((res) => {
       if (res.isConfirmed) {
@@ -59,6 +62,9 @@ const MyPageForm = () => {
       showLoaderOnConfirm: true,
       preConfirm: () => {
         dispatch(userdel(user));
+        setTimeout(() => {
+          dispatch(logout(user));
+        }, 200);
       },
     }).then((res) => {
       if (res.isConfirmed) {

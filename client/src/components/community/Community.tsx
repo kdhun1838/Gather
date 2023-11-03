@@ -176,11 +176,13 @@ const Community: React.FC<CommunityPropType> = ({
                     {post.category}
                   </div>
                 </CategoryTagBox>
+
                 <DateBox>
                   <p>작성일 |</p>
                   <p>{changeDate(post.createdAt)}</p>
                 </DateBox>
                 <TitleBox>{post.title}</TitleBox>
+                <p>{post.User?.nick}</p>
                 <div> 조회수{post.view}</div>
                 <FavoriteBox
                   onClick={() => onClickAddFavoritePost(post.communityNum)}

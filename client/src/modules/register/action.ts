@@ -44,6 +44,12 @@ export const [GET_COMMENT, GET_COMMENT_SUCCESS, GET_COMMENT_FAILURE] =
 
 export const UNLOAD_COMMENT = "register/UNLOAD_COMMENT" as const;
 
+export const GET_ORIGINAL_FORM = "register/GET_ORIGINAL_FORM" as const;
+
+export const [MODIFY_FORM, MODIFY_FORM_SUCCESS, MODIFY_FORM_FAILURE] =
+  createRequestActionTypes("register/MODIFY_FORM" as const);
+
+export const GET_ORIGINAL_COMMENT = "register/GET_ORIGINAL_COMMENT" as const;
 // 디스패치
 export const unloadForm = () => ({
   type: UNLOAD_FORM,
@@ -105,7 +111,7 @@ export const postForm = (form: RegisterState, userNum: number) => ({
   type: POST_FORM,
   payload: {
     form,
-    userNum
+    userNum,
   },
 });
 
@@ -144,7 +150,11 @@ export const changeComment = ({
   },
 });
 
-export const postComment = (comment: string, postId: number, userNum: number) => ({
+export const postComment = (
+  comment: string,
+  postId: number,
+  userNum: number
+) => ({
   type: POST_COMMENT,
   payload: {
     comment,
@@ -155,5 +165,27 @@ export const postComment = (comment: string, postId: number, userNum: number) =>
 
 export const unloadComment = () => ({
   type: UNLOAD_COMMENT,
-  payload: {}
+  payload: {},
 });
+
+export const getOriginalForm = (originFormData: object) => ({
+  type: GET_ORIGINAL_FORM,
+  payload: {
+    originFormData,
+  },
+});
+
+export const modifyForm = (form: RegisterState, postId: number) => ({
+  type: MODIFY_FORM,
+  payload: {
+    form,
+    postId
+  }
+});
+
+export const getOriginalComment = (commentItem: object) => ({
+  type: GET_ORIGINAL_COMMENT,
+  payload: {
+    commentItem
+  }
+})

@@ -25,6 +25,23 @@ function carouselModel(sequelize) {
             type: sequelize_1.DataTypes.JSON,
             allowNull: true,
         },
+        backgroundColor: {
+            type: sequelize_1.DataTypes.STRING(100),
+            allowNull: false,
+        },
+        textColor: {
+            type: sequelize_1.DataTypes.STRING(100),
+            allowNull: false,
+        },
+        onlyImg: {
+            type: sequelize_1.DataTypes.TINYINT,
+            allowNull: false,
+        },
+        count: {
+            type: sequelize_1.DataTypes.BIGINT,
+            allowNull: false,
+            defaultValue: 0,
+        },
     }, {
         sequelize,
         modelName: "Carousels",

@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import { RegisterState } from "../../modules/register/type";
 import DatePicker from "react-datepicker";
@@ -6,6 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale"; //한국어 설정
 import HeaderContainer from "../../container/common/HeaderContainer";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeForm } from "../../modules/register/action";
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -146,9 +148,12 @@ type RegisterProps = {
   onPageBack: () => void;
   onIsPost: (e: FormEvent) => void;
   onCancle: () => void;
+  onModifyForm: (form: RegisterState, postId: number) => void;
   isPost: boolean;
   form: RegisterState;
   userNum: number;
+  originalPostId: number;
+  isAdmin?: boolean;
 };
 
 const personner = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -159,11 +164,25 @@ const Register: React.FC<RegisterProps> = ({
   onPageBack,
   onIsPost,
   onCancle,
+  onModifyForm,
   isPost,
   form,
   userNum,
+  originalPostId,
+  isAdmin,
 }) => {
   const [date, setIsDate] = useState<Date | null>(null);
+  const {
+    title,
+    category,
+    personnel,
+    online,
+    position,
+    contact,
+    period,
+    content,
+  } = form.form;
+  const postId = form.form.originalPostId;
 
   const navigate = useNavigate();
 
@@ -172,6 +191,9 @@ const Register: React.FC<RegisterProps> = ({
       e.preventDefault();
       alert("로그인이 필요합니다.");
       navigate("/login");
+    } else if (originalPostId) {
+      onModifyForm(form, postId);
+      console.log("what???????", postId);
     } else {
       onPostForm(form, userNum);
     }
@@ -185,9 +207,10 @@ const Register: React.FC<RegisterProps> = ({
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+
   return (
     <>
-      <HeaderContainer />
+      {isAdmin ? <></> : <HeaderContainer />}
       <StyleForm>
         <TitleForm>
           <h3>제목</h3>
@@ -196,6 +219,7 @@ const Register: React.FC<RegisterProps> = ({
             onChange={(e) =>
               onChangeForm({ key: "title", value: e.target.value })
             }
+            value={title}
           />
         </TitleForm>
         <OptionForm>
@@ -205,6 +229,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "category", value: e.target.value })
               }
+              value={category}
             >
               <option value="">카테고리</option>
               <option value="운동">운동</option>
@@ -219,6 +244,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "personnel", value: e.target.value })
               }
+              value={personnel}
             >
               <option value="0">인원</option>
               {personner.map((option) => (
@@ -235,6 +261,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "online", value: e.target.value })
               }
+              value={online}
             >
               <option value="">온·오프라인</option>
               <option value="온라인">온라인</option>
@@ -248,6 +275,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "position", value: e.target.value })
               }
+              value={position}
             />
           </InputForm>
           <InputForm>
@@ -257,6 +285,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "contact", value: e.target.value })
               }
+              value={contact}
             />
           </InputForm>
           <InputForm>
@@ -277,6 +306,7 @@ const Register: React.FC<RegisterProps> = ({
                   value: formatDate(selectedDate),
                 });
               }}
+              value={period}
               dateFormat="yyyy-MM-dd"
             />
           </InputForm>
@@ -287,11 +317,16 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(e) =>
                 onChangeForm({ key: "content", value: e.target.value })
               }
+              value={content}
             />
           </InputForm>
         </OptionForm>
         <ButtonForm>
-          <button onClick={(e) => onIsPost(e)}>등록</button>
+          {originalPostId ? (
+            <button onClick={(e) => onIsPost(e)}>수정</button>
+          ) : (
+            <button onClick={(e) => onIsPost(e)}>등록</button>
+          )}
           <button onClick={() => onPageBack()}>취소</button>
         </ButtonForm>
       </StyleForm>

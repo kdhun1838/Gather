@@ -1,4 +1,4 @@
-import { CommunityState, CommunityAction } from "./type";
+import { CommunityState, CommunityAction, FormType } from "./type";
 import {
   CHANGE_FORM,
   CHANGE_SORT,
@@ -11,6 +11,13 @@ import {
   GET_POST,
   GET_POPULAR_POSTS,
   ADD_COMMENT,
+  INIT_POST_FORM,
+  ADD_REPLY_COMMENT,
+  GET_COMMENTS,
+  GET_REPLYS,
+  GET_EDIT_POST,
+  EDIT_POST,
+  DELETE_POST,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -36,12 +43,11 @@ const initialState: CommunityState = {
 
   post: {
     getPost: "",
+    getComments: "",
+    getReply: "",
     comment: "",
-  },
-
-  comment: {
-    parents: "",
-    child: "",
+    reply: "",
+    nestedReply: "",
   },
 };
 
@@ -70,6 +76,19 @@ const community = (
           },
         },
       };
+
+    case INIT_POST_FORM:
+      if ("postInitName" in action.payload) {
+        const { postInitName } = action.payload;
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            [postInitName]: "",
+          },
+        };
+      }
+      return state;
 
     case CHANGE_FORM:
       // action.payload 객체 안에 name, key, value가 모두 존재할 경우
@@ -153,6 +172,48 @@ const community = (
         },
       };
 
+    // 포스트 수정 관련
+    case `${GET_EDIT_POST}_SUCCESS`:
+      console.log(action.payload);
+      const form = action.payload as FormType;
+      return {
+        ...state,
+        form,
+      };
+    case `${GET_EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+      };
+
+    case `${EDIT_POST}_SUCCESS`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: action.payload,
+        },
+      };
+
+    case `${EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: "",
+        },
+      };
+
+    // 포스트 삭제 관련
+    case `${DELETE_POST}_SUCCESS`:
+      return {
+        ...state,
+      };
+
+    case `${DELETE_POST}_FAILURE`:
+      return {
+        ...state,
+      };
+
     // 인기 게시물 불러오기
     case `${GET_POPULAR_POSTS}_SUCCESS`:
       return {
@@ -202,11 +263,66 @@ const community = (
         },
       };
 
+    case `${GET_COMMENTS}_SUCCESS`:
+      const getComments = action.payload;
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getComments,
+        },
+      };
+
+    case `${GET_COMMENTS}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getComments: "",
+        },
+      };
+
+    case `${GET_REPLYS}_SUCCESS`:
+      const getReply = action.payload;
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply,
+        },
+      };
+
+    case `${GET_REPLYS}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply: "",
+        },
+      };
+
     case `${ADD_COMMENT}_SUCCESS`:
       return {
         ...state,
+        post: {
+          ...state.post,
+          getComments: action.payload,
+        },
       };
     case `${ADD_COMMENT}_FAILURE`:
+      return {
+        ...state,
+      };
+
+    case `${ADD_REPLY_COMMENT}_SUCCESS`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getReply: action.payload,
+        },
+      };
+    case `${ADD_REPLY_COMMENT}_FAILURE`:
       return {
         ...state,
       };

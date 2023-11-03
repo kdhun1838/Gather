@@ -5,6 +5,7 @@ import createRequestSaga from '../../lib/function/createRequestSaga';
 
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
 const userupdateSaga = createRequestSaga(USER_UPDATE, authAPI.userupdate);
+const userdelSaga = createRequestSaga(USER_DEL, authAPI.userdel);
 
 function checkFailureSaga() {
   try {
@@ -23,19 +24,10 @@ function* logoutSaga() {
   }
 }
 
-// function* userdelSaga() {
-//   try {
-//     yield call(authAPI.userdel);
-//     localStorage.removeItem('user');
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
 export function* userSaga() {
   yield takeLatest(CHECK, checkSaga);
   yield takeLatest(CHECK_FAILURE, checkFailureSaga);
   yield takeLatest(LOGOUT, logoutSaga);
   yield takeLatest(USER_UPDATE, userupdateSaga);
-  // yield takeLatest(USER_DEL, userdelSaga);
+  yield takeLatest(USER_DEL, userdelSaga);
 }

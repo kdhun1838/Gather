@@ -5,6 +5,7 @@ import models from '../models'; // 수정된 부분: Users 클래스를 가져�
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { countVisitors } from '../middleware/countvisitor';
 dotenv.config();
 
 console.log('jwtsecret', process.env.JWT_SECRET);
@@ -201,11 +202,10 @@ router.post(
     const { userNum } = req.body;
     try {
       const delData = await models.users.destroy({ where: { userNum } });
-      res.status(200).json(delData);
-      res.clearCookie('accessToken');
-      res.status(204).json('good');
+      res.status(200).json({ delData });
     } catch (error) {
-      res.status(500).json(error);
+      // 서버 오류 시 500 상태 코드와 오류 메시지를 보냄
+      res.status(500).json({ error: '서버 오류' });
     }
   }
 );
@@ -247,9 +247,6 @@ router.post(
         });
         return;
       }
-
-      // 비밀번호를 재설정하는 로직을 추가해야 합니다. (예: 임시 비밀번호 생성 및 이메일로 보내기)
-      // 비밀번호 재설정 기능은 보안을 고려하여 구현해야 합니다.
 
       res.status(200).json({ password: user.password });
     } catch (error) {

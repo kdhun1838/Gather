@@ -150,6 +150,7 @@ const MyPage: React.FC<MyPageProps> = ({
             type="radio"
             name="gender"
             value={'남'}
+            checked={user.gender === '남'}
             onChange={(e) => handleInputChange(e)}
           />
           남
@@ -157,6 +158,7 @@ const MyPage: React.FC<MyPageProps> = ({
             type="radio"
             name="gender"
             value={'여'}
+            checked={user.gender === '여'}
             onChange={(e) => handleInputChange(e)}
           />
           여

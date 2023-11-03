@@ -1,4 +1,4 @@
-import { RegisterState, RegisterAction, ListDetailType } from "./type";
+import { RegisterState, RegisterAction, ListDetailType, OriginalFormType, OriginalCommentType } from "./type";
 import {
   CHANGE_DETAIL_SORT_FORM,
   CHANGE_FORM,
@@ -16,6 +16,11 @@ import {
   CHANGE_RECRUIT,
   GET_COMMENT,
   UNLOAD_COMMENT,
+  GET_ORIGINAL_FORM,
+  MODIFY_FORM,
+  MODIFY_FORM_SUCCESS,
+  MODIFY_FORM_FAILURE,
+  GET_ORIGINAL_COMMENT,
 } from "./action";
 
 const initialState: RegisterState = {
@@ -28,6 +33,7 @@ const initialState: RegisterState = {
     contact: "",
     period: "",
     content: "",
+    originalPostId: NaN,
   },
   list: {
     popularList: [],
@@ -58,7 +64,6 @@ const register = (
     case UNLOAD_FORM:
       return initialState;
     case INIT_SORT:
-      console.log("초기화 리듀서");
       return {
         ...state,
         list: {
@@ -168,7 +173,6 @@ const register = (
         },
       };
     case `${GET_FORM}_SUCCESS`:
-      console.log("getform", action.payload);
       return {
         ...state,
         formData: action.payload,
@@ -205,10 +209,45 @@ const register = (
     case `${POST_COMMENT}_FAILURE`:
       return state;
     case UNLOAD_COMMENT:
-      console.log("unload_comment action dispatched");
       return {
         ...state,
         registerComment: initialState.registerComment,
+      };
+    case GET_ORIGINAL_FORM:
+      const originalForm: OriginalFormType = action.payload as OriginalFormType;
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          title: originalForm.originFormData.title,
+          category: originalForm.originFormData.category,
+          personnel: originalForm.originFormData.personnel,
+          online: originalForm.originFormData.meeting,
+          position: originalForm.originFormData.position,
+          contact: originalForm.originFormData.contact,
+          period: originalForm.originFormData.period,
+          content: originalForm.originFormData.content,
+          originalPostId: originalForm.originFormData.registerNum,
+        },
+      };
+    case MODIFY_FORM_SUCCESS:
+      return {
+        ...state,
+        form: {
+          ...state.form
+        }
+      }
+    case MODIFY_FORM_FAILURE:
+      return state;
+    case GET_ORIGINAL_COMMENT:
+      const originalComment: OriginalCommentType = action.payload as OriginalCommentType;
+      console.log("originalComment???", originalComment)
+      return {
+        ...state,
+        registerComment: {
+          ...state.registerComment,
+          comment: originalComment.commentItem.comment,
+        }
       }
     default:
       return state;

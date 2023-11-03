@@ -13,7 +13,7 @@ import { RegisterState } from "../../modules/register/type";
 
 const PostWrap = styled.div`
   width: 100%;
-  height: 100vh;
+  max-height: 200vh;
   background: #fff;
 `;
 const PostContainer = styled.div`
@@ -118,35 +118,54 @@ type ViewProps = {
       period: string;
       content: string;
       view: number;
+      state: number;
       createdAt: string;
+      User: {
+        nick: string;
+        userNum: number;
+      };
     };
   };
-  onClose: (postId: number, e: FormEvent) => void;
+  user: {
+    userNum: number;
+  };
+  onClose: (postId: number, state: number) => void;
   onDelete: (postId: number, e: FormEvent) => void;
+  onGetOriginalForm: (originFormData: object) => void;
   postId: number;
+  isAdmin?: boolean;
 };
-const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
-  const {getFormData} = formData;
+const View: React.FC<ViewProps> = ({
+  formData,
+  onClose,
+  onDelete,
+  onGetOriginalForm,
+  postId,
+  user,
+  isAdmin,
+}) => {
+  const { getFormData } = formData;
+
   const changeDate = (date: string) => {
     const newDate = new Date(date);
     const year = newDate.getFullYear();
-    const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = newDate.getDate().toString().padStart(2, '0');
-    const hour = newDate.getHours().toString().padStart(2, '0');
-    const minute = newDate.getMinutes().toString().padStart(2, '0');
-    const second = newDate.getSeconds().toString().padStart(2, '0');
-  
+    const month = (newDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = newDate.getDate().toString().padStart(2, "0");
+    const hour = newDate.getHours().toString().padStart(2, "0");
+    const minute = newDate.getMinutes().toString().padStart(2, "0");
+    const second = newDate.getSeconds().toString().padStart(2, "0");
+
     const showDate = `${year}. ${month}. ${day} ${hour}:${minute}:${second}`;
     return showDate;
   };
   return (
     <PostWrap>
-      <HeaderContainer />
+      {isAdmin ? <></> : <HeaderContainer />}
       <PostContainer>
         <Section>
           <h1>{getFormData?.title}</h1>
           <div className="firstInfo">
-            <b>NickName</b>
+            <b>{getFormData?.User?.nick}</b>
             <div className="dateView">
               <p>{changeDate(getFormData?.createdAt)}</p>
               <p>조회수 {getFormData?.view}</p>
@@ -191,13 +210,31 @@ const View: React.FC<ViewProps> = ({ formData, onClose, onDelete, postId }) => {
           <p className="content">{getFormData?.content}</p>
         </Section>
         <Section>
-          <CommentContainer />
+          <CommentContainer isAdmin={isAdmin} />
         </Section>
-        <BtnSection>
-          <button onClick={(e) => onClose(postId, e)}>마감하기</button>
-          <button>수정</button>
-          <button onClick={(e) => onDelete(postId, e)}>삭제</button>
-        </BtnSection>
+        {user?.userNum === formData?.getFormData?.User.userNum || isAdmin ? (
+          <BtnSection>
+            {formData?.getFormData?.state === 2 ? (
+              <button
+                onClick={() => onClose(postId, formData?.getFormData?.state)}
+              >
+                모집중으로 변경
+              </button>
+            ) : (
+              <button
+                onClick={(e) => onClose(postId, formData?.getFormData?.state)}
+              >
+                마감하기
+              </button>
+            )}
+            <button onClick={() => onGetOriginalForm(formData.getFormData)}>
+              수정
+            </button>
+            <button onClick={(e) => onDelete(postId, e)}>삭제</button>
+          </BtnSection>
+        ) : (
+          <></>
+        )}
       </PostContainer>
     </PostWrap>
   );

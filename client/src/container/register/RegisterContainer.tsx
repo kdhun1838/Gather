@@ -6,6 +6,8 @@ import { RootState } from "../../modules";
 import { RegisterState } from "../../modules/register/type";
 import {
   changeForm,
+  getOriginalForm,
+  modifyForm,
   postForm,
   unloadForm,
 } from "../../modules/register/action";
@@ -20,8 +22,6 @@ const RegisterContainer = () => {
   }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  console.log("ffffffff", form.form.title, userNum.user);
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {
@@ -63,6 +63,17 @@ const RegisterContainer = () => {
     },
     [dispatch, form]
   );
+
+  const onModifyForm = useCallback(
+    (form: RegisterState, postId: number) => {
+      dispatch(modifyForm(form, postId));
+      console.log("what PostId ?????", postId)
+      setIsPost(false);
+      navigate("/");
+    },
+    [dispatch, form]
+  );
+
   React.useEffect(() => {
     return () => {
       dispatch(unloadForm());
@@ -77,9 +88,11 @@ const RegisterContainer = () => {
         onPageBack={onPageBack}
         onIsPost={onIsPost}
         onCancle={onCancle}
+        onModifyForm={onModifyForm}
         isPost={isPost}
         form={form}
         userNum={userNum.user?.userNum}
+        originalPostId={form.form.originalPostId}
       />
     </div>
   );

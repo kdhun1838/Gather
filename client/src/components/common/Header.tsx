@@ -1,41 +1,47 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { ConfigProvider, Tabs } from 'antd';
-import type { TabsProps } from 'antd';
-import { useLocation, useNavigate } from 'react-router';
-import { Carousel } from 'antd';
-import Responsive from '../../styled/Responsive';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Button from './Button';
-import { logout } from '../../modules/user/action';
-import Logo from '../../images/Logo.png';
-import { UserState } from '../../modules/user/type';
-import { FaCaretDown } from 'react-icons/fa';
+import React, { useState } from "react";
+import { Spacing } from "./admin/AdminHeader";
+import styled from "styled-components";
+import { ConfigProvider, Tabs } from "antd";
+import type { TabsProps } from "antd";
+import { useLocation, useNavigate } from "react-router";
+import { Carousel } from "antd";
+import Responsive from "../../styled/Responsive";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Button from "./Button";
+import { logout } from "../../modules/user/action";
+import Logo from "../../images/Logo.png";
+import { UserState } from "../../modules/user/type";
+import { FaCaretDown } from "react-icons/fa";
 
-const items: TabsProps['items'] = [
+const items: TabsProps["items"] = [
   {
-    key: '/',
-    label: '모임게시판',
+    key: "/",
+    label: "모임게시판",
   },
   {
-    key: '/community',
-    label: '커뮤니티',
+    key: "/community",
+    label: "커뮤니티",
   },
 ];
 const contentStyle: React.CSSProperties = {
-  height: '320px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: 'orange',
+  height: "320px",
+  color: "#000",
+  lineHeight: "160px",
+  textAlign: "center",
 };
 
 interface HeaderProps {
   user: UserState;
+  carouselData: any;
+  onClickCarousel: (carouselNum: number) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ user }) => {
+const Header: React.FC<HeaderProps> = ({
+  user,
+  carouselData,
+  onClickCarousel,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,7 +52,6 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
     location.pathname
   );
   const [isUserListOpen, setUserListOpen] = useState(false);
-
   const toggleUserList = () => {
     setUserListOpen(!isUserListOpen); // Step 2
   };
@@ -55,16 +60,17 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
     navigate(key);
     setCurrentLocation(location.pathname);
   };
+
   return (
     <ConfigProvider
       theme={{
         components: {
           Tabs: {
-            inkBarColor: 'orange',
-            itemSelectedColor: 'orange',
-            itemHoverColor: 'orange',
-            horizontalItemMargin: '32222px',
-            cardPadding: '32',
+            inkBarColor: "orange",
+            itemSelectedColor: "orange",
+            itemHoverColor: "orange",
+            horizontalItemMargin: "32222px",
+            cardPadding: "32",
           },
         },
       }}
@@ -77,8 +83,15 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
           <div>
             {user.user ? (
               <div className="right">
-                {user.user.grade > 2 ? (
-                  <Link to="/admin">관리자페이지</Link>
+                {/* <UserInfo>{user.user.nick}님</UserInfo>
+
+
+                <Spacing />
+                <Button to="/mypage">마이페이지</Button>
+                <Spacing />
+                <Button onClick={onLogout}>로그아웃</Button> */}
+                {user.user.grade > 1 ? (
+                  <Button to="/admin/home">관리자페이지</Button>
                 ) : (
                   <div></div>
                 )}
@@ -123,18 +136,93 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
           />
         </span>
       </Wrapper>
-      <Carousel autoplay>
-        <div>
-          <h3 style={contentStyle}>1</h3>
-        </div>
+      <Carousel
+        autoplay
+        style={{ height: "320px" }} // 캐로셀의 높이 설정
+      >
+        {carouselData &&
+          carouselData.map((item: any) => (
+            <a
+              href={
+                item.href.startsWith("http") ? item.href : `http://${item.href}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              key={item.carouselNum}
+            >
+              {item.onlyImg === 0 ? (
+                <div onClick={() => onClickCarousel(item.carouselNum)}>
+                  <CarouselDiv
+                    style={{
+                      ...contentStyle,
+                      backgroundColor: `${item.backgroundColor}`,
+                      backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
+                    }}
+                  >
+                    <CarouselText
+                      style={{ color: `${item.textColor}` }}
+                      dangerouslySetInnerHTML={{
+                        __html: item.content.replace(/\n/g, "<br>"),
+                      }}
+                    >
+                      {/* {item.content} */}
+                    </CarouselText>
+                    <CarouselImg
+                      style={{
+                        backgroundImage: `url(/carousel/${item.img.filename})`,
+                      }}
+                    ></CarouselImg>
+                  </CarouselDiv>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    ...contentStyle,
+                    backgroundColor: `${item.backgroundColor}`,
+                    backgroundImage: `url(/carousel/${item.img.filename})`,
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100% ",
+                    // objectFit: "fill",
+                    // height: "100%",
+                    // maxHeight: "320px",
+                    // paddingTop: "100%", // 1:1 비율을 유지하도록 높이 설정
+                  }}
+                  onClick={() => onClickCarousel(item.carouselNum)}
+                ></div>
+              )}
+            </a>
+          ))}
       </Carousel>
     </ConfigProvider>
   );
 };
 
-const Wrapper = styled(Responsive)`
-  /* border: solid 1px black; */
+export const CarouselDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3rem 0 3rem;
+`;
 
+export const CarouselText = styled.div`
+  font-size: 2rem;
+  width: 50%;
+  display: flex;
+  line-height: 3.5rem;
+`;
+export const CarouselImg = styled.div`
+  width: 40%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const Wrapper = styled(Responsive)`
   > div {
     display: flex;
     height: 6rem;
@@ -152,7 +240,6 @@ const Wrapper = styled(Responsive)`
       cursor: pointer;
       font-weight: 600;
       font-size: 1.125rem;
-      margin: ;
     }
   }
   > span {
@@ -171,12 +258,6 @@ const UserInfo = styled.div`
   font-weight: 800;
   margin: 0 1rem 0 1rem;
 `;
-
-// const CustomTabs = styled(Tabs)`
-//   .ant-tabs-tab {
-//     margin-right: 40px;
-//   }
-// `;
 
 const LogoBlock = styled.img`
   height: 5.5rem;
