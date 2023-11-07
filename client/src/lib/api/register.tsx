@@ -51,3 +51,14 @@ export const postComment = ({
 export const getComment = (postId: Number): Promise<AxiosResponse> => {
   return client.get("/register/getComment/:postId", { params: postId });
 };
+
+export const modifyForm = ({
+  form,
+  postId,
+}: {
+  form: RegisterState;
+  postId: Number;
+}): Promise<AxiosResponse> => {
+  console.log("modifyPostId?????", postId);
+  return client.post(`/register/modifyForm/${postId}`, {form, postId});
+};

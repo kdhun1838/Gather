@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Button from "../Button";
 import Responsive from "../../../styled/Responsive";
 import LogoImage from "../../../images/Logo.png";
+import {
+  HomeOutlined,
+  UserOutlined,
+  AppstoreOutlined,
+  FileImageOutlined,
+  LineChartOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Menu } from "antd";
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -38,6 +48,7 @@ const LogoWrapper = styled(Responsive)`
   width: 100%;
   height: 50px;
   margin: 0 !important;
+  background-color: #001529;
   .logo {
     font-size: 1.125rem;
     font-weight: 800;
@@ -67,6 +78,7 @@ const Spacer = styled.div`
 
 const UserInfo = styled.div`
   font-weight: 800;
+  color: white;
   margin-right: 1rem;
 `;
 
@@ -84,15 +96,77 @@ interface AdminProps {
   user: any;
   onLogout: () => void;
 }
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key?: React.Key | null,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: "group"
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
+
+const items: MenuItem[] = [
+  getItem("관리자 홈", "/admin/home", <HomeOutlined />),
+  getItem("유저 관리", "/admin/user", <UserOutlined />, [
+    getItem("차트", "/admin/user/chart", <LineChartOutlined />),
+    getItem("관리", "/admin/user/manage", <SettingOutlined />),
+  ]),
+
+  getItem("모임게시판 관리", "/admin/register", <AppstoreOutlined />, [
+    getItem("차트", "/admin/register/chart", <LineChartOutlined />),
+    getItem("관리", "/admin/register/manage", <SettingOutlined />),
+  ]),
+
+  getItem("커뮤니티 관리", "/admin/community", <AppstoreOutlined />, [
+    getItem("차트", "/admin/community/chart", <LineChartOutlined />),
+    getItem("관리", "/admin/community/manage", <SettingOutlined />),
+  ]),
+  getItem("캐러셀 관리", "/admin/carousel", <FileImageOutlined />, [
+    getItem("차트", "/admin/carousel/chart", <LineChartOutlined />),
+    getItem("관리", "/admin/carousel/manage", <SettingOutlined />),
+  ]),
+];
 
 const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [current, setCurrent] = React.useState<string>(location.pathname);
+  const [openKeys, setOpenKeys] = React.useState(["/admin/home"]);
+
+  useEffect(() => {
+    const pathname = location.pathname;
+    const splitPathName = pathname.split(/(?=\/)/g);
+
+    const openKey = [
+      `${splitPathName[0]}${splitPathName[1]}`,
+      `${splitPathName[0]}${splitPathName[1]}${splitPathName[2]}`,
+    ];
+    setOpenKeys(openKey);
+    setCurrent(openKey[1]);
+  }, [location.pathname]);
+
+  const onClick: MenuProps["onClick"] = (e) => {
+    console.log("click ", e);
+    navigate(e.key);
+    setCurrent(e.key);
+  };
+
   return (
     <>
       <HeaderBlock>
         <LogoWrapper>
-          <Link to="/admin" className="logo">
+          {/* <Link to="/admin" className="logo">
             <Logo src={LogoImage} alt="Logo" />
-          </Link>
+          </Link> */}
           {user ? (
             <div className="right">
               <UserInfo>
@@ -114,30 +188,17 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
         </LogoWrapper>
       </HeaderBlock>
       <Wrapper>
-        <NavLink
-          to="/admin/user"
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          유저 관리
-        </NavLink>
-        <NavLink
-          to="/admin/register"
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          모임게시판 관리
-        </NavLink>
-        <NavLink
-          to="/admin/community"
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          커뮤니티 관리
-        </NavLink>
-        <NavLink
-          to="/admin/carousel"
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          캐러셀 관리
-        </NavLink>
+        <Menu
+          theme="dark"
+          onClick={onClick}
+          openKeys={openKeys}
+          onOpenChange={(openKeys) => setOpenKeys(openKeys)}
+          style={{ width: "100%", height: "100%" }}
+          defaultOpenKeys={["sub1"]}
+          selectedKeys={[current]}
+          mode="inline"
+          items={items}
+        />
       </Wrapper>
     </>
   );

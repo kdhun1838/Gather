@@ -41,6 +41,11 @@ function communityReplysModel(sequelize) {
             type: sequelize_1.DataTypes.STRING(200),
             allowNull: false,
         },
+        isParentsReply: {
+            type: sequelize_1.DataTypes.TINYINT,
+            allowNull: false,
+            defaultValue: 0,
+        },
     }, {
         sequelize,
         modelName: "CommunityReplys",

@@ -223,16 +223,38 @@ const AuthForm: React.FC<textMapProps> = ({
         )}
         {type === 'register' && (
           <div className="span">
-            <span>성별</span>
+            <span>상세주소</span>
             <StyledInput
-              autoComplete="gender"
+              autoComplete="addr_detail"
+              name="addr_detail"
+              placeholder="상세주소"
+              onChange={(e) =>
+                onChange({ key: 'addr_detail', value: e.target.value })
+              }
+            />
+          </div>
+        )}
+        {type === 'register' && (
+          <div className="span">
+            <div>성별</div>
+            <input
+              type="radio"
               name="gender"
-              placeholder="성별"
               onChange={(e) =>
                 onChange({ key: 'gender', value: e.target.value })
               }
-              // value={form.register.grade}
+              value={'남'}
             />
+            남
+            <input
+              type="radio"
+              name="gender"
+              onChange={(e) =>
+                onChange({ key: 'gender', value: e.target.value })
+              }
+              value={'여'}
+            />
+            여
           </div>
         )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -242,6 +264,9 @@ const AuthForm: React.FC<textMapProps> = ({
               onComplete={handleAddressComplete}
               autoClose
               style={{
+                width: '400px',
+                height: '300px',
+                top: '40px',
                 position: 'absolute',
                 zIndex: 100,
                 border: '1px solid #ccc',
@@ -254,7 +279,11 @@ const AuthForm: React.FC<textMapProps> = ({
       </form>
       <Footer>
         {type === 'login' ? (
-          <Link to="/signup">회원가입</Link>
+          <div>
+            <button>아이디찾기</button>
+            <button>비번찾기</button>
+            <Link to="/signup">회원가입</Link>
+          </div>
         ) : (
           <Link to="/login">로그인</Link>
         )}

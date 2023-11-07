@@ -1,4 +1,4 @@
-import { CommunityState, CommunityAction } from "./type";
+import { CommunityState, CommunityAction, FormType } from "./type";
 import {
   CHANGE_FORM,
   CHANGE_SORT,
@@ -11,10 +11,13 @@ import {
   GET_POST,
   GET_POPULAR_POSTS,
   ADD_COMMENT,
-  INIT_REPLY,
+  INIT_POST_FORM,
   ADD_REPLY_COMMENT,
   GET_COMMENTS,
   GET_REPLYS,
+  GET_EDIT_POST,
+  EDIT_POST,
+  DELETE_POST,
 } from "./action";
 
 const initialState: CommunityState = {
@@ -44,6 +47,7 @@ const initialState: CommunityState = {
     getReply: "",
     comment: "",
     reply: "",
+    nestedReply: "",
   },
 };
 
@@ -73,14 +77,18 @@ const community = (
         },
       };
 
-    case INIT_REPLY:
-      return {
-        ...state,
-        post: {
-          ...state.post,
-          reply: "",
-        },
-      };
+    case INIT_POST_FORM:
+      if ("postInitName" in action.payload) {
+        const { postInitName } = action.payload;
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            [postInitName]: "",
+          },
+        };
+      }
+      return state;
 
     case CHANGE_FORM:
       // action.payload 객체 안에 name, key, value가 모두 존재할 경우
@@ -162,6 +170,48 @@ const community = (
           ...state.main,
           mainPosts: null,
         },
+      };
+
+    // 포스트 수정 관련
+    case `${GET_EDIT_POST}_SUCCESS`:
+      console.log(action.payload);
+      const form = action.payload as FormType;
+      return {
+        ...state,
+        form,
+      };
+    case `${GET_EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+      };
+
+    case `${EDIT_POST}_SUCCESS`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: action.payload,
+        },
+      };
+
+    case `${EDIT_POST}_FAILURE`:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          getPost: "",
+        },
+      };
+
+    // 포스트 삭제 관련
+    case `${DELETE_POST}_SUCCESS`:
+      return {
+        ...state,
+      };
+
+    case `${DELETE_POST}_FAILURE`:
+      return {
+        ...state,
       };
 
     // 인기 게시물 불러오기

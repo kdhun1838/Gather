@@ -30,7 +30,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 
     const whereCondition: any = {};
     let orderCondition: any = [["createdAt", "DESC"]];
-    console.log("sss");
+
     // 큰틀의 정렬 값 where절에 넣기
     if (mainSort && mainSort !== "전체") {
       whereCondition.category = mainSort;
@@ -60,6 +60,14 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     const getCommunityPosts = await models.communitys.findAll({
       where: whereCondition,
       order: orderCondition,
+      nest: true,
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ["userNum", "nick"],
+        },
+      ],
     });
 
     res.status(200).json(getCommunityPosts);
@@ -72,8 +80,8 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 router.post(
   "/create",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { category, title, detail, content } = req.body.form;
-    const userId = 17;
+    const { category, title, detail, content } = req.body.form.form;
+    const { userId } = req.body;
     try {
       const newCommunityPost = await models.communitys.create({
         category,
@@ -125,6 +133,78 @@ router.get(
         } else {
           res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
         }
+      } catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+      }
+    }
+  }
+);
+
+router.get(
+  "/edit/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
+
+    if (postId) {
+      try {
+        const getPost = await models.communitys.findOne({
+          attributes: ["category", "detail", "title", "content"],
+          where: { communityNum: postId },
+        });
+
+        res.status(200).json(getPost);
+      } catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+      }
+    }
+  }
+);
+
+router.post(
+  "/editPost",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
+    const { category, detail, title, content } = req.body.form;
+    const { postId } = req.body;
+    try {
+      const updatePost = await models.communitys.update(
+        {
+          category,
+          detail,
+          title,
+          content,
+          updatedAt: new Date(),
+        },
+        {
+          where: { communityNum: postId },
+        }
+      );
+      res.status(200).json(updatePost);
+    } catch (e) {
+      res.status(500).json(e);
+      console.log(e);
+      next(e);
+    }
+  }
+);
+
+// 포스트 삭제 코드
+router.post(
+  "/delete",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const communityNum = req.body.postId;
+
+    if (communityNum) {
+      try {
+        const deletePost = await models.communitys.destroy({
+          where: { communityNum },
+        });
+
+        res.status(200).json(deletePost);
       } catch (e) {
         res.status(500).json(e);
         console.log(e);
@@ -247,6 +327,13 @@ router.post(
           where: {
             postId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getComments);
@@ -262,13 +349,14 @@ router.post(
 router.post(
   "/addReply",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, postId, commentId, reply } = req.body.data.data;
+    const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
     try {
       const newCommentReply = await models.communityReplys.create({
         content: reply,
         userId,
         postId,
         commentId,
+        isParentsReply: isfirst,
       });
 
       if (newCommentReply) {
@@ -277,6 +365,13 @@ router.post(
             postId,
             commentId,
           },
+          include: [
+            {
+              nest: true,
+              model: models.users,
+              attributes: ["nick"],
+            },
+          ],
         });
 
         res.status(200).json(getReply);

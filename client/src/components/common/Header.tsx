@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Spacing } from "./admin/AdminHeader";
 import styled from "styled-components";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
@@ -6,12 +7,12 @@ import { useLocation, useNavigate } from "react-router";
 import { Carousel } from "antd";
 import Responsive from "../../styled/Responsive";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { logout } from "../../modules/user/action";
 import Logo from "../../images/Logo.png";
 import { UserState } from "../../modules/user/type";
-import { Spacing } from "./admin/AdminHeader";
+import { FaCaretDown } from "react-icons/fa";
 
 const items: TabsProps["items"] = [
   {
@@ -25,18 +26,22 @@ const items: TabsProps["items"] = [
 ];
 const contentStyle: React.CSSProperties = {
   height: "320px",
-  color: "#fff",
+  color: "#000",
   lineHeight: "160px",
   textAlign: "center",
-  // background: "orange",
 };
 
 interface HeaderProps {
   user: UserState;
   carouselData: any;
+  onClickCarousel: (carouselNum: number) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
+const Header: React.FC<HeaderProps> = ({
+  user,
+  carouselData,
+  onClickCarousel,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,6 +51,10 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   const [currentLocation, setCurrentLocation] = React.useState<string>(
     location.pathname
   );
+  const [isUserListOpen, setUserListOpen] = useState(false);
+  const toggleUserList = () => {
+    setUserListOpen(!isUserListOpen); // Step 2
+  };
 
   const onChange = (key: string) => {
     navigate(key);
@@ -74,14 +83,42 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
           <div>
             {user.user ? (
               <div className="right">
-                <UserInfo>{user.user.nick}님</UserInfo>
-                {user.user.grade > 2 ? (
-                  <Button to="/admin">관리자페이지</Button>
+                {/* <UserInfo>{user.user.nick}님</UserInfo>
+
+
+                <Spacing />
+                <Button to="/mypage">마이페이지</Button>
+                <Spacing />
+                <Button onClick={onLogout}>로그아웃</Button> */}
+                {user.user.grade > 1 ? (
+                  <Button to="/admin/home">관리자페이지</Button>
                 ) : (
                   <div></div>
                 )}
-                <Spacing />
-                <Button onClick={onLogout}>로그아웃</Button>
+                <div className="userlist" onClick={toggleUserList}>
+                  <UserInfo>{user.user.id}</UserInfo>
+                  <svg
+                    stoke-width="0"
+                    viewBox="0 0 24 24"
+                    height="16px"
+                    width="16px"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <FaCaretDown></FaCaretDown>
+                  </svg>
+                </div>
+                {isUserListOpen && (
+                  <Userlist>
+                    <ul>
+                      <li>내 작성글</li>
+                      <li>내 관심글</li>
+                      <li>
+                        <Link to="/mypage">설정</Link>
+                      </li>
+                      <li onClick={onLogout}>로그아웃</li>
+                    </ul>
+                  </Userlist>
+                )}
               </div>
             ) : (
               <div className="right">
@@ -114,16 +151,14 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
               key={item.carouselNum}
             >
               {item.onlyImg === 0 ? (
-                <div>
+                <div onClick={() => onClickCarousel(item.carouselNum)}>
                   <CarouselDiv
                     style={{
                       ...contentStyle,
                       backgroundColor: `${item.backgroundColor}`,
-                      // backgroundImage: `url(/carousel/${item.img.filename})`,
                       backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
-                      // height: "100%", // 이미지의 높이를 캐로셀과 일치시킴
                       width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
                     }}
                   >
@@ -148,11 +183,16 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
                     ...contentStyle,
                     backgroundColor: `${item.backgroundColor}`,
                     backgroundImage: `url(/carousel/${item.img.filename})`,
-                    backgroundSize: "contain",
+                    backgroundSize: "100% 100%",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    width: "100%",
+                    width: "100% ",
+                    // objectFit: "fill",
+                    // height: "100%",
+                    // maxHeight: "320px",
+                    // paddingTop: "100%", // 1:1 비율을 유지하도록 높이 설정
                   }}
+                  onClick={() => onClickCarousel(item.carouselNum)}
                 ></div>
               )}
             </a>
@@ -162,18 +202,19 @@ const Header: React.FC<HeaderProps> = ({ user, carouselData }) => {
   );
 };
 
-const CarouselDiv = styled.div`
+export const CarouselDiv = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 3rem 0 3rem;
 `;
 
-const CarouselText = styled.div`
+export const CarouselText = styled.div`
   font-size: 2rem;
   width: 50%;
   display: flex;
+  line-height: 3.5rem;
 `;
-const CarouselImg = styled.div`
+export const CarouselImg = styled.div`
   width: 40%;
   height: 100%;
   background-size: contain;
@@ -206,6 +247,11 @@ const Wrapper = styled(Responsive)`
     justify-content: center;
     align-items: center;
   }
+  .userlist {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -215,6 +261,30 @@ const UserInfo = styled.div`
 
 const LogoBlock = styled.img`
   height: 5.5rem;
+`;
+
+const Userlist = styled.div`
+  position: absolute;
+  top: 5%;
+  margin-top: 1rem;
+  right: 0px;
+  ul {
+    position: relative;
+    z-index: 5;
+    width: 12rem;
+    background: rgb(255, 255, 255);
+    border: 0.5px solid rgba(37, 53, 90, 0.1);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 10px;
+    list-style: none;
+    display: block;
+  }
+  ul li {
+    padding: 0.75rem 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+    cursor: pointer;
+  }
 `;
 
 export default Header;
