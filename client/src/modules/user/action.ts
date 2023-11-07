@@ -38,6 +38,7 @@ export const userupdate = (user: UserState) => ({
 
 export const userupdateAdmin = (user: UserState) => ({
   type: USER_UPDATE_ADMIN,
+  payload: user,
 });
 
 export const userdel = (user: UserState) => ({

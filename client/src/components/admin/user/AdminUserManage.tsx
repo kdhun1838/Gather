@@ -239,9 +239,12 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Space size="middle">
-            <ActionButton onClick={() => showModal(record.userNum)}>
-              정보 수정
-            </ActionButton>
+            {((props.user.grade > 2 && record.grade === 3) ||
+              record.grade < 3) && (
+              <ActionButton onClick={() => showModal(record.userNum)}>
+                정보 수정
+              </ActionButton>
+            )}
             <Modal
               title={null}
               open={isModalOpen}
@@ -299,7 +302,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       width: "20%",
     },
   ];
-
+  console.log("props.user.grade", props.user.grade);
   return <Table columns={columns} dataSource={props.data} />;
 };
 
