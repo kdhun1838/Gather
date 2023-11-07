@@ -13,6 +13,9 @@ export const [
   USER_UPDATE_ADMIN_FAILURE,
 ] = createRequestActionTypes("user/USER_UPDATE_ADMIN");
 
+export const [USER_DEL, USER_DEL_SUCCESS, USER_DEL_FAILURE] =
+  createRequestActionTypes("user/USER_DEL");
+
 export const tempSetUser = (user: UserState) => ({
   type: TEMP_SET_USER,
   payload: user,
@@ -32,7 +35,12 @@ export const userupdate = (user: UserState) => ({
   type: USER_UPDATE,
   payload: user,
 });
+
 export const userupdateAdmin = (user: UserState) => ({
   type: USER_UPDATE_ADMIN,
+});
+
+export const userdel = (user: UserState) => ({
+  type: USER_DEL,
   payload: user,
 });

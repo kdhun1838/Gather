@@ -143,15 +143,14 @@ router.post("/logout", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     res.status(204).json("good");
 }));
 router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, name, nick, email, tel, addr, gender } = req.body;
-    console.log("req.body", req.body);
+    const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
     try {
         const updateData = {
             name,
             nick,
             email,
             tel,
-            addr,
+            addr: addr + addr_detail,
             gender,
         };
         const [updateRows] = yield models_1.default.users.update(updateData, {
@@ -164,6 +163,17 @@ router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
     catch (error) {
         res.status(500).json(error);
+    }
+}));
+router.post("/userdel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userNum } = req.body;
+    try {
+        const delData = yield models_1.default.users.destroy({ where: { userNum } });
+        res.status(200).json({ delData });
+    }
+    catch (error) {
+        // 서버 오류 시 500 상태 코드와 오류 메시지를 보냄
+        res.status(500).json({ error: "서버 오류" });
     }
 }));
 router.post("/findid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -197,8 +207,6 @@ router.post("/findpassword", (req, res, next) => __awaiter(void 0, void 0, void 
             });
             return;
         }
-        // 비밀번호를 재설정하는 로직을 추가해야 합니다. (예: 임시 비밀번호 생성 및 이메일로 보내기)
-        // 비밀번호 재설정 기능은 보안을 고려하여 구현해야 합니다.
         res.status(200).json({ password: user.password });
     }
     catch (error) {

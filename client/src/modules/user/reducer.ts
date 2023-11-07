@@ -4,6 +4,7 @@ import {
   LOGOUT,
   USER_UPDATE,
   USER_UPDATE_ADMIN,
+  USER_DEL,
 } from "./action";
 import { UserState, UserAction } from "./type";
 
@@ -46,11 +47,21 @@ function user(state: UserState = initialState, action: UserAction) {
         ...state,
         userError: action.payload,
       };
+
     case `${USER_UPDATE_ADMIN}_SUCCESS`:
       return {
         ...state,
       };
     case `${USER_UPDATE_ADMIN}_FAILURE`:
+      return {
+        ...state,
+      };
+    case `${USER_DEL}_SUCCESS`:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case `${USER_DEL}_FAILURE`:
       return {
         ...state,
         userError: action.payload,
