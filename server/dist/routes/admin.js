@@ -16,10 +16,57 @@ const express_1 = __importDefault(require("express"));
 const models_1 = __importDefault(require("../models"));
 const multer_1 = __importDefault(require("multer"));
 const sequelize_1 = require("sequelize");
+const node_cron_1 = __importDefault(require("node-cron"));
 const router = express_1.default.Router();
 //메인
+router.get("/getMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const messages = yield models_1.default.messages.findAll({
+            where: {
+                state: 0,
+            },
+            include: [
+                {
+                    model: models_1.default.users,
+                    attributes: ["nick", "grade"],
+                },
+            ],
+            order: [["createdAt", "DESC"]],
+            limit: 6,
+        });
+        res.status(200).json(messages);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/postMessages", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { text, userNum } = req.body;
+        const data = yield models_1.default.messages.create({
+            content: text,
+            userNum,
+        });
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.post("/postDelete/:messageNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const messageNum = req.params.messageNum;
+        console.log("번호", messageNum);
+        const deleteData = yield models_1.default.messages.update({ state: 1 }, {
+            where: { messageNum },
+        });
+        res.status(200).json(deleteData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("탑인포 빽");
     try {
         const userData = yield models_1.default.users.findAndCountAll({
             attributes: {
@@ -78,14 +125,95 @@ router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500);
     }
 }));
+router.get("/visitor", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("방문자백");
+    try {
+        const data = yield models_1.default.visitors.findAll({});
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.get("/weekRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentDate = new Date();
+        const oneWeekAgo = new Date(currentDate);
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+        const registerData = yield models_1.default.registers.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const registerFormatData = registerData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const communityData = yield models_1.default.communitys.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const communityFormatData = communityData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const userData = yield models_1.default.users.findAll({
+            where: {
+                createdAt: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, currentDate],
+                },
+            },
+        });
+        const userFormatData = userData.map((item) => (Object.assign(Object.assign({}, item.dataValues), { createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10) })));
+        const dateCounts = {};
+        for (let i = new Date(oneWeekAgo); i <= currentDate; i.setDate(i.getDate() + 1)) {
+            const formattedDate = new Date(i.getTime()).toISOString().slice(0, 10);
+            dateCounts[formattedDate] = {
+                registerDataCount: registerFormatData.filter((item) => item.createdAt === formattedDate).length,
+                communityDataCount: communityFormatData.filter((item) => item.createdAt === formattedDate).length,
+                userDataCount: userFormatData.filter((item) => item.createdAt === formattedDate).length,
+            };
+        }
+        let totalRegisterDataCount = 0;
+        let totalCommunityDataCount = 0;
+        let totalUserDataCount = 0;
+        for (let i = 0; i < 7; i++) {
+            const formattedDate = new Date(oneWeekAgo.getTime() + i * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .slice(0, 10);
+            totalRegisterDataCount += dateCounts[formattedDate].registerDataCount;
+            totalCommunityDataCount += dateCounts[formattedDate].communityDataCount;
+            totalUserDataCount += dateCounts[formattedDate].userDataCount;
+        }
+        const result = Object.keys(dateCounts)
+            .sort()
+            .reverse()
+            .map((date) => ({
+            date,
+            registerDataCount: dateCounts[date].registerDataCount,
+            communityDataCount: dateCounts[date].communityDataCount,
+            userDataCount: dateCounts[date].userDataCount,
+        }));
+        result.push({
+            date: "최근 7일 합계",
+            registerDataCount: totalRegisterDataCount,
+            communityDataCount: totalCommunityDataCount,
+            userDataCount: totalUserDataCount,
+        });
+        res.status(200).json(result);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}));
 // 캐러셀 관리
 const uniqueFileName = (name) => {
     const timestamp = Date.now();
-    return `${timestamp}-00`;
+    return `${timestamp}-00.jpg`;
 };
 const storage = multer_1.default.diskStorage({
     destination(req, file, done) {
-        done(null, "../client/public/carousel");
+        done(null, "../client/public");
     },
     filename(req, file, done) {
         done(null, uniqueFileName(file.originalname));
@@ -106,7 +234,7 @@ router.post("/uploadImg", upload.single("file"), (req, res) => __awaiter(void 0,
         href: link,
         img: {
             filename: req.file.filename,
-            url: `../../images/carousel/${req.file.filename}`,
+            url: `../../images/${req.file.filename}`,
         },
         backgroundColor,
         textColor,
@@ -190,7 +318,6 @@ router.delete("/deleteUser/:userNum", (req, res) => __awaiter(void 0, void 0, vo
 }));
 router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userNum, grade } = req.body;
-    console.log("백 userNum", userNum, "grade", grade);
     try {
         if (grade === 2) {
             yield models_1.default.users.update({
@@ -207,7 +334,27 @@ router.post("/updateUserGrade", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(500);
     }
 }));
-exports.default = router;
+router.get("/getUserDetail/:userNum", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userNum = req.params.userNum;
+    try {
+        const User = yield models_1.default.users.findOne({ where: { userNum } });
+        const data = {
+            id: User.id,
+            name: User.name,
+            nick: User.nick,
+            email: User.email,
+            tel: User.tel,
+            age: User.age,
+            grade: User.grade,
+            addr: User.addr,
+            gender: User.gender,
+        };
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 //모임게시판 관리
 router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -252,7 +399,6 @@ router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 // 커뮤니티 관리
 router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("getCommunity백");
     try {
         const data = yield models_1.default.communitys.findAll({
             include: [
@@ -287,3 +433,34 @@ router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500);
     }
 }));
+const createOrUpdateVisitorRecord = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentDate = new Date();
+        const currentDateString = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0];
+        const existingRecord = yield models_1.default.visitors.findOne({
+            where: { date: currentDateString },
+        });
+        if (existingRecord) {
+            console.log(`이미 레코드가 존재합니다. date: ${currentDateString}`);
+        }
+        else {
+            const newVisitorRecord = {
+                visitor_count: 0,
+                user_count: 0,
+                total_count: 0,
+                date: currentDateString,
+            };
+            yield models_1.default.visitors.create(newVisitorRecord);
+            console.log(`새로운 레코드를 추가했습니다. date: ${currentDateString}`);
+        }
+    }
+    catch (e) {
+        console.error("오류가 발생했습니다:", e);
+    }
+});
+node_cron_1.default.schedule("0 0 * * *", () => {
+    createOrUpdateVisitorRecord();
+});
+exports.default = router;

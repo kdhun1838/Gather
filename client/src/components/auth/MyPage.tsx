@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '../common/Button';
-import Header from '../common/Header';
-import DaumPostcode from 'react-daum-postcode';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "../common/Button";
+import Header from "../common/Header";
+import DaumPostcode from "react-daum-postcode";
 
 const MyPagediv = styled.div`
   width: 100%;
@@ -66,7 +66,7 @@ const MyPage: React.FC<MyPageProps> = ({
   };
 
   const [isAddressModalOpen, setAddressModalOpen] = useState(false);
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState("");
 
   const handleOpenAddressModal = () => {
     setAddressModalOpen(true);
@@ -80,7 +80,7 @@ const MyPage: React.FC<MyPageProps> = ({
     handleCloseAddressModal(); // 모달 닫기
     handleInputChange({
       target: {
-        name: 'addr',
+        name: "addr",
         value: data.address,
       },
     } as React.ChangeEvent<HTMLInputElement>);
@@ -128,7 +128,14 @@ const MyPage: React.FC<MyPageProps> = ({
           onChange={(e) => handleAddressChange(e)}
         />
         <div>
-          <button onClick={handleOpenAddressModal}>주소찾기</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleOpenAddressModal();
+            }}
+          >
+            주소찾기
+          </button>
         </div>
         <Inputnick>상세주소</Inputnick>
         <StyledInput
@@ -140,14 +147,14 @@ const MyPage: React.FC<MyPageProps> = ({
           <input
             type="radio"
             name="gender"
-            value={'남'}
+            value={"남"}
             onChange={(e) => handleInputChange(e)}
           />
           남
           <input
             type="radio"
             name="gender"
-            value={'여'}
+            value={"여"}
             onChange={(e) => handleInputChange(e)}
           />
           여
@@ -158,12 +165,12 @@ const MyPage: React.FC<MyPageProps> = ({
               onComplete={handleAddressComplete}
               autoClose
               style={{
-                width: '400px',
-                height: '300px',
-                top: '40px',
-                position: 'absolute',
+                width: "400px",
+                height: "300px",
+                top: "40px",
+                position: "absolute",
                 zIndex: 100,
-                border: '1px solid #ccc',
+                border: "1px solid #ccc",
               }}
             />
             <button onClick={handleCloseAddressModal}>닫기</button>

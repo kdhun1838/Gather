@@ -1,13 +1,14 @@
 import { SearchOutlined } from "@ant-design/icons";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import type { InputRef } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import { Button, Input, Space, Table, Modal } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { UserDetail } from "../../../modules/user/type";
 import { changeDate } from "../../community/Community";
 import styled from "styled-components";
+import MyPageForm from "../../../container/auth/MyPageForm";
 
 interface DataType {
   key: number;
@@ -27,13 +28,26 @@ interface AdminUserProps {
   user: any;
   handleDelete: (userNum: number) => void;
   handleGradeUpdate: (userNum: number, grade: number, id: string) => void;
+  setIsDelete: (isDelete: boolean) => void;
+  isDelete?: boolean;
 }
 
 const AdminUserManage: React.FC<AdminUserProps> = (props) => {
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+  const [searchText, setSearchText] = React.useState("");
+  const [searchedColumn, setSearchedColumn] = React.useState("");
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const searchInput = useRef<InputRef>(null);
+  const [uNum, setUNum] = React.useState<number>(0);
+  console.log("isModalOpen", isModalOpen);
+  const showModal = (num: number) => {
+    setUNum(num);
+    setIsModalOpen(true);
+  };
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    props.setIsDelete(!props.isDelete);
+  };
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -225,7 +239,24 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Space size="middle">
-            <ActionButton>정보 수정</ActionButton>
+            <ActionButton onClick={() => showModal(record.userNum)}>
+              정보 수정
+            </ActionButton>
+            <Modal
+              title={null}
+              open={isModalOpen}
+              onCancel={handleCancel}
+              width="70%"
+              style={{ maxHeight: "800vh", minWidth: "70%" }}
+              footer={null}
+            >
+              <MyPageForm
+                isAdmin={true}
+                uNum={uNum}
+                setIsModalOpen={setIsModalOpen}
+                handleCancel={handleCancel}
+              />
+            </Modal>
             {record.grade < 3 && props.user.userNum !== record.userNum ? (
               <ActionButton onClick={() => props.handleDelete(record.userNum)}>
                 회원 탈퇴

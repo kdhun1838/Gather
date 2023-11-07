@@ -144,6 +144,7 @@ router.post("/logout", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, name, nick, email, tel, addr, gender } = req.body;
+    console.log("req.body", req.body);
     try {
         const updateData = {
             name,

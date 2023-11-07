@@ -2,11 +2,72 @@ import express, { Request, Response, NextFunction } from "express";
 import models from "../models";
 import multer from "multer";
 import { Op } from "sequelize";
+import moment from "moment";
+import cron from "node-cron";
+
 const router = express.Router();
 
+interface DateCounts {
+  [date: string]: {
+    registerDataCount: number;
+    communityDataCount: number;
+    userDataCount: number;
+  };
+}
 //메인
+router.get("/getMessages", async (req: Request, res: Response) => {
+  try {
+    const messages = await models.messages.findAll({
+      where: {
+        state: 0,
+      },
+      include: [
+        {
+          model: models.users,
+          attributes: ["nick", "grade"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+      limit: 6,
+    });
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.post("/postMessages", async (req: Request, res: Response) => {
+  try {
+    const { text, userNum } = req.body;
+    const data = await models.messages.create({
+      content: text,
+      userNum,
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.post("/postDelete/:messageNum", async (req: Request, res: Response) => {
+  try {
+    const messageNum = req.params.messageNum;
+    console.log("번호", messageNum);
+
+    const deleteData = await models.messages.update(
+      { state: 1 },
+      {
+        where: { messageNum },
+      }
+    );
+
+    res.status(200).json(deleteData);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 router.get("/topInfo", async (req: Request, res: Response) => {
-  console.log("탑인포 빽");
   try {
     const userData = await models.users.findAndCountAll({
       attributes: {
@@ -70,15 +131,126 @@ router.get("/topInfo", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/visitor", async (req: Request, res: Response) => {
+  console.log("방문자백");
+  try {
+    const data = await models.visitors.findAll({});
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+router.get("/weekRegister", async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const oneWeekAgo = new Date(currentDate);
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+
+    const registerData = await models.registers.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [oneWeekAgo, currentDate],
+        },
+      },
+    });
+    const registerFormatData = registerData.map((item: any) => ({
+      ...item.dataValues,
+      createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10),
+    }));
+
+    const communityData = await models.communitys.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [oneWeekAgo, currentDate],
+        },
+      },
+    });
+    const communityFormatData = communityData.map((item: any) => ({
+      ...item.dataValues,
+      createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10),
+    }));
+
+    const userData = await models.users.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [oneWeekAgo, currentDate],
+        },
+      },
+    });
+    const userFormatData = userData.map((item: any) => ({
+      ...item.dataValues,
+      createdAt: new Date(item.createdAt.getTime()).toISOString().slice(0, 10),
+    }));
+
+    const dateCounts: DateCounts = {};
+    for (
+      let i = new Date(oneWeekAgo);
+      i <= currentDate;
+      i.setDate(i.getDate() + 1)
+    ) {
+      const formattedDate = new Date(i.getTime()).toISOString().slice(0, 10);
+      dateCounts[formattedDate] = {
+        registerDataCount: registerFormatData.filter(
+          (item: any) => item.createdAt === formattedDate
+        ).length,
+        communityDataCount: communityFormatData.filter(
+          (item: any) => item.createdAt === formattedDate
+        ).length,
+        userDataCount: userFormatData.filter(
+          (item: any) => item.createdAt === formattedDate
+        ).length,
+      };
+    }
+
+    let totalRegisterDataCount = 0;
+    let totalCommunityDataCount = 0;
+    let totalUserDataCount = 0;
+
+    for (let i = 0; i < 7; i++) {
+      const formattedDate = new Date(
+        oneWeekAgo.getTime() + i * 24 * 60 * 60 * 1000
+      )
+        .toISOString()
+        .slice(0, 10);
+
+      totalRegisterDataCount += dateCounts[formattedDate].registerDataCount;
+      totalCommunityDataCount += dateCounts[formattedDate].communityDataCount;
+      totalUserDataCount += dateCounts[formattedDate].userDataCount;
+    }
+
+    const result = Object.keys(dateCounts)
+      .sort()
+      .reverse()
+      .map((date) => ({
+        date,
+        registerDataCount: dateCounts[date].registerDataCount,
+        communityDataCount: dateCounts[date].communityDataCount,
+        userDataCount: dateCounts[date].userDataCount,
+      }));
+    result.push({
+      date: "최근 7일 합계",
+      registerDataCount: totalRegisterDataCount,
+      communityDataCount: totalCommunityDataCount,
+      userDataCount: totalUserDataCount,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // 캐러셀 관리
 const uniqueFileName = (name: string) => {
   const timestamp = Date.now();
-  return `${timestamp}-00`;
+  return `${timestamp}-00.jpg`;
 };
 
 const storage = multer.diskStorage({
   destination(req, file, done) {
-    done(null, "../client/public/carousel");
+    done(null, "../client/public");
   },
   filename(req, file, done) {
     done(null, uniqueFileName(file.originalname));
@@ -105,7 +277,7 @@ router.post(
       href: link,
       img: {
         filename: req.file.filename,
-        url: `../../images/carousel/${req.file.filename}`,
+        url: `../../images/${req.file.filename}`,
       },
       backgroundColor,
       textColor,
@@ -208,7 +380,6 @@ router.delete("/deleteUser/:userNum", async (req: Request, res: Response) => {
 
 router.post("/updateUserGrade", async (req: Request, res: Response) => {
   const { userNum, grade } = req.body;
-  console.log("백 userNum", userNum, "grade", grade);
   try {
     if (grade === 2) {
       await models.users.update(
@@ -230,7 +401,26 @@ router.post("/updateUserGrade", async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+router.get("/getUserDetail/:userNum", async (req: Request, res: Response) => {
+  const userNum = req.params.userNum;
+  try {
+    const User = await models.users.findOne({ where: { userNum } });
+    const data = {
+      id: User.id,
+      name: User.name,
+      nick: User.nick,
+      email: User.email,
+      tel: User.tel,
+      age: User.age,
+      grade: User.grade,
+      addr: User.addr,
+      gender: User.gender,
+    };
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
 
 //모임게시판 관리
 
@@ -281,7 +471,6 @@ router.get("/getRegister", async (req: Request, res: Response) => {
 // 커뮤니티 관리
 
 router.get("/getCommunity", async (req: Request, res: Response) => {
-  console.log("getCommunity백");
   try {
     const data = await models.communitys.findAll({
       include: [
@@ -318,3 +507,39 @@ router.get("/getCommunity", async (req: Request, res: Response) => {
     res.status(500);
   }
 });
+
+const createOrUpdateVisitorRecord = async () => {
+  try {
+    const currentDate = new Date();
+    const currentDateString = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    )
+      .toISOString()
+      .split("T")[0];
+    const existingRecord = await models.visitors.findOne({
+      where: { date: currentDateString },
+    });
+
+    if (existingRecord) {
+      console.log(`이미 레코드가 존재합니다. date: ${currentDateString}`);
+    } else {
+      const newVisitorRecord = {
+        visitor_count: 0,
+        user_count: 0,
+        total_count: 0,
+        date: currentDateString,
+      };
+
+      await models.visitors.create(newVisitorRecord);
+      console.log(`새로운 레코드를 추가했습니다. date: ${currentDateString}`);
+    }
+  } catch (e) {
+    console.error("오류가 발생했습니다:", e);
+  }
+};
+
+cron.schedule("0 0 * * *", () => {
+  createOrUpdateVisitorRecord();
+});
+
+export default router;

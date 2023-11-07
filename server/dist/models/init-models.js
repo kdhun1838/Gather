@@ -9,6 +9,7 @@ const communityComments_1 = require("./communityComments");
 const carousels_1 = require("./carousels");
 const communityReplys_1 = require("./communityReplys");
 const visitors_1 = require("./visitors");
+const messages_1 = require("./messages");
 function initModels(sequelize) {
     const users = (0, users_1.usersModel)(sequelize);
     const registers = (0, registers_1.registersModel)(sequelize);
@@ -18,12 +19,16 @@ function initModels(sequelize) {
     const carousels = (0, carousels_1.carouselModel)(sequelize);
     const communityReplys = (0, communityReplys_1.communityReplysModel)(sequelize);
     const visitors = (0, visitors_1.visitorModel)(sequelize);
+    const messages = (0, messages_1.messagesModel)(sequelize);
     registers.hasMany(registerComments, { foreignKey: "registerNum" });
     registerComments.belongsTo(registers, { foreignKey: "registerNum" });
     users.hasMany(registerComments, { foreignKey: "userId" });
     registerComments.belongsTo(users, { foreignKey: "userId" });
     users.hasMany(registers, { foreignKey: "userNum" });
     registers.belongsTo(users, { foreignKey: "userNum" });
+    // 유저테이블 & 메시지테이블 관게설정
+    messages.belongsTo(users, { foreignKey: "userNum" });
+    users.hasMany(messages, { foreignKey: "userNum" });
     //------------- 커뮤니티 관계설정 --------------
     users.hasMany(communityComments, { foreignKey: "userId" });
     communityComments.belongsTo(users, { foreignKey: "userId" });
@@ -44,6 +49,7 @@ function initModels(sequelize) {
         registerComments,
         carousels,
         visitors,
+        messages,
     };
 }
 exports.initModels = initModels;

@@ -15,6 +15,7 @@ const store = legacy_createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleWare))
 );
+// const store = legacy_createStore(rootReducer, applyMiddleware(sagaMiddleWare));
 // const { user } = useSelector((state: RootState) => ({
 //   user: state.user.user,
 // }));

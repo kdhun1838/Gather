@@ -1,12 +1,17 @@
-import { UserState } from './type';
-import { createRequestActionTypes } from '../../lib/function/createRequestSaga';
+import { UserState } from "./type";
+import { createRequestActionTypes } from "../../lib/function/createRequestSaga";
 
-export const TEMP_SET_USER = 'user/TEMP_USER' as const;
+export const TEMP_SET_USER = "user/TEMP_USER" as const;
 export const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] =
-  createRequestActionTypes('user/CHECK');
-export const LOGOUT = 'user/LOGOUT' as const;
+  createRequestActionTypes("user/CHECK");
+export const LOGOUT = "user/LOGOUT" as const;
 export const [USER_UPDATE, USER_UPDATE_SUCCESS, USER_UPDATE_FAILURE] =
-  createRequestActionTypes('user/USER_UPDATE');
+  createRequestActionTypes("user/USER_UPDATE");
+export const [
+  USER_UPDATE_ADMIN,
+  USER_UPDATE_ADMIN_SUCCESS,
+  USER_UPDATE_ADMIN_FAILURE,
+] = createRequestActionTypes("user/USER_UPDATE_ADMIN");
 
 export const tempSetUser = (user: UserState) => ({
   type: TEMP_SET_USER,
@@ -25,5 +30,9 @@ export const logout = (user: UserState) => ({
 
 export const userupdate = (user: UserState) => ({
   type: USER_UPDATE,
+  payload: user,
+});
+export const userupdateAdmin = (user: UserState) => ({
+  type: USER_UPDATE_ADMIN,
   payload: user,
 });

@@ -4,6 +4,7 @@ import { AdminBody } from "./AdminHomePage";
 import AdminCarouselChartContainer from "../../container/admin/carousel/AdminCarouselChartContainer";
 import { useSelector } from "react-redux";
 import { RootState } from "../../modules";
+import AdminHomeVisitorContainer from "../../container/admin/home/visitor/AdminHomeVisitorContainer";
 
 const AdminCarouselChartPage = () => {
   const { user } = useSelector((state: RootState) => ({
@@ -15,7 +16,8 @@ const AdminCarouselChartPage = () => {
         <>
           <AdminHeaderContainer />
           <AdminBody>
-            <AdminCarouselChartContainer />
+            {/* <AdminCarouselChartContainer /> */}
+            <AdminHomeVisitorContainer />
           </AdminBody>
         </>
       ) : (

@@ -16,6 +16,12 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { RiAdminFill } from "react-icons/ri";
+import AdminHomeVisitorContainer from "../../../container/admin/home/visitor/AdminHomeVisitorContainer";
+import AdminHomeRegisterContainer from "../../../container/admin/home/register/AdminHomeRegisterContainer";
+import AdminHomeMessageContainer from "../../../container/admin/home/message/AdminHomeMessageContainer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser as fa } from "@fortawesome/free-regular-svg-icons";
 
 interface BoxProps {
   height?: number;
@@ -157,20 +163,23 @@ const AdminHome: React.FC<OwnProps> = (props) => {
               </Row>
               <Row>
                 <Col span={24}>
-                  <Box height={20}>방문자 차트</Box>
+                  <Box height={20}>
+                    <AdminHomeVisitorContainer />
+                  </Box>
                 </Col>
               </Row>
               <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Box height={20}>모임 추이</Box>
-                </Col>
-                <Col span={12}>
-                  <Box height={20}>커뮤니티 추이</Box>
+                <Col span={24}>
+                  <Box height={20}>
+                    <AdminHomeRegisterContainer
+                      registerInfo={props.registerInfo}
+                    />
+                  </Box>
                 </Col>
               </Row>
             </Col>
             <Col span={6}>
-              <Row gutter={[16, 0]}>
+              <Row gutter={[0, 0]}>
                 <Col span={24}>
                   <Box height={20}>
                     <AdminMember>
@@ -190,9 +199,16 @@ const AdminHome: React.FC<OwnProps> = (props) => {
                           .map((item) => (
                             <AdminMemberDetail key={item.id}>
                               <div style={{ minWidth: "10%" }}>
-                                <RiAdminFill />
+                                {item.grade === 3 ? (
+                                  <FontAwesomeIcon
+                                    icon={faCircleUser}
+                                    size="lg"
+                                  />
+                                ) : (
+                                  <FontAwesomeIcon icon={fa} size="lg" />
+                                )}
                               </div>
-                              <div style={{ minWidth: "50%" }}>{item.id}</div>
+                              <div style={{ minWidth: "50%" }}>{item.nick}</div>
                               <div style={{ minWidth: "40%" }}>
                                 {item.grade === 3 ? (
                                   <div style={{ fontWeight: "bold" }}>
@@ -209,7 +225,9 @@ const AdminHome: React.FC<OwnProps> = (props) => {
                   </Box>
                 </Col>
                 <Col span={24}>
-                  <Box height={27}>운영진 현황</Box>
+                  <Box height={31} style={{ background: "#fdf8af" }}>
+                    <AdminHomeMessageContainer />
+                  </Box>
                 </Col>
               </Row>
             </Col>
@@ -317,9 +335,10 @@ const AdminMember = styled.div`
   }
 
   > .body {
-    /* display: flex; */
+    /* display: inline-block; */
     height: 20%;
     padding: 0 0 0 0.5rem;
+    align-items: baseline;
   }
 `;
 
@@ -327,6 +346,7 @@ const AdminMemberDetail = styled.div`
   margin: 0.5rem;
   display: flex;
   font-size: 1rem;
+  align-items: baseline;
 
   > div {
     margin-right: 0.2rem;
