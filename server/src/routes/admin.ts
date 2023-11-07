@@ -479,6 +479,172 @@ router.get("/getRegister", async (req: Request, res: Response) => {
   }
 });
 
+router.get(
+  "/getRegisterChart/category",
+  async (req: Request, res: Response) => {
+    try {
+      const sport = await models.registers.count({
+        where: { category: "운동" },
+      });
+      const game = await models.registers.count({
+        where: { category: "게임" },
+      });
+      const study = await models.registers.count({
+        where: { category: "스터디" },
+      });
+      const etc = await models.registers.count({
+        where: { category: "기타" },
+      });
+      const data = [
+        { id: "운동", value: sport },
+        { id: "게임", value: game },
+        { id: "스터디", value: study },
+        { id: "기타", value: etc },
+      ];
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+
+router.get("/getRegisterChart/month", async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const monthlyData = [];
+
+    for (let month = 1; month <= 12; month++) {
+      const startDate = new Date(`${currentYear}-${month}-01`);
+      const endDate = new Date(currentYear, month, 0, 23, 59, 59, 999);
+
+      const sportCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "운동",
+        },
+      });
+      const studyCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "스터디",
+        },
+      });
+      const gameCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "게임",
+        },
+      });
+      const etcCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "기타",
+        },
+      });
+
+      monthlyData.push({
+        id: `${month}월`,
+        운동: sportCount,
+        스터디: studyCount,
+        게임: gameCount,
+        기타: etcCount,
+      });
+    }
+    res.status(200).json(monthlyData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.get("/getRegisterChart/day", async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const oneWeekAgo = new Date(currentDate);
+    oneWeekAgo.setDate(currentDate.getDate() - 6); // 일주일 전부터 오늘까지
+
+    const dailyData = [];
+
+    for (let day = 0; day < 7; day++) {
+      const date = new Date(oneWeekAgo);
+      date.setDate(oneWeekAgo.getDate() + day);
+
+      const formattedDate = `${
+        date.getMonth() + 1
+      }월 ${date.getDate()}일(${getDayName(date)})`;
+
+      const startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0); // 날짜의 시작 시간
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999); // 날짜의 끝 시간
+
+      const sportCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "운동",
+        },
+      });
+      const studyCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "스터디",
+        },
+      });
+      const gameCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "게임",
+        },
+      });
+      const etcCount = await models.registers.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "기타",
+        },
+      });
+
+      dailyData.push({
+        id: formattedDate,
+        운동: sportCount,
+        스터디: studyCount,
+        게임: gameCount,
+        기타: etcCount,
+      });
+    }
+    console.log("ddd", dailyData);
+    res.status(200).json(dailyData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+function getDayName(date: any) {
+  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+  return dayNames[date.getDay()];
+}
+
 // 커뮤니티 관리
 
 router.get("/getCommunity", async (req: Request, res: Response) => {
@@ -519,6 +685,37 @@ router.get("/getCommunity", async (req: Request, res: Response) => {
   }
 });
 
+router.get(
+  "/getCommunityChart/category",
+  async (req: Request, res: Response) => {
+    try {
+      const review = await models.communitys.count({
+        where: { category: "후기" },
+      });
+      const question = await models.communitys.count({
+        where: { category: "질문" },
+      });
+      const etc = await models.communitys.count({
+        where: { category: "잡담" },
+      });
+      const data = [
+        { id: "후기", value: review },
+        { id: "질문", value: question },
+        { id: "잡담", value: etc },
+      ];
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+);
+router.get("/getCommunityChart/month", async (req: Request, res: Response) => {
+  console.log("커뮤니티차트");
+});
+router.get("/getCommunityChart/week", async (req: Request, res: Response) => {
+  console.log("커뮤니티차트");
+});
+// 시간체크 후 자동마감함수
 const createOrUpdateVisitorRecord = async () => {
   try {
     const currentDate = new Date();

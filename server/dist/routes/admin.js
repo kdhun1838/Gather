@@ -407,6 +407,158 @@ router.get("/getRegister", (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500);
     }
 }));
+router.get("/getRegisterChart/category", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const sport = yield models_1.default.registers.count({
+            where: { category: "운동" },
+        });
+        const game = yield models_1.default.registers.count({
+            where: { category: "게임" },
+        });
+        const study = yield models_1.default.registers.count({
+            where: { category: "스터디" },
+        });
+        const etc = yield models_1.default.registers.count({
+            where: { category: "기타" },
+        });
+        const data = [
+            { id: "운동", value: sport },
+            { id: "게임", value: game },
+            { id: "스터디", value: study },
+            { id: "기타", value: etc },
+        ];
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.get("/getRegisterChart/month", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentYear = new Date().getFullYear();
+        const monthlyData = [];
+        for (let month = 1; month <= 12; month++) {
+            const startDate = new Date(`${currentYear}-${month}-01`);
+            const endDate = new Date(currentYear, month, 0, 23, 59, 59, 999);
+            const sportCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "운동",
+                },
+            });
+            const studyCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "스터디",
+                },
+            });
+            const gameCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "게임",
+                },
+            });
+            const etcCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "기타",
+                },
+            });
+            monthlyData.push({
+                id: `${month}월`,
+                운동: sportCount,
+                스터디: studyCount,
+                게임: gameCount,
+                기타: etcCount,
+            });
+        }
+        res.status(200).json(monthlyData);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
+router.get("/getRegisterChart/day", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const currentDate = new Date();
+        const oneWeekAgo = new Date(currentDate);
+        oneWeekAgo.setDate(currentDate.getDate() - 6); // 일주일 전부터 오늘까지
+        const dailyData = [];
+        for (let day = 0; day < 7; day++) {
+            const date = new Date(oneWeekAgo);
+            date.setDate(oneWeekAgo.getDate() + day);
+            const formattedDate = `${date.getMonth() + 1}월 ${date.getDate()}일(${getDayName(date)})`;
+            const startDate = new Date(date);
+            startDate.setHours(0, 0, 0, 0); // 날짜의 시작 시간
+            const endDate = new Date(date);
+            endDate.setHours(23, 59, 59, 999); // 날짜의 끝 시간
+            const sportCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "운동",
+                },
+            });
+            const studyCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "스터디",
+                },
+            });
+            const gameCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "게임",
+                },
+            });
+            const etcCount = yield models_1.default.registers.count({
+                where: {
+                    createdAt: {
+                        [sequelize_1.Op.gte]: startDate,
+                        [sequelize_1.Op.lte]: endDate,
+                    },
+                    category: "기타",
+                },
+            });
+            dailyData.push({
+                id: formattedDate,
+                운동: sportCount,
+                스터디: studyCount,
+                게임: gameCount,
+                기타: etcCount,
+            });
+        }
+        console.log("ddd", dailyData);
+        res.status(200).json(dailyData);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
+function getDayName(date) {
+    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+    return dayNames[date.getDay()];
+}
 // 커뮤니티 관리
 router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -443,6 +595,35 @@ router.get("/getCommunity", (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500);
     }
 }));
+router.get("/getCommunityChart/category", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const review = yield models_1.default.communitys.count({
+            where: { category: "후기" },
+        });
+        const question = yield models_1.default.communitys.count({
+            where: { category: "질문" },
+        });
+        const etc = yield models_1.default.communitys.count({
+            where: { category: "잡담" },
+        });
+        const data = [
+            { id: "후기", value: review },
+            { id: "질문", value: question },
+            { id: "잡담", value: etc },
+        ];
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.get("/getCommunityChart/month", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("커뮤니티차트");
+}));
+router.get("/getCommunityChart/week", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("커뮤니티차트");
+}));
+// 시간체크 후 자동마감함수
 const createOrUpdateVisitorRecord = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const currentDate = new Date();
