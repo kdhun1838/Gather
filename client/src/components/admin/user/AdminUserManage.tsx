@@ -29,6 +29,7 @@ interface AdminUserProps {
   handleDelete: (userNum: number) => void;
   handleGradeUpdate: (userNum: number, grade: number, id: string) => void;
   setIsDelete: (isDelete: boolean) => void;
+  isDelete?: boolean;
 }
 
 const AdminUserManage: React.FC<AdminUserProps> = (props) => {
@@ -45,6 +46,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    props.setIsDelete(!props.isDelete);
   };
   const handleSearch = (
     selectedKeys: string[],
@@ -248,7 +250,12 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
               style={{ maxHeight: "800vh", minWidth: "70%" }}
               footer={null}
             >
-              <MyPageForm isAdmin={true} uNum={uNum} />
+              <MyPageForm
+                isAdmin={true}
+                uNum={uNum}
+                setIsModalOpen={setIsModalOpen}
+                handleCancel={handleCancel}
+              />
             </Modal>
             {record.grade < 3 && props.user.userNum !== record.userNum ? (
               <ActionButton onClick={() => props.handleDelete(record.userNum)}>

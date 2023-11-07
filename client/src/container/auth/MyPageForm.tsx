@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 interface OwnProps {
   isAdmin?: boolean;
   uNum?: number;
+  setIsModalOpen?: (tf: boolean) => void;
+  handleCancel?: () => void;
 }
 
 const MyPageForm: React.FC<OwnProps> = (props) => {
@@ -57,7 +59,9 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
             icon: "success",
             text: "수정이 완료되었습니다.",
           });
-          navigate("/admin/home");
+          // navigate("/admin/home");
+          // props.setIsModalOpen && props.setIsModalOpen(false);
+          props.handleCancel && props.handleCancel();
         }
       });
     } else {

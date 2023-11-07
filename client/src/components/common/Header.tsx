@@ -25,9 +25,9 @@ const items: TabsProps["items"] = [
   },
 ];
 const contentStyle: React.CSSProperties = {
-  height: "320px",
+  height: "20rem",
   color: "#000",
-  lineHeight: "160px",
+  // lineHeight: "160px",
   textAlign: "center",
 };
 
@@ -205,14 +205,14 @@ const Header: React.FC<HeaderProps> = ({
 export const CarouselDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 3rem 0 3rem;
+  padding: 1% 5% 0 5%;
 `;
 
 export const CarouselText = styled.div`
   font-size: 2rem;
   width: 50%;
   display: flex;
-  line-height: 3.5rem;
+  /* line-height: 3.5rem; */
 `;
 export const CarouselImg = styled.div`
   width: 40%;
