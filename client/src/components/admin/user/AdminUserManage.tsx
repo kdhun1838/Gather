@@ -29,6 +29,7 @@ interface AdminUserProps {
   handleDelete: (userNum: number) => void;
   handleGradeUpdate: (userNum: number, grade: number, id: string) => void;
   setIsDelete: (isDelete: boolean) => void;
+  isDelete?: boolean;
 }
 
 const AdminUserManage: React.FC<AdminUserProps> = (props) => {
@@ -45,6 +46,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    props.setIsDelete(!props.isDelete);
   };
   const handleSearch = (
     selectedKeys: string[],
@@ -237,9 +239,12 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Space size="middle">
-            <ActionButton onClick={() => showModal(record.userNum)}>
-              정보 수정
-            </ActionButton>
+            {((props.user.grade > 2 && record.grade === 3) ||
+              record.grade < 3) && (
+              <ActionButton onClick={() => showModal(record.userNum)}>
+                정보 수정
+              </ActionButton>
+            )}
             <Modal
               title={null}
               open={isModalOpen}
@@ -248,7 +253,12 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
               style={{ maxHeight: "800vh", minWidth: "70%" }}
               footer={null}
             >
-              <MyPageForm isAdmin={true} uNum={uNum} />
+              <MyPageForm
+                isAdmin={true}
+                uNum={uNum}
+                setIsModalOpen={setIsModalOpen}
+                handleCancel={handleCancel}
+              />
             </Modal>
             {record.grade < 3 && props.user.userNum !== record.userNum ? (
               <ActionButton onClick={() => props.handleDelete(record.userNum)}>
@@ -292,7 +302,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       width: "20%",
     },
   ];
-
+  console.log("props.user.grade", props.user.grade);
   return <Table columns={columns} dataSource={props.data} />;
 };
 

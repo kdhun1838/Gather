@@ -128,7 +128,17 @@ router.get("/topInfo", (req, res) => __awaiter(void 0, void 0, void 0, function*
 router.get("/visitor", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("방문자백");
     try {
-        const data = yield models_1.default.visitors.findAll({});
+        const today = new Date();
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(today.getDate() - 7);
+        const data = yield models_1.default.visitors.findAll({
+            where: {
+                date: {
+                    [sequelize_1.Op.between]: [oneWeekAgo, today],
+                },
+            },
+            order: [["date", "ASC"]],
+        });
         res.status(200).json(data);
     }
     catch (error) {

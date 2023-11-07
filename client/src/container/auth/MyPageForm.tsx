@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MyPage from "../../components/auth/MyPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../modules";
-import { userupdate, check, userupdateAdmin } from "../../modules/user/action";
+import {
+  userupdate,
+  check,
+  userdel,
+  logout,
+  userupdateAdmin,
+} from "../../modules/user/action";
 import Swal from "sweetalert2";
 import { createGlobalStyle } from "styled-components";
-import { getUserDetail } from "../../lib/api/admin";
 import { useNavigate } from "react-router-dom";
+import { getUserDetail } from "../../lib/api/admin";
 
 interface OwnProps {
   isAdmin?: boolean;
   uNum?: number;
+  setIsModalOpen?: (tf: boolean) => void;
+  handleCancel?: () => void;
 }
 
 const MyPageForm: React.FC<OwnProps> = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => ({
     user: state.user.user,
   }));
   const [formData, setFormData] = useState(user);
-  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (props.isAdmin && props.uNum) {
@@ -33,6 +41,11 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
   }, [props.isAdmin, props.uNum]);
 
   console.log("user=====>", formData);
+
+  useEffect(() => {
+    setFormData(user);
+  }, [user]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -57,7 +70,9 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
             icon: "success",
             text: "수정이 완료되었습니다.",
           });
-          navigate("/admin/home");
+          // navigate("/admin/home");
+          // props.setIsModalOpen && props.setIsModalOpen(false);
+          props.handleCancel && props.handleCancel();
         }
       });
     } else {
@@ -83,10 +98,37 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
     }
   };
 
+  const onDel = async () => {
+    console.log("formdata=========>");
+    Swal.fire({
+      title: "회원탈퇴",
+      text: `정말 회원탈퇴를 하시겠습니까?`,
+      showCancelButton: true,
+      cancelButtonText: "취소",
+      confirmButtonText: "확인",
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        dispatch(userdel(user));
+        setTimeout(() => {
+          dispatch(logout(user));
+        }, 200);
+      },
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          text: "회원탈퇴가 완료되었습니다.",
+        });
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <MyPage
       user={formData}
       onSubmit={onSubmit}
+      onDel={onDel}
       handleInputChange={handleInputChange}
     />
   );

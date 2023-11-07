@@ -134,7 +134,18 @@ router.get("/topInfo", async (req: Request, res: Response) => {
 router.get("/visitor", async (req: Request, res: Response) => {
   console.log("방문자백");
   try {
-    const data = await models.visitors.findAll({});
+    const today = new Date();
+    const oneWeekAgo = new Date(today);
+    oneWeekAgo.setDate(today.getDate() - 7);
+
+    const data = await models.visitors.findAll({
+      where: {
+        date: {
+          [Op.between]: [oneWeekAgo, today],
+        },
+      },
+      order: [["date", "ASC"]],
+    });
 
     res.status(200).json(data);
   } catch (error) {

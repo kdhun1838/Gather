@@ -220,7 +220,7 @@ const Home: React.FC<CommunityPropType> = ({
   );
 };
 
-const Center = styled.div`
+export const Center = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 1rem;

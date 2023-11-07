@@ -53,12 +53,12 @@ const AdminHomeRegister: React.FC<OwnProps> = (props) => {
   );
 };
 
-const TableTitleBlock = styled.div`
+export const TableTitleBlock = styled.div`
   padding: 0.3rem 0 0.3rem 0;
 
   border-bottom: 1px solid lightgray;
 `;
-const TableTitle = styled.h2`
+export const TableTitle = styled.h2`
   margin: 0 0 0 3rem;
 `;
 

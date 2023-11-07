@@ -97,6 +97,7 @@ const AdminUserManageContainer = () => {
         handleDelete={handleDelete}
         handleGradeUpdate={handleGradeUpdate}
         setIsDelete={setIsDelete}
+        isDelete={isDelete}
       />
     </div>
   );
