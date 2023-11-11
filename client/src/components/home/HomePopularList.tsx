@@ -26,26 +26,32 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
   const settings = {
     className: "center",
     centerMode: true,
-    // infinite: true,
     centerPadding: "60px",
     slidesToShow: 4,
-    // speed: 500,
-    // responsive: [
-    //   {
-    //     breakpoint: 1920,
-    //     settings: {
-    //       slidesToShow: 5,
-    //       slidesToScroll: 1,
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 720,
-    //     settings: {
-    //       slidesToShow: 1,
-    //       slidesToScroll: 1,
-    //     },
-    //   },
-    // ],
+    speed: 500,
+    responsive: [
+      {
+        breakpoint: 1920,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1080,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 720,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -107,12 +113,14 @@ const HomePopularList: React.FC<OwnProps> = (props) => {
 const Center = styled.div`
   display: flex;
   justify-content: center;
+  /* width: 100%; */
+  /* min-width: 1280px; */
 `;
 
 const Item = styled.div`
   color: black;
   display: flex;
-  width: 100%;
+  width: 340px;
   padding: 20px 25px;
   gap: 10px;
   border-radius: 20px;
@@ -199,7 +207,7 @@ const ItemFourth = styled.div`
 
 const Wrapper = styled(Responsive)``;
 
-const ButtonBlock = styled.div`
+export const ButtonBlock = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
@@ -208,7 +216,8 @@ const CustomSlider = styled(Slider)`
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
-  max-width: 90%;
+  max-width: 95%;
+  width: 90%;
   min-width: 100px;
   /* height: 15rem; */
   .slick-next:before,
@@ -216,19 +225,22 @@ const CustomSlider = styled(Slider)`
     color: black;
     font-size: 2rem;
     margin: 0 1rem;
+    /* z-index: 1; */
   }
 
   .slick-list {
     margin: 0 6% 0 6%;
+    width: 90%;
     /* display: flex; */
   }
   .slick-slide {
     padding-left: 0.5rem;
+    /* width: 100% !important; */
   }
   .slick-slider {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 90%;
   }
 `;
 

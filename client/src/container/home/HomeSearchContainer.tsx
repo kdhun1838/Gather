@@ -61,7 +61,6 @@ const HomeSearchContainer = () => {
       data: { key: string; value: string }
     ) => {
       if (e.key === "Enter") {
-        console.log("Enter 키가 눌렸습니다.");
         dispatch(getList({ mainSort, search: data.value, recruit }));
       }
     },

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { PostType } from "./CommunityPost";
+import { Link } from "react-router-dom";
 
 const CommentBox = styled.div`
   display: flex;
@@ -61,35 +61,118 @@ const CommentsBox = styled.ul`
   width: 100%;
 `;
 
+const Comment = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e1e1e1;
+`;
+
+const CommentDetailBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+  cursor: pointer;
+`;
+
+const UserNick = styled.div`
+  color: #333;
+  font-weight: 700;
+
+  .sameNick {
+    margin-left: 3px;
+    border: 1px solid orange;
+    color: orange;
+    padding: 2px 6px 1px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+`;
+
+const CreatedTime = styled.div`
+  font-size: 14px;
+  line-height: 126.5%;
+  letter-spacing: -0.005em;
+  color: #9f9f9f;
+`;
+
+const CommentDetail = styled.p`
+  font-size: 1.125rem;
+  line-height: 1.7;
+  letter-spacing: -0.004em;
+  word-break: break-all;
+  overflow-wrap: break-all;
+  margin-bottom: 10px;
+`;
+
+const ReplyBox = styled.div`
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 10px 15px;
+  background-color: #f6f6f6;
+`;
+
+const UserNickTag = styled(Link)`
+  color: #8da2cc;
+  margin-right: 3px;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 type CommentPorpsType = {
+  replys: Record<string, any>;
   comment: string;
+  reply: string;
+  nestedReply: string;
+  user: any;
   postId: number;
-  post: {
-    updatedPost: PostType;
-    getComment: string[];
-  };
+  commentBoxOpen: Record<number, boolean>;
+  replyBoxOpen: Record<number, boolean>;
+  comments: string[];
   onChangeTextArea: (data: { key: string; value: string }) => void;
   onClickButton: (data: {
     userId: number;
     postId: number;
     comment: string;
   }) => void;
+  showReplyBox: (name: string, commentIndex: number) => void;
+  onClickReply: (data: {
+    userId: number;
+    postId: number;
+    commentId: number;
+    reply: string;
+    isfirst: boolean;
+  }) => void;
 };
 
 const CommunityComment: React.FC<CommentPorpsType> = ({
+  replys,
   comment,
+  reply,
+  nestedReply,
+  replyBoxOpen,
+  commentBoxOpen,
+  user,
   postId,
-  post,
+  comments,
   onChangeTextArea,
   onClickButton,
+  showReplyBox,
+  onClickReply,
 }) => {
-  const { getComment } = post;
-  console.log(getComment);
+  const userId = user?.userNum;
+  const usernick = user?.nick;
 
   return (
     <CommentBox>
       <CommentCount>
-        댓글 <span>{getComment?.length}</span>
+        댓글 <span>{comments?.length}</span>
       </CommentCount>
 
       <CommentInputBox>
@@ -98,22 +181,144 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
           name="comment"
           value={comment}
           onChange={(e) =>
-            onChangeTextArea({ key: e.target.name, value: e.target.value })
+            onChangeTextArea({
+              key: e.target.name,
+              value: e.target.value,
+            })
           }
         />
       </CommentInputBox>
 
       <CommentButtonBox>
         <CommentButton
-          onClick={() => onClickButton({ userId: 17, postId, comment })}
+          onClick={() => onClickButton({ userId, postId, comment })}
         >
           댓글 등록
         </CommentButton>
       </CommentButtonBox>
+
       <CommentsBox>
-        {getComment?.map((comment: any, index: number) => (
-          <li key={index}>{comment?.content}</li>
-        ))}
+        {comments &&
+          comments?.map((comment: any, index: number) => (
+            <Comment key={index}>
+              <CommentDetailBox>
+                <div>
+                  <UserNick>
+                    {comment.User?.nick}
+                    {comment.User?.nick === usernick && (
+                      <span className="sameNick">작성자</span>
+                    )}
+                  </UserNick>
+                  <CreatedTime> {comment?.createdAt}</CreatedTime>
+                </div>
+                <div>
+                  <button onClick={(e) => showReplyBox("comment", index)}>
+                    답글
+                  </button>
+                  <button>신고</button>
+                </div>
+              </CommentDetailBox>
+              <CommentDetail>{comment?.content}</CommentDetail>
+
+              {commentBoxOpen[index] && (
+                <>
+                  <CommentTextArea
+                    name="reply"
+                    value={reply}
+                    onChange={(e) =>
+                      onChangeTextArea({
+                        key: e.target.name,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                  <CommentButtonBox>
+                    <CommentButton
+                      onClick={() =>
+                        onClickReply({
+                          userId,
+                          postId,
+                          commentId: comment?.commentNum,
+                          reply,
+                          isfirst: true,
+                        })
+                      }
+                    >
+                      답글 등록
+                    </CommentButton>
+                  </CommentButtonBox>
+                </>
+              )}
+
+              {replys &&
+                replys?.map((reply: any, index: number) => (
+                  <div key={index}>
+                    {reply?.commentId === comment.commentNum && (
+                      <ReplyBox>
+                        <div>
+                          <UserNick>
+                            {reply.User?.nick}
+                            {reply.User?.nick === usernick && (
+                              <span className="sameNick">작성자</span>
+                            )}
+                          </UserNick>
+                          <CreatedTime>{reply.createdAt}</CreatedTime>
+                        </div>
+
+                        <div>
+                          <button onClick={() => showReplyBox("reply", index)}>
+                            답글
+                          </button>
+                          <button>신고</button>
+                        </div>
+
+                        <CommentDetail>
+                          {reply.isParentsReply === 0 ? (
+                            <UserNickTag to="#">@{reply.User.nick}</UserNickTag>
+                          ) : (
+                            <UserNickTag to="#">
+                              @{comment.User.nick}
+                            </UserNickTag>
+                          )}
+
+                          {reply.content}
+                        </CommentDetail>
+
+                        {replyBoxOpen[index] && (
+                          <>
+                            <CommentTextArea
+                              name="nestedReply"
+                              value={nestedReply}
+                              onChange={(e) =>
+                                onChangeTextArea({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                })
+                              }
+                            />
+                            <CommentButtonBox>
+                              <CommentButton
+                                onClick={() =>
+                                  onClickReply({
+                                    userId,
+                                    postId,
+                                    commentId: comment?.commentNum,
+                                    reply: nestedReply,
+                                    isfirst: false,
+                                  })
+                                }
+                              >
+                                답글 등록
+                              </CommentButton>
+                            </CommentButtonBox>
+                          </>
+                        )}
+                      </ReplyBox>
+                    )}
+                  </div>
+                ))}
+            </Comment>
+          ))}
       </CommentsBox>
     </CommentBox>
   );

@@ -77,7 +77,7 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 }));
 router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, password, name, nick, email, tel, age, grade, addr, gender } = req.body;
+    const { id, password, name, nick, email, tel, age, addr, gender, addr_detail, } = req.body;
     console.log("register==================", req.body);
     const agetoNum = +age;
     try {
@@ -98,8 +98,8 @@ router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 email,
                 tel,
                 age: agetoNum,
-                grade,
-                addr,
+                grade: 1,
+                addr: addr + addr_detail,
                 gender,
             });
             const accessToken = jsonwebtoken_1.default.sign({
@@ -130,5 +130,88 @@ router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     }
     next();
 }));
-router.get("/check", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { }));
+router.get("/check", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.cookies.accessToken;
+    if (!user) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+    res.json(jsonwebtoken_1.default.verify(user, getJwtSecret()));
+}));
+router.post("/logout", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.clearCookie("accessToken");
+    res.status(204).json("good");
+}));
+router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
+    try {
+        const updateData = {
+            name,
+            nick,
+            email,
+            tel,
+            addr: addr + addr_detail,
+            gender,
+        };
+        const [updateRows] = yield models_1.default.users.update(updateData, {
+            where: { id },
+        });
+        const updatedUser = yield models_1.default.users.findOne({
+            where: { id },
+        });
+        res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+router.post("/userdel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userNum } = req.body;
+    try {
+        const delData = yield models_1.default.users.destroy({ where: { userNum } });
+        res.status(200).json({ delData });
+    }
+    catch (error) {
+        // 서버 오류 시 500 상태 코드와 오류 메시지를 보냄
+        res.status(500).json({ error: "서버 오류" });
+    }
+}));
+router.post("/findid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, tel } = req.body;
+    try {
+        const user = yield models_1.default.users.findOne({
+            where: { email, tel },
+        });
+        if (!user) {
+            res.status(404).json({
+                error: "해당 이메일과 번호로 등록된 사용자를 찾을 수 없습니다.",
+            });
+            return;
+        }
+        res.status(200).json({ id: user.id });
+    }
+    catch (error) {
+        console.log("ID 찾기 오류:", error);
+        res.status(500).json({ error: "서버 오류" });
+    }
+}));
+router.post("/findpassword", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    try {
+        const user = yield models_1.default.users.findOne({
+            where: { id },
+        });
+        if (!user) {
+            res.status(404).json({
+                error: "해당 아이디로 등록된 사용자를 찾을 수 없습니다.",
+            });
+            return;
+        }
+        res.status(200).json({ password: user.password });
+    }
+    catch (error) {
+        console.error("비밀번호 찾기 오류:", error);
+        res.status(500).json({ error: "서버 오류" });
+    }
+}));
 exports.default = router;

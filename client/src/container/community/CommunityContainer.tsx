@@ -25,7 +25,6 @@ const CommunityContainer = () => {
 
   const onClickAddFavoritePost = useCallback(
     (postId: number) => {
-      console.log(postId);
       dispatch(addFavorite(postId));
     },
     [dispatch]

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Responsive from "../../styled/Responsive";
 import { Pagination } from "antd";
+import { Center } from "../home/Home";
 
 const CommunityBox = styled(Responsive)`
   overflow: hidden;
@@ -176,11 +177,13 @@ const Community: React.FC<CommunityPropType> = ({
                     {post.category}
                   </div>
                 </CategoryTagBox>
+
                 <DateBox>
                   <p>작성일 |</p>
                   <p>{changeDate(post.createdAt)}</p>
                 </DateBox>
                 <TitleBox>{post.title}</TitleBox>
+                <p>{post.User?.nick}</p>
                 <div> 조회수{post.view}</div>
                 <FavoriteBox
                   onClick={() => onClickAddFavoritePost(post.communityNum)}
@@ -191,13 +194,15 @@ const Community: React.FC<CommunityPropType> = ({
             );
           })}
       </PostsBox>
-      <Pagination
-        defaultCurrent={1}
-        total={posts && posts.length}
-        pageSize={itemsPerPage}
-        current={currentPage}
-        onChange={handlePageChange}
-      />
+      <Center>
+        <Pagination
+          defaultCurrent={1}
+          total={posts && posts.length}
+          pageSize={itemsPerPage}
+          current={currentPage}
+          onChange={handlePageChange}
+        />
+      </Center>
     </CommunityBox>
   );
 };

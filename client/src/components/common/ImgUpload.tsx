@@ -1,46 +1,53 @@
-import React, { useState, ChangeEvent } from "react";
-import axios from "axios";
+import React from "react";
+import styled from "styled-components";
 
-const ImgUpload: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+const CustomFileUpload = styled.label`
+  margin: 0.5rem 0 0 0;
+  background-color: skyblue;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  transition: 0.3s ease;
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files && event.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  };
+  &:hover {
+    background-color: #0073e6;
+  }
+`;
 
-  const handleUpload = async () => {
-    console.log("sss");
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+const Input = styled.input`
+  display: none;
+`;
+const SelectedFileName = styled.div`
+  font-size: 12px;
+  margin-top: 0.5rem;
+`;
 
-      try {
-        const response = await axios.post("/admin/uploadImg", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+interface ImgUploadProps {
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  file: File | null;
+}
 
-        if (response.status === 200) {
-          console.log("파일이 성공적으로 업로드되었습니다.");
-        } else {
-          console.error("파일 업로드 실패:", response.statusText);
-        }
-      } catch (error) {
-        console.error("파일 업로드 중 오류 발생:", error);
-      }
-    } else {
-      console.log("업로드할 파일이 선택되지 않았습니다.");
-    }
-  };
-
+const ImgUpload: React.FC<ImgUploadProps> = (props) => {
   return (
     <div>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <button onClick={handleUpload}>업로드</button>
+      <CustomFileUpload htmlFor="image-upload">이미지 선택</CustomFileUpload>
+      <Input
+        id="image-upload"
+        type="file"
+        accept="image/*"
+        onChange={props.handleFileChange}
+      />
+      {props.file ? (
+        <>
+          <SelectedFileName>선택된 파일: {props.file.name}</SelectedFileName>
+        </>
+      ) : (
+        <div>선택된 파일이 없습니다. 파일을 선택해주세요</div>
+      )}
     </div>
   );
 };

@@ -6,6 +6,8 @@ import { RootState } from "../../modules";
 import { RegisterState } from "../../modules/register/type";
 import {
   changeForm,
+  getOriginalForm,
+  modifyForm,
   postForm,
   unloadForm,
 } from "../../modules/register/action";
@@ -14,11 +16,12 @@ import { useNavigate } from "react-router";
 const RegisterContainer = () => {
   const [isPost, setIsPost] = useState(false);
 
-  const form = useSelector((state: RootState) => state.register);
+  const { form, userNum } = useSelector((state: RootState) => ({
+    form: state.register,
+    userNum: state.user,
+  }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  console.log("ffffffff", form.form.title);
 
   const onChangeForm = useCallback(
     (data: { key: string; value: string | number }) => {
@@ -46,21 +49,31 @@ const RegisterContainer = () => {
 
   const onPageBack = () => {
     navigate(-1);
-  }
+  };
 
   const onCancle = () => {
     setIsPost(false);
   };
 
   const onPostForm = useCallback(
-    (form: RegisterState) => {
-      dispatch(postForm(form));
-      console.log("form===", form);
+    (form: RegisterState, userNum: number) => {
+      dispatch(postForm(form, userNum));
       setIsPost(false);
       navigate("/");
     },
     [dispatch, form]
   );
+
+  const onModifyForm = useCallback(
+    (form: RegisterState, postId: number) => {
+      dispatch(modifyForm(form, postId));
+      console.log("what PostId ?????", postId)
+      setIsPost(false);
+      navigate("/");
+    },
+    [dispatch, form]
+  );
+
   React.useEffect(() => {
     return () => {
       dispatch(unloadForm());
@@ -75,8 +88,11 @@ const RegisterContainer = () => {
         onPageBack={onPageBack}
         onIsPost={onIsPost}
         onCancle={onCancle}
+        onModifyForm={onModifyForm}
         isPost={isPost}
         form={form}
+        userNum={userNum.user?.userNum}
+        originalPostId={form.form.originalPostId}
       />
     </div>
   );

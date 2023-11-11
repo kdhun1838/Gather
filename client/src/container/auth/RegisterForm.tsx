@@ -17,13 +17,12 @@ const RegisterForm = () => {
     user: state.user.user,
   }));
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
+  const onChange = (data: { key: string; value: string | number }) => {
     dispatch(
       changeField({
         name: 'register',
-        key: name,
-        value,
+        key: data.key,
+        value: String(data.value),
       })
     );
   };
@@ -39,7 +38,6 @@ const RegisterForm = () => {
       email,
       tel,
       age,
-      grade,
       addr,
       gender,
     } = form;
@@ -54,7 +52,6 @@ const RegisterForm = () => {
         email,
         tel,
         age,
-        grade,
         addr,
         gender,
       ].includes('')

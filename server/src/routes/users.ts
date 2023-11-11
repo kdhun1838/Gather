@@ -1,17 +1,29 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import models from '../models'; // 수정된 부분: Users 클래스를 가져옴
+import models from "../models";
 
-/* GET users listing. */
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  console.log('하이');
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usersData = await models.users.findAll({}); // Users 클래스를 사용
+    const usersData = await models.users.findAll({
+      attributes: [
+        "userNum",
+        "id",
+        "name",
+        "nick",
+        "email",
+        "tel",
+        "age",
+        "grade",
+        "addr",
+        "gender",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
     res.status(200).json(usersData);
-    console.log(usersData);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'An error occurred' });
+    res.status(500).json({ error: "An error occurred" });
   }
 });
 

@@ -196,11 +196,11 @@ const Home: React.FC<CommunityPropType> = ({
                         <DeadLine>마감되었습니다</DeadLine>
                       )}
                     </DateBox>
-                    <FavoriteBox
+                    {/* <FavoriteBox
                       onClick={() => onClickAddFavoritePost(post.registerNum)}
                     >
                       ⭐
-                    </FavoriteBox>
+                    </FavoriteBox> */}
                   </PostBox>
                 );
               })}
@@ -220,7 +220,7 @@ const Home: React.FC<CommunityPropType> = ({
   );
 };
 
-const Center = styled.div`
+export const Center = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 1rem;

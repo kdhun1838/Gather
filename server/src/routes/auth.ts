@@ -5,6 +5,7 @@ import models from "../models"; // 수정된 부분: Users 클래스를 가져�
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { countVisitors } from "../middleware/countvisitor";
 dotenv.config();
 
 console.log("jwtsecret", process.env.JWT_SECRET);
@@ -79,12 +80,23 @@ router.post(
 router.post(
   "/signup",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, password, name, nick, email, tel, age, grade, addr, gender } =
-      req.body;
+    const {
+      id,
+      password,
+      name,
+      nick,
+      email,
+      tel,
+      age,
+      addr,
+      gender,
+      addr_detail,
+    } = req.body;
     console.log("register==================", req.body);
     const agetoNum = +age;
     try {
       const User = await models.users.findOne({ where: { id } });
+
       if (User) {
         console.log("중복");
         res.status(409).json("중복된 id 입니다.");
@@ -100,8 +112,8 @@ router.post(
           email,
           tel,
           age: agetoNum,
-          grade,
-          addr,
+          grade: 1,
+          addr: addr + addr_detail,
           gender,
         });
 
@@ -140,7 +152,109 @@ router.post(
 
 router.get(
   "/check",
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.cookies.accessToken;
+    if (!user) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+    res.json(jwt.verify(user, getJwtSecret()));
+  }
+);
+
+router.post(
+  "/logout",
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("accessToken");
+    res.status(204).json("good");
+  }
+);
+
+router.post(
+  "/userupdate",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
+
+    try {
+      const updateData = {
+        name,
+        nick,
+        email,
+        tel,
+        addr: addr + addr_detail,
+        gender,
+      };
+      const [updateRows] = await models.users.update(updateData, {
+        where: { id },
+      });
+      const updatedUser = await models.users.findOne({
+        where: { id },
+      });
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+);
+
+router.post(
+  "/userdel",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userNum } = req.body;
+    try {
+      const delData = await models.users.destroy({ where: { userNum } });
+      res.status(200).json({ delData });
+    } catch (error) {
+      // 서버 오류 시 500 상태 코드와 오류 메시지를 보냄
+      res.status(500).json({ error: "서버 오류" });
+    }
+  }
+);
+
+router.post(
+  "/findid",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, tel } = req.body;
+    try {
+      const user = await models.users.findOne({
+        where: { email, tel },
+      });
+      if (!user) {
+        res.status(404).json({
+          error: "해당 이메일과 번호로 등록된 사용자를 찾을 수 없습니다.",
+        });
+        return;
+      }
+      res.status(200).json({ id: user.id });
+    } catch (error) {
+      console.log("ID 찾기 오류:", error);
+      res.status(500).json({ error: "서버 오류" });
+    }
+  }
+);
+
+router.post(
+  "/findpassword",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.body;
+    try {
+      const user = await models.users.findOne({
+        where: { id },
+      });
+
+      if (!user) {
+        res.status(404).json({
+          error: "해당 아이디로 등록된 사용자를 찾을 수 없습니다.",
+        });
+        return;
+      }
+
+      res.status(200).json({ password: user.password });
+    } catch (error) {
+      console.error("비밀번호 찾기 오류:", error);
+      res.status(500).json({ error: "서버 오류" });
+    }
+  }
 );
 
 export default router;

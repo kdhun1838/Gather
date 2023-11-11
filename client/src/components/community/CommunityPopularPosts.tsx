@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import Responsive from "../../styled/Responsive";
+import { ButtonBlock } from "../home/HomePopularList";
+import Button from "../../styled/Button";
+import { useNavigate } from "react-router-dom";
 
 const PopularBox = styled(Responsive)`
   /* width: 100%;
@@ -76,11 +79,18 @@ type PopularPostPorpsType = {
 const CommunityPopularPosts: React.FC<PopularPostPorpsType> = ({
   popularPosts,
 }) => {
+  const navigate = useNavigate();
+  const goWrite = () => {
+    navigate("/community/write");
+  };
   return (
     <>
       <PopularBox>
         <TitleBox>
           <Title>🔥 이번주 인기글</Title>
+          <ButtonBlock>
+            <Button onClick={() => goWrite()}>글쓰기</Button>
+          </ButtonBlock>
         </TitleBox>
         <PageButtonBox>
           <PageButton />

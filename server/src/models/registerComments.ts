@@ -8,44 +8,47 @@ import {
   Model,
   Sequelize,
 } from "sequelize";
-import { Registers } from "./registers";
 
 interface CommentAttributes {
   commentNum: number;
   registerNum: number;
-  userId: string;
+  userId: number;
   comment: string;
 }
 
 export class RegisterComments extends Model<CommentAttributes> {
   public commentNum!: number;
   public registerNum!: number;
-  public userId!: string;
+  public userId!: number;
   public comment!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public getRegisters!: HasManyGetAssociationsMixin<Registers>; // Note the null assertions!
-  public addRegisters!: HasManyAddAssociationMixin<Registers, number>;
-  public hasRegisters!: HasManyHasAssociationMixin<Registers, number>;
-  public countRegisters!: HasManyCountAssociationsMixin;
-  public createRegisters!: HasManyCreateAssociationMixin<Registers>;
+  // public getRegisters!: HasManyGetAssociationsMixin<Registers>; // Note the null assertions!
+  // public addRegisters!: HasManyAddAssociationMixin<Registers, number>;
+  // public hasRegisters!: HasManyHasAssociationMixin<Registers, number>;
+  // public countRegisters!: HasManyCountAssociationsMixin;
+  // public createRegisters!: HasManyCreateAssociationMixin<Registers>;
 }
 
-export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
+export function RegisterCommentsModel(
+  sequelize: Sequelize
+): typeof RegisterComments {
   RegisterComments.init(
     {
       commentNum: {
+        autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
+        primaryKey: true,
       },
       registerNum: {
         type: DataTypes.BIGINT,
         allowNull: false,
       },
       userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
       comment: {
@@ -55,8 +58,8 @@ export function CommentsModel(sequelize: Sequelize): typeof RegisterComments {
     },
     {
       sequelize,
-      modelName: "Comments",
-      tableName: "comments",
+      modelName: "RegisterComments",
+      tableName: "registercomments",
       timestamps: true,
       indexes: [
         {

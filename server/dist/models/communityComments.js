@@ -33,10 +33,6 @@ function communityCommentsModel(sequelize) {
                 key: "communityNum",
             },
         },
-        childComment: {
-            type: sequelize_1.DataTypes.BIGINT,
-            allowNull: true,
-        },
     }, {
         sequelize,
         modelName: "CommunityComments",

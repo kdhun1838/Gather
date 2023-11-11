@@ -1,32 +1,61 @@
-import { Sequelize, DataTypes } from "sequelize";
-import { boardsModel } from "./boards";
+import { Sequelize } from "sequelize";
 import { usersModel } from "./users";
 import { registersModel } from "./registers";
 import { communitysModel } from "./communitys";
-import { CommentsModel } from "./registerComments";
+import { RegisterCommentsModel } from "./registerComments";
 import { communityCommentsModel } from "./communityComments";
+import { carouselModel } from "./carousels";
+import { communityReplysModel } from "./communityReplys";
+import { visitorModel } from "./visitors";
+import { messagesModel } from "./messages";
 
 function initModels(sequelize: Sequelize) {
-  const boards = boardsModel(sequelize);
   const users = usersModel(sequelize);
   const registers = registersModel(sequelize);
   const communitys = communitysModel(sequelize);
   const communityComments = communityCommentsModel(sequelize);
-  const registerComments = CommentsModel(sequelize);
+  const registerComments = RegisterCommentsModel(sequelize);
+  const carousels = carouselModel(sequelize);
+  const communityReplys = communityReplysModel(sequelize);
+  const visitors = visitorModel(sequelize);
+  const messages = messagesModel(sequelize);
 
   registers.hasMany(registerComments, { foreignKey: "registerNum" });
   registerComments.belongsTo(registers, { foreignKey: "registerNum" });
+  users.hasMany(registerComments, { foreignKey: "userId" });
+  registerComments.belongsTo(users, { foreignKey: "userId" });
+  users.hasMany(registers, { foreignKey: "userNum" });
+  registers.belongsTo(users, { foreignKey: "userNum" });
 
+  // 유저테이블 & 메시지테이블 관게설정
+  messages.belongsTo(users, { foreignKey: "userNum" });
+  users.hasMany(messages, { foreignKey: "userNum" });
+  //------------- 커뮤니티 관계설정 --------------
   users.hasMany(communityComments, { foreignKey: "userId" });
   communityComments.belongsTo(users, { foreignKey: "userId" });
 
+  users.hasMany(communitys, { foreignKey: "userId" });
+  communitys.belongsTo(users, { foreignKey: "userId" });
+
+  users.hasMany(communityReplys, { foreignKey: "userId" });
+  communityReplys.belongsTo(users, { foreignKey: "userId" });
+
+  communitys.hasMany(communityComments, { foreignKey: "postId" });
+  communityComments.belongsTo(communitys, { foreignKey: "postId" });
+
+  communityComments.hasMany(communityReplys, { foreignKey: "commentId" });
+  communityReplys.belongsTo(communityComments, { foreignKey: "commentId" });
+
   return {
-    boards,
     users,
     registers,
     communitys,
     communityComments,
+    communityReplys,
     registerComments,
+    carousels,
+    visitors,
+    messages,
   };
 }
 

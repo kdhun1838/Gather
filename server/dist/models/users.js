@@ -42,8 +42,9 @@ function usersModel(sequelize) {
             allowNull: false,
         },
         grade: {
-            type: sequelize_1.DataTypes.STRING(100),
+            type: sequelize_1.DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1,
         },
         addr: {
             type: sequelize_1.DataTypes.STRING(100),
@@ -55,33 +56,33 @@ function usersModel(sequelize) {
         },
     }, {
         sequelize,
-        modelName: "Users",
-        tableName: "users",
+        modelName: 'Users',
+        tableName: 'users',
         timestamps: true,
         indexes: [
             {
-                name: "PRIMARY",
+                name: 'PRIMARY',
                 unique: true,
-                using: "BTREE",
-                fields: [{ name: "userNum" }],
+                using: 'BTREE',
+                fields: [{ name: 'userNum' }],
             },
             {
-                name: "user_UN",
+                name: 'user_UN',
                 unique: true,
-                using: "BTREE",
-                fields: ["id"],
+                using: 'BTREE',
+                fields: ['id'],
             },
             {
-                name: "user_UN1",
+                name: 'user_UN1',
                 unique: true,
-                using: "BTREE",
-                fields: ["nick"],
+                using: 'BTREE',
+                fields: ['nick'],
             },
             {
-                name: "user_UN2",
+                name: 'user_UN2',
                 unique: true,
-                using: "BTREE",
-                fields: ["email"],
+                using: 'BTREE',
+                fields: ['email'],
             },
         ],
     });

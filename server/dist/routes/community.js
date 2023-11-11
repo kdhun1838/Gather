@@ -28,7 +28,6 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
         const whereCondition = {};
         let orderCondition = [["createdAt", "DESC"]];
-        console.log("sss");
         // 큰틀의 정렬 값 where절에 넣기
         if (mainSort && mainSort !== "전체") {
             whereCondition.category = mainSort;
@@ -57,6 +56,14 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const getCommunityPosts = yield models_1.default.communitys.findAll({
             where: whereCondition,
             order: orderCondition,
+            nest: true,
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ["userNum", "nick"],
+                },
+            ],
         });
         res.status(200).json(getCommunityPosts);
     }
@@ -66,8 +73,8 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 router.post("/create", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { category, title, detail, content } = req.body.form;
-    const userId = 17;
+    const { category, title, detail, content } = req.body.form.form;
+    const { userId } = req.body;
     try {
         const newCommunityPost = yield models_1.default.communitys.create({
             category,
@@ -94,9 +101,95 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
             const getPost = yield models_1.default.communitys.findOne({
                 where: { communityNum: postId },
             });
-            const getComment = yield models_1.default.communityComments.findAll({
+            if (getPost) {
+                yield getPost.increment("view", { by: 1 });
+                // 모델 이름을 일관되게 사용합니다 (community)
+                const updatedPost = yield models_1.default.communitys.findOne({
+                    where: { communityNum: postId },
+                    nest: true,
+                    include: [
+                        {
+                            nest: true,
+                            model: models_1.default.users,
+                            attributes: ["userNum", "nick"],
+                        },
+                    ],
+                });
+                res.status(200).json(updatedPost);
+            }
+            else {
+                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+            }
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.get("/edit/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
+    if (postId) {
+        try {
+            const getPost = yield models_1.default.communitys.findOne({
+                attributes: ["category", "detail", "title", "content"],
+                where: { communityNum: postId },
+            });
+            res.status(200).json(getPost);
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.post("/editPost", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    const { category, detail, title, content } = req.body.form;
+    const { postId } = req.body;
+    try {
+        const updatePost = yield models_1.default.communitys.update({
+            category,
+            detail,
+            title,
+            content,
+            updatedAt: new Date(),
+        }, {
+            where: { communityNum: postId },
+        });
+        res.status(200).json(updatePost);
+    }
+    catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+    }
+}));
+// 포스트 삭제 코드
+router.post("/delete", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const communityNum = req.body.postId;
+    if (communityNum) {
+        try {
+            const deletePost = yield models_1.default.communitys.destroy({
+                where: { communityNum },
+            });
+            res.status(200).json(deletePost);
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.get("/comment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.params;
+    if (postId) {
+        try {
+            const getPostComments = yield models_1.default.communityComments.findAll({
                 where: { postId },
-                nest: true,
                 include: [
                     {
                         nest: true,
@@ -105,18 +198,30 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                     },
                 ],
             });
-            console.log("getComment===========", getComment);
-            if (getPost) {
-                yield getPost.increment("view", { by: 1 });
-                // 모델 이름을 일관되게 사용합니다 (community)
-                const updatedPost = yield models_1.default.communitys.findOne({
-                    where: { communityNum: postId },
-                });
-                res.status(200).json({ updatedPost, getComment });
-            }
-            else {
-                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
-            }
+            res.status(200).json(getPostComments);
+        }
+        catch (e) {
+            res.status(500).json(e);
+            console.log(e);
+            next(e);
+        }
+    }
+}));
+router.get("/reply/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { postId } = req.params;
+    if (postId) {
+        try {
+            const getReplys = yield models_1.default.communityReplys.findAll({
+                where: { postId },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
+            });
+            res.status(200).json(getReplys);
         }
         catch (e) {
             res.status(500).json(e);
@@ -165,10 +270,54 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
             userId,
             postId,
         });
-        res.status(200).json({
-            message: "성공적으로 저장되었습니다.",
-            data: newCommunityComment,
+        if (newCommunityComment) {
+            const getComments = yield models_1.default.communityComments.findAll({
+                where: {
+                    postId,
+                },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
+            });
+            res.status(200).json(getComments);
+        }
+    }
+    catch (e) {
+        res.status(500).json(e);
+        console.log(e);
+        next(e);
+    }
+}));
+router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
+    try {
+        const newCommentReply = yield models_1.default.communityReplys.create({
+            content: reply,
+            userId,
+            postId,
+            commentId,
+            isParentsReply: isfirst,
         });
+        if (newCommentReply) {
+            const getReply = yield models_1.default.communityReplys.findAll({
+                where: {
+                    postId,
+                    commentId,
+                },
+                include: [
+                    {
+                        nest: true,
+                        model: models_1.default.users,
+                        attributes: ["nick"],
+                    },
+                ],
+            });
+            res.status(200).json(getReply);
+        }
     }
     catch (e) {
         res.status(500).json(e);

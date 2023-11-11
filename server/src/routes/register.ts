@@ -3,6 +3,7 @@ const router = express.Router();
 import models from "../models";
 import { Op } from "sequelize";
 import cron from "node-cron";
+import { countVisitors } from "../middleware/countvisitor";
 
 type QueryData = {
   mainSort: string;
@@ -23,7 +24,6 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     const mainSort: string = data.mainSort || "";
     const search: string = data.search || "";
     const recruit: string = data.recruit || "";
-    console.log("recruit=============", recruit);
     const time: string = data.detailSort?.time || "";
     const view: string = data.detailSort?.view || "";
     const like: string = data.detailSort?.like || "";
@@ -43,12 +43,9 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     }
     if (recruit === "true") {
       where.state = 1;
-      console.log("true입니다");
     } else {
-      console.log("false입니다");
       where.state < 3;
     }
-    console.log("where-============", where);
 
     if (time === "newset") {
       order = [["createdAt", "DESC"]];
@@ -77,6 +74,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 
 router.get(
   "/popularList",
+  countVisitors,
   async (req: Request, res: Response, next: NextFunction) => {
     const today = new Date();
     today.setHours(today.getHours() + 9);
@@ -108,20 +106,8 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     contact,
     period,
     content,
-  } = req.body.form;
-  // console.log(
-  //   "register 백도착",
-  //   req.body,
-  //   "sssssssss",
-  //   title,
-  //   category,
-  //   personnel,
-  //   online,
-  //   position,
-  //   contact,
-  //   period,
-  //   content
-  // );
+  } = req.body.form.form;
+  const userNum = req.body.userNum;
   try {
     const newRegister = await models.registers.create({
       title,
@@ -132,9 +118,11 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       contact,
       period,
       content,
+      userNum,
     });
     res.status(200).json(newRegister);
   } catch (error) {
+    console.error(error);
     res.status(500).json(error);
     next(error);
   }
@@ -147,10 +135,32 @@ router.get(
     try {
       const getFormData = await models.registers.findOne({
         where: { registerNum: postId },
+        include: [
+          {
+            nest: true,
+            model: models.users,
+            attribute: ["name"],
+          },
+        ],
+      });
+      const getComment = await models.registerComments.findAll({
+        where: { registerNum: postId },
+        include: [
+          {
+            nest: true,
+            model: models.registers,
+            attribute: ["registerNum"],
+          },
+          {
+            nest: true,
+            model: models.users,
+            attribute: ["name"],
+          },
+        ],
       });
       getFormData.view += 1;
       await getFormData.save();
-      res.status(200).json(getFormData);
+      res.status(200).json({ getFormData, getComment });
     } catch (e) {
       console.error(e);
     }
@@ -162,13 +172,31 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
-      const postClose = await models.registers.update(
-        { state: 2, updatedAt: new Date() },
-        {
-          where: { registerNum: postId },
-        }
-      );
-      res.status(200).json(postClose);
+      const post = await models.registers.findOne({
+        where: { registerNum: postId },
+      });
+      if (!post) {
+        return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+      }
+      if (post.state === 1) {
+        await models.registers.update(
+          { state: 2, updatedAt: new Date() },
+          {
+            where: { registerNum: postId },
+          }
+        );
+      } else if (post.state === 2) {
+        await models.registers.update(
+          { state: 1, updatedAt: new Date() },
+          {
+            where: { registerNum: postId },
+          }
+        );
+      }
+      const updatedPost = await models.registers.findOne({
+        where: { registerNum: postId },
+      });
+      res.status(200).json(updatedPost);
     } catch (e) {
       console.error(e);
       res.status(500).json(e);
@@ -180,7 +208,6 @@ router.post(
   "/delete/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
-    console.log("22222222222222", postId);
     try {
       const postDelete = await models.registers.destroy({
         where: { registerNum: postId },
@@ -196,14 +223,11 @@ router.post(
 router.post(
   "/postComment/:postId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const postId = req.body.postId;
-    const comment = req.body.comment;
-    const ID = "dkdlel123";
-    console.log("bodybodybodybodybodybodybodybodybody", req.body);
+    const { postId, userNum, comment } = req.body;
     try {
       const postComment = await models.registerComments.create({
-        userId: ID,
-        comment: comment,
+        userId: userNum,
+        comment,
         registerNum: postId,
       });
       res.status(200).json(postComment);
@@ -212,6 +236,40 @@ router.post(
     }
   }
 );
+
+router.post("/modifyForm/:postId", async (req: Request, res: Response) => {
+  const {
+    title,
+    category,
+    personnel,
+    online,
+    position,
+    contact,
+    period,
+    content,
+  } = req.body.form.form;
+  const postId = req.body.postId;
+  console.log("modifyReq.Body??????????", req.body, title);
+  try {
+    const modifyForm = await models.registers.update(
+      {
+        title,
+        category,
+        personnel,
+        meeting: online,
+        position,
+        contact,
+        period,
+        content,
+      },
+      { where: { registerNum: postId } }
+    );
+    res.status(200).json(modifyForm);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json(e);
+  }
+});
 
 const updateExpiredStates = async () => {
   try {
