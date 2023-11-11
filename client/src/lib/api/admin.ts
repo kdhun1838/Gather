@@ -63,9 +63,29 @@ export const getRegister = (): Promise<AxiosResponse> => {
   return client.get("/admin/getRegister");
 };
 
+export const getRegisterChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getRegisterChart/category");
+};
+
+export const getRegisterMonthChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getRegisterChart/month");
+};
+export const getRegisterDayChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getRegisterChart/day");
+};
+
 // 커뮤니티게시판 관리
 
 export const getCommunityWithUser = (): Promise<AxiosResponse> => {
   console.log("API");
   return client.get("/admin/getCommunity");
+};
+export const getCommunityChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getCommunityChart/category");
+};
+export const getCommunityMonthChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getCommunityChart/month");
+};
+export const getCommunityDayChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getCommunityChart/day");
 };

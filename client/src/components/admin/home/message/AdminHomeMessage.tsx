@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser as fa } from "@fortawesome/free-regular-svg-icons";
 import { changeDate } from "../../../community/Community";
+import { TableTitle, TableTitleBlock } from "../register/AdminHomeRegister";
 
 interface OwnProps {
   message?: MessageType[];
@@ -25,6 +26,11 @@ const AdminHomeMessage = (props: OwnProps) => {
 
   return (
     <Container>
+      <TableTitleBlock>
+        <Top>
+          <h2>관리자 공유 메시지</h2>
+        </Top>
+      </TableTitleBlock>
       <MessageBlock>
         {props.message &&
           props.message.map((item) => (
@@ -77,6 +83,11 @@ const AdminHomeMessage = (props: OwnProps) => {
     </Container>
   );
 };
+
+const Top = styled.div`
+  display: flex;
+  margin: 0 0 0.5rem 0;
+`;
 
 const MessageDetailBlock = styled.div`
   margin: 0 0 0.5rem 0;

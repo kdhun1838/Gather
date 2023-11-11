@@ -26,13 +26,13 @@ const AdminHomeVisitorContainer = () => {
   console.log("data", data);
 
   return (
-    <Wrapper>
+    <ChartWrapper>
       {loading ? <>로딩중</> : <AdminHomeVisitor data={data} />}
-    </Wrapper>
+    </ChartWrapper>
   );
 };
 
-const Wrapper = styled.div`
+export const ChartWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 100%;

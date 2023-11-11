@@ -53,7 +53,7 @@ const LogoWrapper = styled(Responsive)`
     font-size: 1.125rem;
     font-weight: 800;
     letter-spacing: 2px;
-    margin-left: 50px;
+    margin-left: 80px;
   }
   .right {
     float: right;
@@ -164,9 +164,9 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
     <>
       <HeaderBlock>
         <LogoWrapper>
-          {/* <Link to="/admin" className="logo">
+          <Link to="/admin/home" className="logo">
             <Logo src={LogoImage} alt="Logo" />
-          </Link> */}
+          </Link>
           {user ? (
             <div className="right">
               <UserInfo>
