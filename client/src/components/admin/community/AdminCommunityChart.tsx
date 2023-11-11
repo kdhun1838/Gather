@@ -6,6 +6,8 @@ import {
   TableTitleBlock,
 } from "../home/register/AdminHomeRegister";
 import AdminCommunityChartCategoryContainer from "../../../container/admin/community/chart/AdminCommunityChartCategoryContainer";
+import AdminCommunityChartMonthContainer from "../../../container/admin/community/chart/AdminCommunityChartMonthContainer";
+import AdminCommunityChartDayContainer from "../../../container/admin/community/chart/AdminCommunityChartDayContainer";
 const AdminCommunityChart = () => {
   return (
     <div>
@@ -32,6 +34,7 @@ const AdminCommunityChart = () => {
             <TableTitleBlock>
               <TableTitle>월별 게시글(라인)</TableTitle>
             </TableTitleBlock>
+            <AdminCommunityChartMonthContainer />
           </Box>
         </Col>
         <Col span={12}>
@@ -39,6 +42,7 @@ const AdminCommunityChart = () => {
             <TableTitleBlock>
               <TableTitle>일별 게시글(라인)</TableTitle>
             </TableTitleBlock>
+            <AdminCommunityChartDayContainer />
           </Box>
         </Col>
       </Row>

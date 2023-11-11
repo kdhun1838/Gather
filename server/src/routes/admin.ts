@@ -709,12 +709,118 @@ router.get(
     }
   }
 );
-router.get("/getCommunityChart/month", async (req: Request, res: Response) => {
-  console.log("커뮤니티차트");
+router.get("/getCommunityChart/month", async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const monthlyData = [];
+
+    for (let month = 1; month <= 12; month++) {
+      const startDate = new Date(`${currentYear}-${month}-01`);
+      const endDate = new Date(currentYear, month, 0, 23, 59, 59, 999);
+
+      const chatCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "잡담",
+        },
+      });
+      const askCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "질문",
+        },
+      });
+      const reviewCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "후기",
+        },
+      });
+
+      monthlyData.push({
+        id: `${month}월`,
+        잡담: chatCount,
+        질문: askCount,
+        후기: reviewCount,
+      });
+    }
+    res.status(200).json(monthlyData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-router.get("/getCommunityChart/week", async (req: Request, res: Response) => {
-  console.log("커뮤니티차트");
+router.get("/getCommunityChart/day", async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const oneWeekAgo = new Date(currentDate);
+    oneWeekAgo.setDate(currentDate.getDate() - 6);
+
+    const dailyData = [];
+
+    for (let day = 0; day < 7; day++) {
+      const date = new Date(oneWeekAgo);
+      date.setDate(oneWeekAgo.getDate() + day);
+
+      const formattedDate = `${
+        date.getMonth() + 1
+      }월 ${date.getDate()}일(${getDayName(date)})`;
+
+      const startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+
+      const chatCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "잡담",
+        },
+      });
+      const askCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "질문",
+        },
+      });
+      const reviewCount = await models.communitys.count({
+        where: {
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+          category: "후기",
+        },
+      });
+
+      dailyData.push({
+        id: formattedDate,
+        잡담: chatCount,
+        질문: askCount,
+        후기: reviewCount,
+      });
+    }
+    console.log("ddd", dailyData);
+    res.status(200).json(dailyData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
 // 시간체크 후 자동마감함수
 const createOrUpdateVisitorRecord = async () => {
   try {

@@ -9,7 +9,7 @@ const AdminRegisterChartDay = (props: OwnProps) => {
   return (
     <ResponsiveBar
       data={props.data}
-      keys={["운동", "스터디", "게임", "기타"]}
+      keys={["운동", "게임", "스터디", "기타"]}
       indexBy="id"
       margin={{ top: 50, right: 130, bottom: 80, left: 60 }}
       padding={0.3}

@@ -83,3 +83,9 @@ export const getCommunityWithUser = (): Promise<AxiosResponse> => {
 export const getCommunityChart = (): Promise<AxiosResponse> => {
   return client.get("/admin/getCommunityChart/category");
 };
+export const getCommunityMonthChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getCommunityChart/month");
+};
+export const getCommunityDayChart = (): Promise<AxiosResponse> => {
+  return client.get("/admin/getCommunityChart/day");
+};

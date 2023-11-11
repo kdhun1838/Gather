@@ -4,11 +4,11 @@ interface OwnProps {
   data: any;
 }
 
-const AdminRegisterChartMonth = (props: OwnProps) => {
+const AdminCommunityChartMonth = (props: OwnProps) => {
   return (
     <ResponsiveBar
       data={props.data}
-      keys={["운동", "게임", "스터디", "기타"]}
+      keys={["후기", "질문", "잡담"]}
       indexBy="id"
       margin={{ top: 50, right: 130, bottom: 80, left: 60 }}
       padding={0.3}
@@ -63,4 +63,4 @@ const AdminRegisterChartMonth = (props: OwnProps) => {
   );
 };
 
-export default AdminRegisterChartMonth;
+export default AdminCommunityChartMonth;

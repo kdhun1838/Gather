@@ -16,8 +16,7 @@ const AdminCarouselChartPage = () => {
         <>
           <AdminHeaderContainer />
           <AdminBody>
-            {/* <AdminCarouselChartContainer /> */}
-            <AdminHomeVisitorContainer />
+            <AdminCarouselChartContainer />
           </AdminBody>
         </>
       ) : (
