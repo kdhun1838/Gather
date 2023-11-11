@@ -15,7 +15,7 @@ const AdminCommunityChart = () => {
         <Col span={8}>
           <Box height={24}>
             <TableTitleBlock>
-              <TableTitle>카테고리별 게시글(파이)</TableTitle>
+              <TableTitle>카테고리별 게시글</TableTitle>
             </TableTitleBlock>
             <AdminCommunityChartCategoryContainer />
           </Box>
@@ -23,7 +23,7 @@ const AdminCommunityChart = () => {
         <Col span={16}>
           <Box height={24}>
             <TableTitleBlock>
-              <TableTitle>조회수 Top 게시글(표)</TableTitle>
+              <TableTitle>조회수 Top 게시글</TableTitle>
             </TableTitleBlock>
           </Box>
         </Col>
@@ -32,7 +32,7 @@ const AdminCommunityChart = () => {
         <Col span={12}>
           <Box height={24}>
             <TableTitleBlock>
-              <TableTitle>월별 게시글(라인)</TableTitle>
+              <TableTitle>월별 게시글</TableTitle>
             </TableTitleBlock>
             <AdminCommunityChartMonthContainer />
           </Box>
@@ -40,7 +40,7 @@ const AdminCommunityChart = () => {
         <Col span={12}>
           <Box height={24}>
             <TableTitleBlock>
-              <TableTitle>일별 게시글(라인)</TableTitle>
+              <TableTitle>일별 게시글</TableTitle>
             </TableTitleBlock>
             <AdminCommunityChartDayContainer />
           </Box>
