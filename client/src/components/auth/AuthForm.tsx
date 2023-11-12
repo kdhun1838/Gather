@@ -280,8 +280,6 @@ const AuthForm: React.FC<textMapProps> = ({
       <Footer>
         {type === 'login' ? (
           <div>
-            <button>아이디찾기</button>
-            <button>비번찾기</button>
             <Link to="/signup">회원가입</Link>
           </div>
         ) : (

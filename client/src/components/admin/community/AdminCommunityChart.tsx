@@ -1,13 +1,13 @@
-import React from "react";
-import { Col, Row } from "antd";
-import { Box } from "../home/AdminHome";
+import React from 'react';
+import { Col, Row } from 'antd';
+import { Box } from '../home/AdminHome';
 import {
   TableTitle,
   TableTitleBlock,
-} from "../home/register/AdminHomeRegister";
-import AdminCommunityChartCategoryContainer from "../../../container/admin/community/chart/AdminCommunityChartCategoryContainer";
-import AdminCommunityChartMonthContainer from "../../../container/admin/community/chart/AdminCommunityChartMonthContainer";
-import AdminCommunityChartDayContainer from "../../../container/admin/community/chart/AdminCommunityChartDayContainer";
+} from '../home/register/AdminHomeRegister';
+import AdminCommunityChartCategoryContainer from '../../../container/admin/community/chart/AdminCommunityChartCategoryContainer';
+import AdminCommunityChartMonthContainer from '../../../container/admin/community/chart/AdminCommunityChartMonthContainer';
+import AdminCommunityChartDayContainer from '../../../container/admin/community/chart/AdminCommunityChartDayContainer';
 const AdminCommunityChart = () => {
   return (
     <div>

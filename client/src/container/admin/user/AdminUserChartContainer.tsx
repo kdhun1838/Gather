@@ -1,5 +1,5 @@
-import React from "react";
-import AdminUserChart from "../../../components/admin/user/AdminUserChart";
+import React from 'react';
+import AdminUserChart from '../../../components/admin/user/AdminUserChart';
 
 const AdminUserChartContainer = () => {
   return (
