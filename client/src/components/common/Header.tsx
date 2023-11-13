@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
     dispatch(logout(user));
   };
   const [currentLocation, setCurrentLocation] = React.useState<string>(
-    location.pathname
+    location.pathname.split("/").slice(0, 2).join("/")
   );
   const [isUserListOpen, setUserListOpen] = useState(false);
   const toggleUserList = () => {
@@ -58,8 +58,12 @@ const Header: React.FC<HeaderProps> = ({
 
   const onChange = (key: string) => {
     navigate(key);
-    setCurrentLocation(location.pathname);
+    setCurrentLocation(location.pathname.split("/").slice(0, 2).join("/"));
   };
+
+  React.useEffect(() => {
+    setCurrentLocation(location.pathname.split("/").slice(0, 2).join("/"));
+  }, [location.pathname]);
 
   return (
     <ConfigProvider
