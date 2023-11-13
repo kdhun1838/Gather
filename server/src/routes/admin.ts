@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
-import models from '../models';
-import multer from 'multer';
-import { Op } from 'sequelize';
-import moment from 'moment';
-import cron from 'node-cron';
+import express, { Request, Response, NextFunction } from "express";
+import models from "../models";
+import multer from "multer";
+import { Op } from "sequelize";
+import moment from "moment";
+import cron from "node-cron";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ interface DateCounts {
   };
 }
 //메인
-router.get('/getMessages', async (req: Request, res: Response) => {
+router.get("/getMessages", async (req: Request, res: Response) => {
   try {
     const messages = await models.messages.findAll({
       where: {
@@ -24,10 +24,10 @@ router.get('/getMessages', async (req: Request, res: Response) => {
       include: [
         {
           model: models.users,
-          attributes: ['nick', 'grade'],
+          attributes: ["nick", "grade"],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: 6,
     });
     res.status(200).json(messages);
@@ -36,7 +36,7 @@ router.get('/getMessages', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/postMessages', async (req: Request, res: Response) => {
+router.post("/postMessages", async (req: Request, res: Response) => {
   try {
     const { text, userNum } = req.body;
     const data = await models.messages.create({
@@ -49,10 +49,10 @@ router.post('/postMessages', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/postDelete/:messageNum', async (req: Request, res: Response) => {
+router.post("/postDelete/:messageNum", async (req: Request, res: Response) => {
   try {
     const messageNum = req.params.messageNum;
-    console.log('번호', messageNum);
+    console.log("번호", messageNum);
 
     const deleteData = await models.messages.update(
       { state: 1 },
@@ -67,11 +67,11 @@ router.post('/postDelete/:messageNum', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/topInfo', async (req: Request, res: Response) => {
+router.get("/topInfo", async (req: Request, res: Response) => {
   try {
     const userData = await models.users.findAndCountAll({
       attributes: {
-        exclude: ['password'],
+        exclude: ["password"],
       },
       nest: true,
     });
@@ -131,8 +131,8 @@ router.get('/topInfo', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/visitor', async (req: Request, res: Response) => {
-  console.log('방문자백');
+router.get("/visitor", async (req: Request, res: Response) => {
+  console.log("방문자백");
   try {
     const today = new Date();
     const oneWeekAgo = new Date(today);
@@ -144,7 +144,7 @@ router.get('/visitor', async (req: Request, res: Response) => {
           [Op.between]: [oneWeekAgo, today],
         },
       },
-      order: [['date', 'ASC']],
+      order: [["date", "ASC"]],
     });
 
     res.status(200).json(data);
@@ -152,7 +152,7 @@ router.get('/visitor', async (req: Request, res: Response) => {
     res.status(500);
   }
 });
-router.get('/weekRegister', async (req, res) => {
+router.get("/weekRegister", async (req, res) => {
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
@@ -240,7 +240,7 @@ router.get('/weekRegister', async (req, res) => {
         userDataCount: dateCounts[date].userDataCount,
       }));
     result.push({
-      date: '최근 7일 합계',
+      date: "최근 7일 합계",
       registerDataCount: totalRegisterDataCount,
       communityDataCount: totalCommunityDataCount,
       userDataCount: totalUserDataCount,
@@ -249,7 +249,7 @@ router.get('/weekRegister', async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -261,7 +261,7 @@ const uniqueFileName = (name: string) => {
 
 const storage = multer.diskStorage({
   destination(req, file, done) {
-    done(null, '../client/public');
+    done(null, "../client/public");
   },
   filename(req, file, done) {
     done(null, uniqueFileName(file.originalname));
@@ -274,14 +274,13 @@ const upload = multer({
 });
 
 router.post(
-  '/uploadImg',
-  upload.single('file'),
+  "/uploadImg",
+  upload.single("file"),
   async (req: Request, res: Response) => {
     if (!req.file) {
-      return res.status(400).send('업로드실패');
+      return res.status(400).send("업로드실패");
     }
     const { content, link, backgroundColor, textColor, onlyImg } = req.body;
-    // const newCarousel = await models.carousels.findAll({});
 
     const newUpload = await models.carousels.create({
       content,
@@ -295,7 +294,7 @@ router.post(
       onlyImg: Number(onlyImg),
     });
     if (newUpload === null) {
-      res.status(400).send('등록실패하였습니다.');
+      res.status(400).send("등록실패하였습니다.");
     } else {
       res.status(200);
     }
@@ -303,7 +302,7 @@ router.post(
 );
 
 router.get(
-  '/getCarousel',
+  "/getCarousel",
   async (req: Request, res: Response, next: NextFunction) => {
     const Carousel = await models.carousels.findAll({});
     try {
@@ -315,7 +314,7 @@ router.get(
 );
 
 router.post(
-  '/clickCarousel',
+  "/clickCarousel",
   async (req: Request, res: Response, next: NextFunction) => {
     const carouselNum = req.body.carouselNum;
     try {
@@ -332,8 +331,8 @@ router.post(
 );
 
 router.post(
-  '/updateCarousel/',
-  upload.single('file'),
+  "/updateCarousel/",
+  upload.single("file"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { content, link, carouselNum, backgroundColor, textColor, onlyImg } =
       req.body;
@@ -361,7 +360,7 @@ router.post(
 );
 
 router.delete(
-  '/deleteCarousel/:carouselNum',
+  "/deleteCarousel/:carouselNum",
   async (req: Request, res: Response, next: NextFunction) => {
     const carouselNum = req.params.carouselNum;
     try {
@@ -377,7 +376,7 @@ router.delete(
 
 //유저관리
 
-router.delete('/deleteUser/:userNum', async (req: Request, res: Response) => {
+router.delete("/deleteUser/:userNum", async (req: Request, res: Response) => {
   const userNum = req.params.userNum;
   try {
     await models.users.destroy({
@@ -389,7 +388,7 @@ router.delete('/deleteUser/:userNum', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/updateUserGrade', async (req: Request, res: Response) => {
+router.post("/updateUserGrade", async (req: Request, res: Response) => {
   const { userNum, grade } = req.body;
   try {
     if (grade === 2) {
@@ -412,7 +411,7 @@ router.post('/updateUserGrade', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/getUserDetail/:userNum', async (req: Request, res: Response) => {
+router.get("/getUserDetail/:userNum", async (req: Request, res: Response) => {
   const userNum = req.params.userNum;
   try {
     const User = await models.users.findOne({ where: { userNum } });
@@ -433,7 +432,7 @@ router.get('/getUserDetail/:userNum', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/getUserChart/grade', async (req: Request, res: Response) => {
+router.get("/getUserChart/grade", async (req: Request, res: Response) => {
   try {
     const superadmin = await models.users.count({
       where: { grade: 3 },
@@ -445,9 +444,9 @@ router.get('/getUserChart/grade', async (req: Request, res: Response) => {
       where: { grade: 1 },
     });
     const data = [
-      { id: '최고관리자', value: superadmin },
-      { id: '관리자', value: admin },
-      { id: '일반유저', value: user },
+      { id: "최고관리자", value: superadmin },
+      { id: "관리자", value: admin },
+      { id: "일반유저", value: user },
     ];
     res.status(200).json(data);
   } catch (error) {
@@ -455,7 +454,7 @@ router.get('/getUserChart/grade', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/getUserChart/month', async (req, res) => {
+router.get("/getUserChart/month", async (req, res) => {
   try {
     const currentYear = new Date().getFullYear();
     const monthlyData = [];
@@ -483,7 +482,7 @@ router.get('/getUserChart/month', async (req, res) => {
   }
 });
 
-router.get('/getUserChart/day', async (req, res) => {
+router.get("/getUserChart/day", async (req, res) => {
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
@@ -527,14 +526,14 @@ router.get('/getUserChart/day', async (req, res) => {
 
 //모임게시판 관리
 
-router.get('/getRegister', async (req: Request, res: Response) => {
+router.get("/getRegister", async (req: Request, res: Response) => {
   try {
     const data = await models.registers.findAll({
       include: [
         {
           nest: true,
           model: models.users,
-          attributes: ['id', 'nick', 'name'],
+          attributes: ["id", "nick", "name"],
         },
       ],
     });
@@ -572,26 +571,26 @@ router.get('/getRegister', async (req: Request, res: Response) => {
 });
 
 router.get(
-  '/getRegisterChart/category',
+  "/getRegisterChart/category",
   async (req: Request, res: Response) => {
     try {
       const sport = await models.registers.count({
-        where: { category: '운동' },
+        where: { category: "운동" },
       });
       const game = await models.registers.count({
-        where: { category: '게임' },
+        where: { category: "게임" },
       });
       const study = await models.registers.count({
-        where: { category: '스터디' },
+        where: { category: "스터디" },
       });
       const etc = await models.registers.count({
-        where: { category: '기타' },
+        where: { category: "기타" },
       });
       const data = [
-        { id: '운동', value: sport },
-        { id: '게임', value: game },
-        { id: '스터디', value: study },
-        { id: '기타', value: etc },
+        { id: "운동", value: sport },
+        { id: "게임", value: game },
+        { id: "스터디", value: study },
+        { id: "기타", value: etc },
       ];
       res.status(200).json(data);
     } catch (error) {
@@ -600,7 +599,7 @@ router.get(
   }
 );
 
-router.get('/getRegisterChart/month', async (req, res) => {
+router.get("/getRegisterChart/month", async (req, res) => {
   try {
     const currentYear = new Date().getFullYear();
     const monthlyData = [];
@@ -615,7 +614,7 @@ router.get('/getRegisterChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '운동',
+          category: "운동",
         },
       });
       const studyCount = await models.registers.count({
@@ -624,7 +623,7 @@ router.get('/getRegisterChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '스터디',
+          category: "스터디",
         },
       });
       const gameCount = await models.registers.count({
@@ -633,7 +632,7 @@ router.get('/getRegisterChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '게임',
+          category: "게임",
         },
       });
       const etcCount = await models.registers.count({
@@ -642,7 +641,7 @@ router.get('/getRegisterChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '기타',
+          category: "기타",
         },
       });
 
@@ -656,14 +655,14 @@ router.get('/getRegisterChart/month', async (req, res) => {
     }
     res.status(200).json(monthlyData);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-router.get('/getRegisterChart/day', async (req, res) => {
+router.get("/getRegisterChart/day", async (req, res) => {
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
-    oneWeekAgo.setDate(currentDate.getDate() - 6); // 일주일 전부터 오늘까지
+    oneWeekAgo.setDate(currentDate.getDate() - 6);
 
     const dailyData = [];
 
@@ -676,9 +675,9 @@ router.get('/getRegisterChart/day', async (req, res) => {
       }월 ${date.getDate()}일(${getDayName(date)})`;
 
       const startDate = new Date(date);
-      startDate.setHours(0, 0, 0, 0); // 날짜의 시작 시간
+      startDate.setHours(0, 0, 0, 0);
       const endDate = new Date(date);
-      endDate.setHours(23, 59, 59, 999); // 날짜의 끝 시간
+      endDate.setHours(23, 59, 59, 999);
 
       const sportCount = await models.registers.count({
         where: {
@@ -686,7 +685,7 @@ router.get('/getRegisterChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '운동',
+          category: "운동",
         },
       });
       const studyCount = await models.registers.count({
@@ -695,7 +694,7 @@ router.get('/getRegisterChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '스터디',
+          category: "스터디",
         },
       });
       const gameCount = await models.registers.count({
@@ -704,7 +703,7 @@ router.get('/getRegisterChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '게임',
+          category: "게임",
         },
       });
       const etcCount = await models.registers.count({
@@ -713,7 +712,7 @@ router.get('/getRegisterChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '기타',
+          category: "기타",
         },
       });
 
@@ -725,28 +724,74 @@ router.get('/getRegisterChart/day', async (req, res) => {
         기타: etcCount,
       });
     }
-    console.log('ddd', dailyData);
     res.status(200).json(dailyData);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
 function getDayName(date: any) {
-  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
   return dayNames[date.getDay()];
 }
 
+router.get("/getRegisterChart/table", async (req: Request, res: Response) => {
+  try {
+    const data = await models.registers.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ["id", "nick", "name"],
+        },
+      ],
+      where: {
+        state: 1,
+      },
+      order: [["view", "DESC"]],
+      limit: 5,
+    });
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        category: item.category,
+        contact: item.contact,
+        content: item.content,
+        createdAt: item.createdAt,
+        favorite: item.favorite,
+        meeting: item.meeting,
+        period: item.period,
+        personnel: item.personnel,
+        position: item.position,
+        registerNum: item.registerNum,
+        state: item.state,
+        title: item.title,
+        updatedAt: item.updatedAt,
+        userNum: item.userNum,
+        view: item.view,
+      };
+      return restOfData;
+    });
+    console.log("data===", transformedData);
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 // 커뮤니티 관리
 
-router.get('/getCommunity', async (req: Request, res: Response) => {
+router.get("/getCommunity", async (req: Request, res: Response) => {
   try {
     const data = await models.communitys.findAll({
       include: [
         {
           nest: true,
           model: models.users,
-          attributes: ['id', 'nick', 'name'],
+          attributes: ["id", "nick", "name"],
         },
       ],
     });
@@ -778,22 +823,22 @@ router.get('/getCommunity', async (req: Request, res: Response) => {
 });
 
 router.get(
-  '/getCommunityChart/category',
+  "/getCommunityChart/category",
   async (req: Request, res: Response) => {
     try {
       const review = await models.communitys.count({
-        where: { category: '후기' },
+        where: { category: "후기" },
       });
       const question = await models.communitys.count({
-        where: { category: '질문' },
+        where: { category: "질문" },
       });
       const etc = await models.communitys.count({
-        where: { category: '잡담' },
+        where: { category: "잡담" },
       });
       const data = [
-        { id: '후기', value: review },
-        { id: '질문', value: question },
-        { id: '잡담', value: etc },
+        { id: "후기", value: review },
+        { id: "질문", value: question },
+        { id: "잡담", value: etc },
       ];
       res.status(200).json(data);
     } catch (error) {
@@ -801,7 +846,7 @@ router.get(
     }
   }
 );
-router.get('/getCommunityChart/month', async (req, res) => {
+router.get("/getCommunityChart/month", async (req, res) => {
   try {
     const currentYear = new Date().getFullYear();
     const monthlyData = [];
@@ -816,7 +861,7 @@ router.get('/getCommunityChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '잡담',
+          category: "잡담",
         },
       });
       const askCount = await models.communitys.count({
@@ -825,7 +870,7 @@ router.get('/getCommunityChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '질문',
+          category: "질문",
         },
       });
       const reviewCount = await models.communitys.count({
@@ -834,7 +879,7 @@ router.get('/getCommunityChart/month', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '후기',
+          category: "후기",
         },
       });
 
@@ -847,10 +892,10 @@ router.get('/getCommunityChart/month', async (req, res) => {
     }
     res.status(200).json(monthlyData);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-router.get('/getCommunityChart/day', async (req, res) => {
+router.get("/getCommunityChart/day", async (req, res) => {
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
@@ -877,7 +922,7 @@ router.get('/getCommunityChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '잡담',
+          category: "잡담",
         },
       });
       const askCount = await models.communitys.count({
@@ -886,7 +931,7 @@ router.get('/getCommunityChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '질문',
+          category: "질문",
         },
       });
       const reviewCount = await models.communitys.count({
@@ -895,7 +940,7 @@ router.get('/getCommunityChart/day', async (req, res) => {
             [Op.gte]: startDate,
             [Op.lte]: endDate,
           },
-          category: '후기',
+          category: "후기",
         },
       });
 
@@ -906,10 +951,51 @@ router.get('/getCommunityChart/day', async (req, res) => {
         후기: reviewCount,
       });
     }
-    console.log('ddd', dailyData);
+    console.log("ddd", dailyData);
     res.status(200).json(dailyData);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/getCommunityChart/table", async (req: Request, res: Response) => {
+  console.log("왓다");
+  try {
+    const data = await models.communitys.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ["id", "nick", "name"],
+        },
+      ],
+      order: [["view", "DESC"]],
+      limit: 5,
+    });
+
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        communityNum: item.communityNum,
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        userNum: item.userId,
+        title: item.title,
+        category: item.category,
+        content: item.content,
+        detail: item.detail,
+        view: item.view,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+
+      return restOfData;
+    });
+    console.log("data===", transformedData);
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
   }
 });
 
@@ -921,7 +1007,7 @@ const createOrUpdateVisitorRecord = async () => {
       currentDate.getTime() + 9 * 60 * 60 * 1000
     )
       .toISOString()
-      .split('T')[0];
+      .split("T")[0];
     const existingRecord = await models.visitors.findOne({
       where: { date: currentDateString },
     });
@@ -940,11 +1026,11 @@ const createOrUpdateVisitorRecord = async () => {
       console.log(`새로운 레코드를 추가했습니다. date: ${currentDateString}`);
     }
   } catch (e) {
-    console.error('오류가 발생했습니다:', e);
+    console.error("오류가 발생했습니다:", e);
   }
 };
 
-cron.schedule('0 0 * * *', () => {
+cron.schedule("0 0 * * *", () => {
   createOrUpdateVisitorRecord();
 });
 

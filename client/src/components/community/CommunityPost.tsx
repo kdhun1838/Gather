@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { changeDate } from "./Community";
 import CommunityCommentContainer from "../../container/community/CommunityCommentContainer";
+import HeaderContainer from "../../container/common/HeaderContainer";
 
 const PostContainer = styled.div`
   max-width: 900px;
@@ -106,39 +107,42 @@ const CommunityPost: React.FC<PostPropsType> = ({
   }
 
   return (
-    <PostContainer>
-      <TitleBox>
-        <div onClick={onClickBack}>뒤로가기버튼</div>
-        <Title>{post?.title}</Title>
-        <NameAndDateBox>
-          <div>
-            <div className="username">{post?.User?.nick}</div>
-            <div className="line"></div>
-            <div className="date">{changeDate(post?.createdAt)}</div>
-          </div>
-          <div>
-            {post?.User?.userNum === userNum ||
-              (isAdmin && (
-                <>
-                  <div onClick={onClickDeletPost}>삭제</div>
-                  <div className="line"></div>
-                  <div onClick={onClickPostEdit}>수정</div>
-                </>
-              ))}
-          </div>
-        </NameAndDateBox>
-      </TitleBox>
-      <PostContentBox
-        dangerouslySetInnerHTML={{ __html: post?.content }}
-      ></PostContentBox>
-      <ViewAndFavoriteBox>
-        <div>조회수: {post?.view}</div>
-        <div>즐겨찾기 버튼</div>
-      </ViewAndFavoriteBox>
-      <CommentBox>
-        <CommunityCommentContainer />
-      </CommentBox>
-    </PostContainer>
+    <>
+      <HeaderContainer />
+      <PostContainer>
+        <TitleBox>
+          <div onClick={onClickBack}>뒤로가기버튼</div>
+          <Title>{post?.title}</Title>
+          <NameAndDateBox>
+            <div>
+              <div className="username">{post?.User?.nick}</div>
+              <div className="line"></div>
+              <div className="date">{changeDate(post?.createdAt)}</div>
+            </div>
+            <div>
+              {post?.User?.userNum === userNum ||
+                (isAdmin && (
+                  <>
+                    <div onClick={onClickDeletPost}>삭제</div>
+                    <div className="line"></div>
+                    <div onClick={onClickPostEdit}>수정</div>
+                  </>
+                ))}
+            </div>
+          </NameAndDateBox>
+        </TitleBox>
+        <PostContentBox
+          dangerouslySetInnerHTML={{ __html: post?.content }}
+        ></PostContentBox>
+        <ViewAndFavoriteBox>
+          <div>조회수: {post?.view}</div>
+          <div>즐겨찾기 버튼</div>
+        </ViewAndFavoriteBox>
+        <CommentBox>
+          <CommunityCommentContainer />
+        </CommentBox>
+      </PostContainer>
+    </>
   );
 };
 
