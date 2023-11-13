@@ -455,6 +455,90 @@ router.get('/getUserChart/grade', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/getUserChart/gender', async (req: Request, res: Response) => {
+  try {
+    const maleuser = await models.users.count({
+      where: { gender: '남' },
+    });
+    const femaleuser = await models.users.count({
+      where: { gender: '여' },
+    });
+    const data = [
+      { id: '남자', value: maleuser },
+      { id: '여자', value: femaleuser },
+    ];
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+router.get('/getUserChart/age', async (req: Request, res: Response) => {
+  try {
+    const twentylate = await models.users.count({
+      where: { age: { [Op.lte]: 20 } },
+    });
+    const twenty = await models.users.count({
+      where: {
+        age: {
+          [Op.and]: [
+            { [Op.gte]: 20 }, // 이상
+            { [Op.lt]: 30 }, // 미만
+          ],
+        },
+      },
+    });
+    const thirty = await models.users.count({
+      where: {
+        age: {
+          [Op.and]: [
+            { [Op.gte]: 30 }, // 이상
+            { [Op.lt]: 40 }, // 미만
+          ],
+        },
+      },
+    });
+    const forty = await models.users.count({
+      where: {
+        age: {
+          [Op.and]: [
+            { [Op.gte]: 40 }, // 이상
+            { [Op.lt]: 50 }, // 미만
+          ],
+        },
+      },
+    });
+    const fifty = await models.users.count({
+      where: {
+        age: {
+          [Op.and]: [
+            { [Op.gte]: 50 }, // 이상
+            { [Op.lt]: 60 }, // 미만
+          ],
+        },
+      },
+    });
+    const sixty = await models.users.count({
+      where: {
+        age: {
+          [Op.gte]: 60,
+        },
+      },
+    });
+    const data = [
+      { id: '20대 미만', value: twentylate },
+      { id: '20대', value: twenty },
+      { id: '30대', value: thirty },
+      { id: '40대', value: forty },
+      { id: '50대', value: fifty },
+      { id: '60대 이상', value: sixty },
+    ];
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
 router.get('/getUserChart/month', async (req, res) => {
   try {
     const currentYear = new Date().getFullYear();

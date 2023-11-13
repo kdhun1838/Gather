@@ -6,6 +6,8 @@ import {
   TableTitleBlock,
 } from '../home/register/AdminHomeRegister';
 import AdminUserChartGradeContainer from '../../../container/admin/user/chart/AdminUserChartGradeContainer';
+import AdminUserChartGenderContainer from '../../../container/admin/user/chart/AdminUserChartGenderContainer';
+import AdminUserChartAgeContainer from '../../../container/admin/user/chart/AdminUserChartAgeContainer';
 import AdminUserChartMonthContainer from '../../../container/admin/user/chart/AdminUserChartMonthContainer';
 import AdminUserChartDayContainer from '../../../container/admin/user/chart/AdminUserChartDayContainer';
 
@@ -21,11 +23,20 @@ const AdminUserChart = () => {
             <AdminUserChartGradeContainer />
           </Box>
         </Col>
-        <Col span={16}>
+        <Col span={8}>
           <Box height={24}>
             <TableTitleBlock>
-              <TableTitle>보류</TableTitle>
+              <TableTitle>가입자 성비 차트</TableTitle>
             </TableTitleBlock>
+            <AdminUserChartGenderContainer />
+          </Box>
+        </Col>
+        <Col span={8}>
+          <Box height={24}>
+            <TableTitleBlock>
+              <TableTitle>세대별 가입자 차트</TableTitle>
+            </TableTitleBlock>
+            <AdminUserChartAgeContainer />
           </Box>
         </Col>
       </Row>

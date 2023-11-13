@@ -61,6 +61,14 @@ export const getUserChart = (): Promise<AxiosResponse> => {
   return client.get('/admin/getUserChart/grade');
 };
 
+export const getUserChartgender = (): Promise<AxiosResponse> => {
+  return client.get('/admin/getUserChart/gender');
+};
+
+export const getUserChartage = (): Promise<AxiosResponse> => {
+  return client.get('/admin/getUserChart/age');
+};
+
 export const getUserMonthChart = (): Promise<AxiosResponse> => {
   return client.get('/admin/getUserChart/month');
 };

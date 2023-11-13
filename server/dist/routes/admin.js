@@ -387,6 +387,90 @@ router.get('/getUserChart/grade', (req, res) => __awaiter(void 0, void 0, void 0
         res.status(500);
     }
 }));
+router.get('/getUserChart/gender', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const maleuser = yield models_1.default.users.count({
+            where: { gender: '남' },
+        });
+        const femaleuser = yield models_1.default.users.count({
+            where: { gender: '여' },
+        });
+        const data = [
+            { id: '남자', value: maleuser },
+            { id: '여자', value: femaleuser },
+        ];
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
+router.get('/getUserChart/age', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const twentylate = yield models_1.default.users.count({
+            where: { age: { [sequelize_1.Op.lte]: 20 } },
+        });
+        const twenty = yield models_1.default.users.count({
+            where: {
+                age: {
+                    [sequelize_1.Op.and]: [
+                        { [sequelize_1.Op.gte]: 20 },
+                        { [sequelize_1.Op.lt]: 30 }, // 미만
+                    ],
+                },
+            },
+        });
+        const thirty = yield models_1.default.users.count({
+            where: {
+                age: {
+                    [sequelize_1.Op.and]: [
+                        { [sequelize_1.Op.gte]: 30 },
+                        { [sequelize_1.Op.lt]: 40 }, // 미만
+                    ],
+                },
+            },
+        });
+        const forty = yield models_1.default.users.count({
+            where: {
+                age: {
+                    [sequelize_1.Op.and]: [
+                        { [sequelize_1.Op.gte]: 40 },
+                        { [sequelize_1.Op.lt]: 50 }, // 미만
+                    ],
+                },
+            },
+        });
+        const fifty = yield models_1.default.users.count({
+            where: {
+                age: {
+                    [sequelize_1.Op.and]: [
+                        { [sequelize_1.Op.gte]: 50 },
+                        { [sequelize_1.Op.lt]: 60 }, // 미만
+                    ],
+                },
+            },
+        });
+        const sixty = yield models_1.default.users.count({
+            where: {
+                age: {
+                    [sequelize_1.Op.gte]: 60,
+                },
+            },
+        });
+        const data = [
+            { id: '20대 미만', value: twentylate },
+            { id: '20대', value: twenty },
+            { id: '30대', value: thirty },
+            { id: '40대', value: forty },
+            { id: '50대', value: fifty },
+            { id: '60대 이상', value: sixty },
+        ];
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 router.get('/getUserChart/month', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const currentYear = new Date().getFullYear();

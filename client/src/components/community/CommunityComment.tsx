@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const CommentBox = styled.div`
   display: flex;
@@ -55,6 +55,8 @@ const CommentButton = styled.button`
   font-weight: 700;
   color: #fff;
   font-size: 16px;
+  align-items: center;
+  display: flex;
 `;
 
 const CommentsBox = styled.ul`
@@ -212,7 +214,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                   <CreatedTime> {comment?.createdAt}</CreatedTime>
                 </div>
                 <div>
-                  <button onClick={(e) => showReplyBox("comment", index)}>
+                  <button onClick={(e) => showReplyBox('comment', index)}>
                     답글
                   </button>
                   <button>신고</button>
@@ -266,7 +268,7 @@ const CommunityComment: React.FC<CommentPorpsType> = ({
                         </div>
 
                         <div>
-                          <button onClick={() => showReplyBox("reply", index)}>
+                          <button onClick={() => showReplyBox('reply', index)}>
                             답글
                           </button>
                           <button>신고</button>
