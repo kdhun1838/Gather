@@ -77,6 +77,29 @@ const CommentBox = styled.div`
   padding-bottom: 80px;
 `;
 
+const ButtonForm = styled.div`
+  display: flex;
+  width: 100%;
+
+  button {
+    width: 150px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #fff;
+    border: 2px solid black !important;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    color: black !important;
+
+    &:first-child {
+      margin-right: 20px;
+      border: 2px solid #59d5f0;
+      color: #59d5f0;
+    }
+  }
+`;
+
 type PostPropsType = {
   post: any;
   user: Record<string, string>;
@@ -111,7 +134,9 @@ const CommunityPost: React.FC<PostPropsType> = ({
       <HeaderContainer />
       <PostContainer>
         <TitleBox>
-          <div onClick={onClickBack}>뒤로가기버튼</div>
+          <ButtonForm>
+            <button onClick={onClickBack}>뒤로가기</button>
+          </ButtonForm>
           <Title>{post?.title}</Title>
           <NameAndDateBox>
             <div>
@@ -136,7 +161,6 @@ const CommunityPost: React.FC<PostPropsType> = ({
         ></PostContentBox>
         <ViewAndFavoriteBox>
           <div>조회수: {post?.view}</div>
-          <div>즐겨찾기 버튼</div>
         </ViewAndFavoriteBox>
         <CommentBox>
           <CommunityCommentContainer />

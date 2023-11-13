@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Button from "../common/Button";
-import Header from "../common/Header";
-import DaumPostcode from "react-daum-postcode";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Button from '../common/Button';
+import Header from '../common/Header';
+import DaumPostcode from 'react-daum-postcode';
+import HeaderContainer from '../../container/common/HeaderContainer';
 
 const MyPagediv = styled.div`
   width: 100%;
@@ -68,7 +69,7 @@ const MyPage: React.FC<MyPageProps> = ({
   };
 
   const [isAddressModalOpen, setAddressModalOpen] = useState(false);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
 
   const handleOpenAddressModal = () => {
     setAddressModalOpen(true);
@@ -82,7 +83,7 @@ const MyPage: React.FC<MyPageProps> = ({
     handleCloseAddressModal(); // 모달 닫기
     handleInputChange({
       target: {
-        name: "addr",
+        name: 'addr',
         value: data.address,
       },
     } as React.ChangeEvent<HTMLInputElement>);
@@ -100,97 +101,104 @@ const MyPage: React.FC<MyPageProps> = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
   return (
-    <MyPagediv>
-      <Nickname>환영합니다</Nickname>
-      <form>
-        <Inputnick>이름</Inputnick>
-        <StyledInput
-          name="name"
-          value={user.name}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Inputnick>닉네임</Inputnick>
-        <StyledInput
-          name="nick"
-          value={user.nick}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Inputnick>이메일</Inputnick>
-        <StyledInput
-          name="email"
-          value={user.email}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Inputnick>전화번호</Inputnick>
-        <StyledInput name="tel" value={user.tel} onChange={handleInputChange} />
-        <Inputnick>주소</Inputnick>
-        <StyledInput
-          name="addr"
-          value={user.addr}
-          onChange={(e) => handleAddressChange(e)}
-        />
-        <div>
-          <button
+    <>
+      <HeaderContainer />
+      <MyPagediv>
+        <Nickname>환영합니다</Nickname>
+        <form>
+          <Inputnick>이름</Inputnick>
+          <StyledInput
+            name="name"
+            value={user.name}
+            onChange={(e) => handleInputChange(e)}
+          />
+          <Inputnick>닉네임</Inputnick>
+          <StyledInput
+            name="nick"
+            value={user.nick}
+            onChange={(e) => handleInputChange(e)}
+          />
+          <Inputnick>이메일</Inputnick>
+          <StyledInput
+            name="email"
+            value={user.email}
+            onChange={(e) => handleInputChange(e)}
+          />
+          <Inputnick>전화번호</Inputnick>
+          <StyledInput
+            name="tel"
+            value={user.tel}
+            onChange={handleInputChange}
+          />
+          <Inputnick>주소</Inputnick>
+          <StyledInput
+            name="addr"
+            value={user.addr}
+            onChange={(e) => handleAddressChange(e)}
+          />
+          <div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleOpenAddressModal();
+              }}
+            >
+              주소찾기
+            </button>
+          </div>
+          <Inputnick>상세주소</Inputnick>
+          <StyledInput
+            name="addr_detail"
+            onChange={(e) => handleInputChange(e)}
+          />
+          <Inputnick>성별</Inputnick>
+          <div>
+            <input
+              type="radio"
+              name="gender"
+              value={'남'}
+              checked={user.gender === '남'}
+              onChange={(e) => handleInputChange(e)}
+            />
+            남
+            <input
+              type="radio"
+              name="gender"
+              value={'여'}
+              checked={user.gender === '여'}
+              onChange={(e) => handleInputChange(e)}
+            />
+            여
+          </div>
+          {isAddressModalOpen && (
+            <div className="DaumPostcode">
+              <DaumPostcode
+                onComplete={handleAddressComplete}
+                autoClose
+                style={{
+                  width: '400px',
+                  height: '300px',
+                  top: '40px',
+                  position: 'absolute',
+                  zIndex: 100,
+                  border: '1px solid #ccc',
+                }}
+              />
+              <button onClick={handleCloseAddressModal}>닫기</button>
+            </div>
+          )}
+          <Button onClick={handleProfileSave}>프로필 저장</Button>
+          <Button
             onClick={(e) => {
               e.preventDefault();
-              handleOpenAddressModal();
+              onDel();
             }}
           >
-            주소찾기
-          </button>
-        </div>
-        <Inputnick>상세주소</Inputnick>
-        <StyledInput
-          name="addr_detail"
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Inputnick>성별</Inputnick>
-        <div>
-          <input
-            type="radio"
-            name="gender"
-            value={"남"}
-            checked={user.gender === "남"}
-            onChange={(e) => handleInputChange(e)}
-          />
-          남
-          <input
-            type="radio"
-            name="gender"
-            value={"여"}
-            checked={user.gender === "여"}
-            onChange={(e) => handleInputChange(e)}
-          />
-          여
-        </div>
-        {isAddressModalOpen && (
-          <div className="DaumPostcode">
-            <DaumPostcode
-              onComplete={handleAddressComplete}
-              autoClose
-              style={{
-                width: "400px",
-                height: "300px",
-                top: "40px",
-                position: "absolute",
-                zIndex: 100,
-                border: "1px solid #ccc",
-              }}
-            />
-            <button onClick={handleCloseAddressModal}>닫기</button>
-          </div>
-        )}
-        <Button onClick={handleProfileSave}>프로필 저장</Button>
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            onDel();
-          }}
-        >
-          회원탈퇴
-        </Button>
-      </form>
-    </MyPagediv>
+            회원탈퇴
+          </Button>
+        </form>
+      </MyPagediv>
+    </>
   );
 };
 
