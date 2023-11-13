@@ -79,18 +79,18 @@ const CommentBox = styled.div`
 
 const ButtonForm = styled.div`
   display: flex;
-  justify-content: center;
   width: 100%;
 
   button {
-    width: 200px;
+    width: 150px;
     font-size: 20px;
     font-weight: bold;
     background: #fff;
-    border: 2px solid #ddd;
+    border: 2px solid black !important;
     border-radius: 5px;
-    padding: 10px;
+    padding: 2px;
     cursor: pointer;
+    color: black !important;
 
     &:first-child {
       margin-right: 20px;

@@ -198,11 +198,11 @@ const AuthForm: React.FC<textMapProps> = ({
         )}
         {type === 'register' && (
           <div className="span">
-            <span>생년월일</span>
+            <span>나이</span>
             <StyledInput
               autoComplete="age"
               name="age"
-              placeholder="생년월일"
+              placeholder="나이"
               onChange={(e) => onChange({ key: 'age', value: e.target.value })}
               // value={form.register.age}
             />

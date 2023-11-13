@@ -1,34 +1,34 @@
-import React, { useState } from "react";
-import { Spacing } from "./admin/AdminHeader";
-import styled from "styled-components";
-import { ConfigProvider, Tabs } from "antd";
-import type { TabsProps } from "antd";
-import { useLocation, useNavigate } from "react-router";
-import { Carousel } from "antd";
-import Responsive from "../../styled/Responsive";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "./Button";
-import { logout } from "../../modules/user/action";
-import Logo from "../../images/Logo.png";
-import { UserState } from "../../modules/user/type";
-import { FaCaretDown } from "react-icons/fa";
+import React, { useState } from 'react';
+import { Spacing } from './admin/AdminHeader';
+import styled from 'styled-components';
+import { ConfigProvider, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { useLocation, useNavigate } from 'react-router';
+import { Carousel } from 'antd';
+import Responsive from '../../styled/Responsive';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from './Button';
+import { logout } from '../../modules/user/action';
+import Logo from '../../images/Logo.png';
+import { UserState } from '../../modules/user/type';
+import { FaCaretDown } from 'react-icons/fa';
 
-const items: TabsProps["items"] = [
+const items: TabsProps['items'] = [
   {
-    key: "/",
-    label: "모임게시판",
+    key: '/',
+    label: '모임게시판',
   },
   {
-    key: "/community",
-    label: "커뮤니티",
+    key: '/community',
+    label: '커뮤니티',
   },
 ];
 const contentStyle: React.CSSProperties = {
-  height: "20rem",
-  color: "#000",
+  height: '20rem',
+  color: '#000',
   // lineHeight: "160px",
-  textAlign: "center",
+  textAlign: 'center',
 };
 
 interface HeaderProps {
@@ -48,8 +48,8 @@ const Header: React.FC<HeaderProps> = ({
   const onLogout = () => {
     dispatch(logout(user));
   };
-  const [currentLocation, setCurrentLocation] = React.useState<string>(
-    location.pathname
+  const [currentLocation, setCurrentLocation] = React.useState(
+    location.pathname.split('/').slice(0, 2).join('/')
   );
   const [isUserListOpen, setUserListOpen] = useState(false);
   const toggleUserList = () => {
@@ -58,19 +58,23 @@ const Header: React.FC<HeaderProps> = ({
 
   const onChange = (key: string) => {
     navigate(key);
-    setCurrentLocation(location.pathname);
+    setCurrentLocation(location.pathname.split('/').slice(0, 2).join('/'));
   };
+
+  React.useEffect(() => {
+    setCurrentLocation(location.pathname.split('/').slice(0, 2).join('/'));
+  }, [location.pathname]);
 
   return (
     <ConfigProvider
       theme={{
         components: {
           Tabs: {
-            inkBarColor: "orange",
-            itemSelectedColor: "orange",
-            itemHoverColor: "orange",
-            horizontalItemMargin: "32222px",
-            cardPadding: "32",
+            inkBarColor: 'orange',
+            itemSelectedColor: 'orange',
+            itemHoverColor: 'orange',
+            horizontalItemMargin: '32222px',
+            cardPadding: '32',
           },
         },
       }}
@@ -138,13 +142,13 @@ const Header: React.FC<HeaderProps> = ({
       </Wrapper>
       <Carousel
         autoplay
-        style={{ height: "320px" }} // 캐로셀의 높이 설정
+        style={{ height: '320px' }} // 캐로셀의 높이 설정
       >
         {carouselData &&
           carouselData.map((item: any) => (
             <a
               href={
-                item.href.startsWith("http") ? item.href : `http://${item.href}`
+                item.href.startsWith('http') ? item.href : `http://${item.href}`
               }
               target="_blank"
               rel="noopener noreferrer"
@@ -156,16 +160,16 @@ const Header: React.FC<HeaderProps> = ({
                     style={{
                       ...contentStyle,
                       backgroundColor: `${item.backgroundColor}`,
-                      backgroundSize: "contain", // 이미지가 캐로셀에 맞게 크기 조정
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      width: "100%", // 이미지의 너비를 캐로셀과 일치시킴
+                      backgroundSize: 'contain', // 이미지가 캐로셀에 맞게 크기 조정
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      width: '100%', // 이미지의 너비를 캐로셀과 일치시킴
                     }}
                   >
                     <CarouselText
                       style={{ color: `${item.textColor}` }}
                       dangerouslySetInnerHTML={{
-                        __html: item.content.replace(/\n/g, "<br>"),
+                        __html: item.content.replace(/\n/g, '<br>'),
                       }}
                     >
                       {/* {item.content} */}
@@ -183,10 +187,10 @@ const Header: React.FC<HeaderProps> = ({
                     ...contentStyle,
                     backgroundColor: `${item.backgroundColor}`,
                     backgroundImage: `url(/${item.img.filename})`,
-                    backgroundSize: "100% 100%",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    width: "100% ",
+                    backgroundSize: '100% 100%',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    width: '100% ',
                     // objectFit: "fill",
                     // height: "100%",
                     // maxHeight: "320px",
