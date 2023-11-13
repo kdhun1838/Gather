@@ -19,17 +19,15 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-console.log("jwtsecret", process.env.JWT_SECRET);
 function getJwtSecret() {
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-        throw new Error("JWT_SECRET is not defined in the environment variables.");
+        throw new Error('JWT_SECRET is not defined in the environment variables.');
     }
     return jwtSecret;
 }
 /* GET users listing. */
-router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("login===========================", req.body);
+router.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, password } = req.body.login;
     try {
         // 데이터베이스에서 사용자 찾기
@@ -39,12 +37,12 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
         const hash = yield bcrypt_1.default.compare(password, user.password);
         if (!user) {
             // 사용자가 없는 경우
-            res.status(404).json({ error: "사용자를 찾을 수 없습니다." });
+            res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
             return;
         }
         // 비밀번호 검사 (실제 비밀번호 검사 로직이 필요)
         if (!hash) {
-            res.status(401).json({ error: "비밀번호가 일치하지 않습니다." });
+            res.status(401).json({ error: '비밀번호가 일치하지 않습니다.' });
             return;
         }
         else {
@@ -60,9 +58,9 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 addr: user.addr,
                 gender: user.gender,
             }, getJwtSecret(), {
-                expiresIn: "7d",
+                expiresIn: '7d',
             });
-            res.cookie("accessToken", accessToken, {
+            res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 * 24 * 7,
                 secure: false,
                 httpOnly: true,
@@ -72,24 +70,21 @@ router.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         // 데이터베이스 쿼리 중 오류 발생 시
-        console.error("로그인 오류:", error);
-        res.status(500).json({ error: "서버 오류" });
+        console.error('로그인 오류:', error);
+        res.status(500).json({ error: '서버 오류' });
     }
 }));
-router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/signup', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, password, name, nick, email, tel, age, addr, gender, addr_detail, } = req.body;
-    console.log("register==================", req.body);
     const agetoNum = +age;
     try {
         const User = yield models_1.default.users.findOne({ where: { id } });
         if (User) {
-            console.log("중복");
-            res.status(409).json("중복된 id 입니다.");
+            res.status(409).json('중복된 id 입니다.');
             return;
         }
         else {
             const hash = yield bcrypt_1.default.hash(password, 15);
-            console.log("hash==========", hash);
             const newSignup = yield models_1.default.users.create({
                 id,
                 password: hash,
@@ -113,10 +108,9 @@ router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 addr: newSignup.addr,
                 gender: newSignup.gender,
             }, getJwtSecret(), {
-                expiresIn: "7d",
+                expiresIn: '7d',
             });
-            console.log("accessToken", accessToken);
-            res.cookie("accessToken", accessToken, {
+            res.cookie('accessToken', accessToken, {
                 expires: new Date(Date.now() + 3600000),
                 secure: false,
                 httpOnly: true,
@@ -130,19 +124,19 @@ router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     }
     next();
 }));
-router.get("/check", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/check', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.cookies.accessToken;
     if (!user) {
-        res.status(401).json({ error: "Unauthorized" });
+        res.status(401).json({ error: 'Unauthorized' });
         return;
     }
     res.json(jsonwebtoken_1.default.verify(user, getJwtSecret()));
 }));
-router.post("/logout", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.clearCookie("accessToken");
-    res.status(204).json("good");
+router.post('/logout', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.clearCookie('accessToken');
+    res.status(204).json('good');
 }));
-router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/userupdate', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, name, nick, email, tel, addr, addr_detail, gender } = req.body;
     try {
         const updateData = {
@@ -165,7 +159,7 @@ router.post("/userupdate", (req, res, next) => __awaiter(void 0, void 0, void 0,
         res.status(500).json(error);
     }
 }));
-router.post("/userdel", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/userdel', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userNum } = req.body;
     try {
         const delData = yield models_1.default.users.destroy({ where: { userNum } });
@@ -173,10 +167,10 @@ router.post("/userdel", (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
     catch (error) {
         // 서버 오류 시 500 상태 코드와 오류 메시지를 보냄
-        res.status(500).json({ error: "서버 오류" });
+        res.status(500).json({ error: '서버 오류' });
     }
 }));
-router.post("/findid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/findid', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, tel } = req.body;
     try {
         const user = yield models_1.default.users.findOne({
@@ -184,18 +178,17 @@ router.post("/findid", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         });
         if (!user) {
             res.status(404).json({
-                error: "해당 이메일과 번호로 등록된 사용자를 찾을 수 없습니다.",
+                error: '해당 이메일과 번호로 등록된 사용자를 찾을 수 없습니다.',
             });
             return;
         }
         res.status(200).json({ id: user.id });
     }
     catch (error) {
-        console.log("ID 찾기 오류:", error);
-        res.status(500).json({ error: "서버 오류" });
+        res.status(500).json({ error: '서버 오류' });
     }
 }));
-router.post("/findpassword", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/findpassword', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
     try {
         const user = yield models_1.default.users.findOne({
@@ -203,15 +196,15 @@ router.post("/findpassword", (req, res, next) => __awaiter(void 0, void 0, void 
         });
         if (!user) {
             res.status(404).json({
-                error: "해당 아이디로 등록된 사용자를 찾을 수 없습니다.",
+                error: '해당 아이디로 등록된 사용자를 찾을 수 없습니다.',
             });
             return;
         }
         res.status(200).json({ password: user.password });
     }
     catch (error) {
-        console.error("비밀번호 찾기 오류:", error);
-        res.status(500).json({ error: "서버 오류" });
+        console.error('비밀번호 찾기 오류:', error);
+        res.status(500).json({ error: '서버 오류' });
     }
 }));
 exports.default = router;

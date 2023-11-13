@@ -1,7 +1,7 @@
-import React from "react";
-import AdminHomeRegister from "../../../../components/admin/home/register/AdminHomeRegister";
-import { getWeekRegister } from "../../../../lib/api/admin";
-import { RegisterInfo } from "../../../../types/adminTypes";
+import React from 'react';
+import AdminHomeRegister from '../../../../components/admin/home/register/AdminHomeRegister';
+import { getWeekRegister } from '../../../../lib/api/admin';
+import { RegisterInfo } from '../../../../types/adminTypes';
 
 interface OwnProps {
   registerInfo?: RegisterInfo;
@@ -21,7 +21,6 @@ const AdminHomeRegisterContainer: React.FC<OwnProps> = (props) => {
   React.useEffect(() => {
     getData();
   }, []);
-  console.log("데이터", data);
 
   return (
     <div>

@@ -8,6 +8,7 @@ import {
 import AdminRegisterChartCategoryContainer from "../../../container/admin/register/chart/AdminRegisterChartCategoryContainer";
 import AdminRegisterChartMonthContainer from "../../../container/admin/register/chart/AdminRegisterChartMonthContainer";
 import AdminRegisterChartDayContainer from "../../../container/admin/register/chart/AdminRegisterChartDayContainer";
+import AdminRegisterChartTableContainer from "../../../container/admin/register/chart/AdminRegisterChartTableContainer";
 
 const AdminRegisterChart = () => {
   return (
@@ -26,6 +27,7 @@ const AdminRegisterChart = () => {
             <TableTitleBlock>
               <TableTitle>조회수 Top 게시글(표)</TableTitle>
             </TableTitleBlock>
+            <AdminRegisterChartTableContainer />
           </Box>
         </Col>
       </Row>

@@ -1,14 +1,14 @@
-import { SearchOutlined } from "@ant-design/icons";
-import React, { useRef } from "react";
-import Highlighter from "react-highlight-words";
-import type { InputRef } from "antd";
-import { Button, Input, Space, Table, Modal } from "antd";
-import type { ColumnType, ColumnsType } from "antd/es/table";
-import type { FilterConfirmProps } from "antd/es/table/interface";
-import { UserDetail } from "../../../modules/user/type";
-import { changeDate } from "../../community/Community";
-import styled from "styled-components";
-import MyPageForm from "../../../container/auth/MyPageForm";
+import { SearchOutlined } from '@ant-design/icons';
+import React, { useRef } from 'react';
+import Highlighter from 'react-highlight-words';
+import type { InputRef } from 'antd';
+import { Button, Input, Space, Table, Modal } from 'antd';
+import type { ColumnType, ColumnsType } from 'antd/es/table';
+import type { FilterConfirmProps } from 'antd/es/table/interface';
+import { UserDetail } from '../../../modules/user/type';
+import { changeDate } from '../../community/Community';
+import styled from 'styled-components';
+import MyPageForm from '../../../container/auth/MyPageForm';
 
 interface DataType {
   key: number;
@@ -33,12 +33,11 @@ interface AdminUserProps {
 }
 
 const AdminUserManage: React.FC<AdminUserProps> = (props) => {
-  const [searchText, setSearchText] = React.useState("");
-  const [searchedColumn, setSearchedColumn] = React.useState("");
+  const [searchText, setSearchText] = React.useState('');
+  const [searchedColumn, setSearchedColumn] = React.useState('');
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const searchInput = useRef<InputRef>(null);
   const [uNum, setUNum] = React.useState<number>(0);
-  console.log("isModalOpen", isModalOpen);
   const showModal = (num: number) => {
     setUNum(num);
     setIsModalOpen(true);
@@ -60,7 +59,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
 
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
-    setSearchText("");
+    setSearchText('');
   };
 
   const getColumnSearchProps = (
@@ -84,7 +83,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
           onPressEnter={() =>
             handleSearch(selectedKeys as string[], confirm, dataIndex)
           }
-          style={{ marginBottom: 8, display: "block" }}
+          style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
           <Button
@@ -129,7 +128,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       </div>
     ),
     filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -144,10 +143,10 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
     render: (text) =>
       searchedColumn === dataIndex ? (
         <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ""}
+          textToHighlight={text ? text.toString() : ''}
         />
       ) : (
         text
@@ -156,50 +155,50 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
 
   const columns: ColumnsType<any> = [
     {
-      title: "아이디",
-      dataIndex: "id",
-      key: "id",
-      width: "10%",
-      ...getColumnSearchProps("id"),
+      title: '아이디',
+      dataIndex: 'id',
+      key: 'id',
+      width: '10%',
+      ...getColumnSearchProps('id'),
     },
     {
-      title: "이름",
-      dataIndex: "name",
-      key: "name",
-      width: "10%",
-      ...getColumnSearchProps("name"),
+      title: '이름',
+      dataIndex: 'name',
+      key: 'name',
+      width: '10%',
+      ...getColumnSearchProps('name'),
     },
     {
-      title: "닉네임",
-      dataIndex: "nick",
-      key: "nick",
-      width: "10%",
-      ...getColumnSearchProps("nick"),
+      title: '닉네임',
+      dataIndex: 'nick',
+      key: 'nick',
+      width: '10%',
+      ...getColumnSearchProps('nick'),
     },
     {
-      title: "나이",
-      dataIndex: "age",
-      key: "age",
-      width: "5%",
+      title: '나이',
+      dataIndex: 'age',
+      key: 'age',
+      width: '5%',
       sorter: (a, b) => a.age - b.age,
     },
     {
-      title: "성별",
-      dataIndex: "gender",
-      key: "gender",
-      width: "5%",
+      title: '성별',
+      dataIndex: 'gender',
+      key: 'gender',
+      width: '5%',
       sorter: (a, b) => {
         if (a.gender === b.gender) return 0;
-        if (a.gender === "여") return -1;
-        if (b.gender === "여") return 1;
+        if (a.gender === '여') return -1;
+        if (b.gender === '여') return 1;
         return 0;
       },
     },
     {
-      title: "가입일",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: "10%",
+      title: '가입일',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: '10%',
       sorter: (a, b) => {
         const dateA = new Date(a.createdAt).getTime();
         const dateB = new Date(b.createdAt).getTime();
@@ -210,34 +209,34 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
       },
     },
     {
-      title: "등급",
-      dataIndex: "grade",
-      key: "grade",
-      width: "5%",
+      title: '등급',
+      dataIndex: 'grade',
+      key: 'grade',
+      width: '5%',
       sorter: (a, b) => a.grade - b.grade,
-      defaultSortOrder: "descend",
+      defaultSortOrder: 'descend',
       render: (text, record) => {
         switch (record.grade) {
           case 3:
             return (
-              <div style={{ fontWeight: "Bold", color: "red" }}>최고관리자</div>
+              <div style={{ fontWeight: 'Bold', color: 'red' }}>최고관리자</div>
             );
           case 2:
             return (
-              <div style={{ fontWeight: "Bold", color: "blue" }}>관리자</div>
+              <div style={{ fontWeight: 'Bold', color: 'blue' }}>관리자</div>
             );
           case 1:
-            return "일반 유저";
+            return '일반 유저';
           default:
-            return "알 수 없음";
+            return '알 수 없음';
         }
       },
     },
     {
-      title: "정보수정 / 회원탈퇴 / 등급UP&Down(최고관리자만 가능)",
-      key: "action",
+      title: '정보수정 / 회원탈퇴 / 등급UP&Down(최고관리자만 가능)',
+      key: 'action',
       render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Space size="middle">
             {((props.user.grade > 2 && record.grade === 3) ||
               record.grade < 3) && (
@@ -250,7 +249,7 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
               open={isModalOpen}
               onCancel={handleCancel}
               width="70%"
-              style={{ maxHeight: "800vh", minWidth: "70%" }}
+              style={{ maxHeight: '800vh', minWidth: '70%' }}
               footer={null}
             >
               <MyPageForm
@@ -299,10 +298,9 @@ const AdminUserManage: React.FC<AdminUserProps> = (props) => {
           </Space>
         </div>
       ),
-      width: "20%",
+      width: '20%',
     },
   ];
-  console.log("props.user.grade", props.user.grade);
   return <Table columns={columns} dataSource={props.data} />;
 };
 

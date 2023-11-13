@@ -1,4 +1,4 @@
-import { CommunityState, CommunityAction, FormType } from "./type";
+import { CommunityState, CommunityAction, FormType } from './type';
 import {
   CHANGE_FORM,
   CHANGE_SORT,
@@ -18,36 +18,36 @@ import {
   GET_EDIT_POST,
   EDIT_POST,
   DELETE_POST,
-} from "./action";
+} from './action';
 
 const initialState: CommunityState = {
   form: {
-    category: "선택사항",
-    detail: "",
-    title: "",
-    content: "",
+    category: '선택사항',
+    detail: '',
+    title: '',
+    content: '',
   },
   main: {
     popularPosts: null,
     sort: {
-      mainSort: "전체",
+      mainSort: '전체',
       detailSort: {
-        time: "newest",
-        view: "",
-        like: "",
+        time: 'newest',
+        view: '',
+        like: '',
       },
-      search: "",
+      search: '',
     },
     mainPosts: null,
   },
 
   post: {
-    getPost: "",
-    getComments: "",
-    getReply: "",
-    comment: "",
-    reply: "",
-    nestedReply: "",
+    getPost: '',
+    getComments: '',
+    getReply: '',
+    comment: '',
+    reply: '',
+    nestedReply: '',
   },
 };
 
@@ -69,22 +69,22 @@ const community = (
           sort: {
             ...state.main.sort,
             detailSort: {
-              time: "",
-              view: "",
-              like: "",
+              time: '',
+              view: '',
+              like: '',
             },
           },
         },
       };
 
     case INIT_POST_FORM:
-      if ("postInitName" in action.payload) {
+      if ('postInitName' in action.payload) {
         const { postInitName } = action.payload;
         return {
           ...state,
           post: {
             ...state.post,
-            [postInitName]: "",
+            [postInitName]: '',
           },
         };
       }
@@ -93,9 +93,9 @@ const community = (
     case CHANGE_FORM:
       // action.payload 객체 안에 name, key, value가 모두 존재할 경우
       if (
-        "name" in action.payload &&
-        "key" in action.payload &&
-        "value" in action.payload
+        'name' in action.payload &&
+        'key' in action.payload &&
+        'value' in action.payload
       ) {
         const { name, key, value } = action.payload;
 
@@ -111,7 +111,7 @@ const community = (
 
     // 정렬 버튼클릭
     case CHANGE_SORT:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           main: {
@@ -126,7 +126,7 @@ const community = (
       return state;
 
     case CHANGE_DETAIL_SORT:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           main: {
@@ -174,7 +174,6 @@ const community = (
 
     // 포스트 수정 관련
     case `${GET_EDIT_POST}_SUCCESS`:
-      console.log(action.payload);
       const form = action.payload as FormType;
       return {
         ...state,
@@ -199,7 +198,7 @@ const community = (
         ...state,
         post: {
           ...state.post,
-          getPost: "",
+          getPost: '',
         },
       };
 
@@ -228,18 +227,16 @@ const community = (
         ...state,
         main: {
           ...state.main,
-          popularPosts: "",
+          popularPosts: '',
         },
       };
 
     // 즐겨찾기 추가 및 제거
     case `${ADD_FAVORITE_POST}_SUCCESS`:
-      console.log("즐겨찾기 성공", action.payload);
       return {
         ...state,
       };
     case `${ADD_FAVORITE_POST}_FAILURE`:
-      console.log("즐겨찾기 실패", action.payload);
       return {
         ...state,
       };
@@ -259,7 +256,7 @@ const community = (
         ...state,
         post: {
           ...state.post,
-          getPost: "",
+          getPost: '',
         },
       };
 
@@ -278,7 +275,7 @@ const community = (
         ...state,
         post: {
           ...state.post,
-          getComments: "",
+          getComments: '',
         },
       };
 
@@ -297,7 +294,7 @@ const community = (
         ...state,
         post: {
           ...state.post,
-          getReply: "",
+          getReply: '',
         },
       };
 

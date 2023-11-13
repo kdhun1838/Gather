@@ -18,19 +18,19 @@ const models_1 = __importDefault(require("../models"));
 const sequelize_1 = require("sequelize");
 const node_cron_1 = __importDefault(require("node-cron"));
 const countvisitor_1 = require("../middleware/countvisitor");
-router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/list', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
         const data = req.query.data;
-        const mainSort = data.mainSort || "";
-        const search = data.search || "";
-        const recruit = data.recruit || "";
-        const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || "";
-        const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || "";
-        const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
+        const mainSort = data.mainSort || '';
+        const search = data.search || '';
+        const recruit = data.recruit || '';
+        const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || '';
+        const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || '';
+        const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || '';
         let where = {};
-        let order = [["createdAt", "DESC"]];
-        if (mainSort && mainSort !== "전체") {
+        let order = [['createdAt', 'DESC']];
+        if (mainSort && mainSort !== '전체') {
             where.category = mainSort;
         }
         if (search) {
@@ -39,29 +39,29 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 { content: { [sequelize_1.Op.like]: `%${search}` } },
             ];
         }
-        if (recruit === "true") {
+        if (recruit === 'true') {
             where.state = 1;
         }
         else {
             where.state < 3;
         }
-        if (time === "newset") {
-            order = [["createdAt", "DESC"]];
+        if (time === 'newset') {
+            order = [['createdAt', 'DESC']];
         }
-        else if (time === "latest") {
-            order = [["createdAt", "ASC"]];
+        else if (time === 'latest') {
+            order = [['createdAt', 'ASC']];
         }
-        else if (view === "highest") {
-            order = [["view", "DESC"]];
+        else if (view === 'highest') {
+            order = [['view', 'DESC']];
         }
-        else if (view === "lowest") {
-            order = [["view", "ASC"]];
+        else if (view === 'lowest') {
+            order = [['view', 'ASC']];
         }
-        else if (like === "highest") {
-            order = [["favorite", "DESC"]];
+        else if (like === 'highest') {
+            order = [['favorite', 'DESC']];
         }
-        else if (like === "lowest") {
-            order = [["favorite", "ASC"]];
+        else if (like === 'lowest') {
+            order = [['favorite', 'ASC']];
         }
         const registerData = yield models_1.default.registers.findAll({
             where,
@@ -71,30 +71,30 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: "에러" });
+        res.status(500).json({ error: '에러' });
     }
 }));
-router.get("/popularList", countvisitor_1.countVisitors, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/popularList', countvisitor_1.countVisitors, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const today = new Date();
     today.setHours(today.getHours() + 9);
     try {
         const popularData = yield models_1.default.registers.findAll({
             where: {
                 period: {
-                    [sequelize_1.Op.gte]: today.toISOString().split("T")[0],
+                    [sequelize_1.Op.gte]: today.toISOString().split('T')[0],
                 },
                 state: 1,
             },
-            order: [["favorite", "DESC"]],
+            order: [['favorite', 'DESC']],
             limit: 10,
         });
         res.status(200).json(popularData);
     }
     catch (error) {
-        res.status(500).json({ error: "에러" });
+        res.status(500).json({ error: '에러' });
     }
 }));
-router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, category, personnel, online, position, contact, period, content, } = req.body.form.form;
     const userNum = req.body.userNum;
     try {
@@ -117,7 +117,7 @@ router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         next(error);
     }
 }));
-router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/post/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.query;
     try {
         const getFormData = yield models_1.default.registers.findOne({
@@ -126,7 +126,7 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                 {
                     nest: true,
                     model: models_1.default.users,
-                    attribute: ["name"],
+                    attribute: ['name'],
                 },
             ],
         });
@@ -136,12 +136,12 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                 {
                     nest: true,
                     model: models_1.default.registers,
-                    attribute: ["registerNum"],
+                    attribute: ['registerNum'],
                 },
                 {
                     nest: true,
                     model: models_1.default.users,
-                    attribute: ["name"],
+                    attribute: ['name'],
                 },
             ],
         });
@@ -153,14 +153,14 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
         console.error(e);
     }
 }));
-router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/close/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
         const post = yield models_1.default.registers.findOne({
             where: { registerNum: postId },
         });
         if (!post) {
-            return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+            return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
         }
         if (post.state === 1) {
             yield models_1.default.registers.update({ state: 2, updatedAt: new Date() }, {
@@ -182,7 +182,7 @@ router.post("/close/:postId", (req, res, next) => __awaiter(void 0, void 0, void
         res.status(500).json(e);
     }
 }));
-router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/delete/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
         const postDelete = yield models_1.default.registers.destroy({
@@ -195,7 +195,7 @@ router.post("/delete/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
         res.status(500).json(e);
     }
 }));
-router.post("/postComment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/postComment/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId, userNum, comment } = req.body;
     try {
         const postComment = yield models_1.default.registerComments.create({
@@ -209,10 +209,9 @@ router.post("/postComment/:postId", (req, res, next) => __awaiter(void 0, void 0
         console.error(e);
     }
 }));
-router.post("/modifyForm/:postId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/modifyForm/:postId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, category, personnel, online, position, contact, period, content, } = req.body.form.form;
     const postId = req.body.postId;
-    console.log("modifyReq.Body??????????", req.body, title);
     try {
         const modifyForm = yield models_1.default.registers.update({
             title,
@@ -236,7 +235,7 @@ const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* ()
         const currentDate = new Date();
         const currentDateString = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000)
             .toISOString()
-            .split("T")[0];
+            .split('T')[0];
         const expiredRegisters = yield models_1.default.registers.findAll({
             where: {
                 state: {
@@ -253,10 +252,10 @@ const updateExpiredStates = () => __awaiter(void 0, void 0, void 0, function* ()
         console.log(`${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`);
     }
     catch (e) {
-        console.error("오류가 발생했습니다:", e);
+        console.error('오류가 발생했습니다:', e);
     }
 });
-node_cron_1.default.schedule("27 * * * *", () => {
+node_cron_1.default.schedule('27 * * * *', () => {
     updateExpiredStates();
 });
 exports.default = router;

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import Button from "../Button";
-import Responsive from "../../../styled/Responsive";
-import LogoImage from "../../../images/Logo.png";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import Button from '../Button';
+import Responsive from '../../../styled/Responsive';
+import LogoImage from '../../../images/Logo.png';
 import {
   HomeOutlined,
   UserOutlined,
@@ -11,9 +11,9 @@ import {
   FileImageOutlined,
   LineChartOutlined,
   SettingOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Menu } from "antd";
+} from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import { Menu } from 'antd';
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -87,23 +87,23 @@ const UserHi = styled.div`
 `;
 
 const activeStyle = {
-  color: "#fff",
+  color: '#fff',
   fontSize: 18,
-  fontWeight: "bold",
+  fontWeight: 'bold',
 };
 
 interface AdminProps {
   user: any;
   onLogout: () => void;
 }
-type MenuItem = Required<MenuProps>["items"][number];
+type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
   label: React.ReactNode,
   key?: React.Key | null,
   icon?: React.ReactNode,
   children?: MenuItem[],
-  type?: "group"
+  type?: 'group'
 ): MenuItem {
   return {
     key,
@@ -115,24 +115,24 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("관리자 홈", "/admin/home", <HomeOutlined />),
-  getItem("유저 관리", "/admin/user", <UserOutlined />, [
-    getItem("차트", "/admin/user/chart", <LineChartOutlined />),
-    getItem("관리", "/admin/user/manage", <SettingOutlined />),
+  getItem('관리자 홈', '/admin/home', <HomeOutlined />),
+  getItem('유저 관리', '/admin/user', <UserOutlined />, [
+    getItem('차트', '/admin/user/chart', <LineChartOutlined />),
+    getItem('관리', '/admin/user/manage', <SettingOutlined />),
   ]),
 
-  getItem("모임게시판 관리", "/admin/register", <AppstoreOutlined />, [
-    getItem("차트", "/admin/register/chart", <LineChartOutlined />),
-    getItem("관리", "/admin/register/manage", <SettingOutlined />),
+  getItem('모임게시판 관리', '/admin/register', <AppstoreOutlined />, [
+    getItem('차트', '/admin/register/chart', <LineChartOutlined />),
+    getItem('관리', '/admin/register/manage', <SettingOutlined />),
   ]),
 
-  getItem("커뮤니티 관리", "/admin/community", <AppstoreOutlined />, [
-    getItem("차트", "/admin/community/chart", <LineChartOutlined />),
-    getItem("관리", "/admin/community/manage", <SettingOutlined />),
+  getItem('커뮤니티 관리', '/admin/community', <AppstoreOutlined />, [
+    getItem('차트', '/admin/community/chart', <LineChartOutlined />),
+    getItem('관리', '/admin/community/manage', <SettingOutlined />),
   ]),
-  getItem("캐러셀 관리", "/admin/carousel", <FileImageOutlined />, [
-    getItem("차트", "/admin/carousel/chart", <LineChartOutlined />),
-    getItem("관리", "/admin/carousel/manage", <SettingOutlined />),
+  getItem('캐러셀 관리', '/admin/carousel', <FileImageOutlined />, [
+    getItem('차트', '/admin/carousel/chart', <LineChartOutlined />),
+    getItem('관리', '/admin/carousel/manage', <SettingOutlined />),
   ]),
 ];
 
@@ -140,7 +140,7 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [current, setCurrent] = React.useState<string>(location.pathname);
-  const [openKeys, setOpenKeys] = React.useState(["/admin/home"]);
+  const [openKeys, setOpenKeys] = React.useState(['/admin/home']);
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -154,8 +154,7 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
     setCurrent(openKey[1]);
   }, [location.pathname]);
 
-  const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
+  const onClick: MenuProps['onClick'] = (e) => {
     navigate(e.key);
     setCurrent(e.key);
   };
@@ -193,8 +192,8 @@ const AdminHeader: React.FC<AdminProps> = ({ user, onLogout }) => {
           onClick={onClick}
           openKeys={openKeys}
           onOpenChange={(openKeys) => setOpenKeys(openKeys)}
-          style={{ width: "100%", height: "100%" }}
-          defaultOpenKeys={["sub1"]}
+          style={{ width: '100%', height: '100%' }}
+          defaultOpenKeys={['sub1']}
           selectedKeys={[current]}
           mode="inline"
           items={items}

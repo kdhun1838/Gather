@@ -52,7 +52,6 @@ router.post('/postMessages', async (req: Request, res: Response) => {
 router.post('/postDelete/:messageNum', async (req: Request, res: Response) => {
   try {
     const messageNum = req.params.messageNum;
-    console.log('번호', messageNum);
 
     const deleteData = await models.messages.update(
       { state: 1 },
@@ -132,7 +131,6 @@ router.get('/topInfo', async (req: Request, res: Response) => {
 });
 
 router.get('/visitor', async (req: Request, res: Response) => {
-  console.log('방문자백');
   try {
     const today = new Date();
     const oneWeekAgo = new Date(today);
@@ -281,7 +279,6 @@ router.post(
       return res.status(400).send('업로드실패');
     }
     const { content, link, backgroundColor, textColor, onlyImg } = req.body;
-    // const newCarousel = await models.carousels.findAll({});
 
     const newUpload = await models.carousels.create({
       content,
@@ -747,7 +744,7 @@ router.get('/getRegisterChart/day', async (req, res) => {
   try {
     const currentDate = new Date();
     const oneWeekAgo = new Date(currentDate);
-    oneWeekAgo.setDate(currentDate.getDate() - 6); // 일주일 전부터 오늘까지
+    oneWeekAgo.setDate(currentDate.getDate() - 6);
 
     const dailyData = [];
 
@@ -760,9 +757,9 @@ router.get('/getRegisterChart/day', async (req, res) => {
       }월 ${date.getDate()}일(${getDayName(date)})`;
 
       const startDate = new Date(date);
-      startDate.setHours(0, 0, 0, 0); // 날짜의 시작 시간
+      startDate.setHours(0, 0, 0, 0);
       const endDate = new Date(date);
-      endDate.setHours(23, 59, 59, 999); // 날짜의 끝 시간
+      endDate.setHours(23, 59, 59, 999);
 
       const sportCount = await models.registers.count({
         where: {
@@ -809,7 +806,6 @@ router.get('/getRegisterChart/day', async (req, res) => {
         기타: etcCount,
       });
     }
-    console.log('ddd', dailyData);
     res.status(200).json(dailyData);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -820,6 +816,52 @@ function getDayName(date: any) {
   const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
   return dayNames[date.getDay()];
 }
+
+router.get('/getRegisterChart/table', async (req: Request, res: Response) => {
+  try {
+    const data = await models.registers.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ['id', 'nick', 'name'],
+        },
+      ],
+      where: {
+        state: 1,
+      },
+      order: [['view', 'DESC']],
+      limit: 5,
+    });
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        category: item.category,
+        contact: item.contact,
+        content: item.content,
+        createdAt: item.createdAt,
+        favorite: item.favorite,
+        meeting: item.meeting,
+        period: item.period,
+        personnel: item.personnel,
+        position: item.position,
+        registerNum: item.registerNum,
+        state: item.state,
+        title: item.title,
+        updatedAt: item.updatedAt,
+        userNum: item.userNum,
+        view: item.view,
+      };
+      return restOfData;
+    });
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
+  }
+});
 
 // 커뮤니티 관리
 
@@ -990,10 +1032,48 @@ router.get('/getCommunityChart/day', async (req, res) => {
         후기: reviewCount,
       });
     }
-    console.log('ddd', dailyData);
     res.status(200).json(dailyData);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/getCommunityChart/table', async (req: Request, res: Response) => {
+  try {
+    const data = await models.communitys.findAll({
+      include: [
+        {
+          nest: true,
+          model: models.users,
+          attributes: ['id', 'nick', 'name'],
+        },
+      ],
+      order: [['view', 'DESC']],
+      limit: 5,
+    });
+
+    const transformedData = data.map((item: any) => {
+      const user = item.User;
+      const restOfData = {
+        communityNum: item.communityNum,
+        id: user.id,
+        nick: user.nick,
+        name: user.name,
+        userNum: item.userId,
+        title: item.title,
+        category: item.category,
+        content: item.content,
+        detail: item.detail,
+        view: item.view,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+
+      return restOfData;
+    });
+    res.status(200).json(transformedData);
+  } catch (error) {
+    res.status(500);
   }
 });
 

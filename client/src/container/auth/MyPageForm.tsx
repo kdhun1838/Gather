@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import MyPage from "../../components/auth/MyPage";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../modules";
+import React, { useState, useEffect } from 'react';
+import MyPage from '../../components/auth/MyPage';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../modules';
 import {
   userupdate,
   check,
   userdel,
   logout,
   userupdateAdmin,
-} from "../../modules/user/action";
-import Swal from "sweetalert2";
-import { createGlobalStyle } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { getUserDetail } from "../../lib/api/admin";
+} from '../../modules/user/action';
+import Swal from 'sweetalert2';
+import { createGlobalStyle } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { getUserDetail } from '../../lib/api/admin';
 
 interface OwnProps {
   isAdmin?: boolean;
@@ -32,15 +32,11 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
   React.useEffect(() => {
     if (props.isAdmin && props.uNum) {
       const userNum: number = Number(props.uNum);
-      console.log(userNum);
       getUserDetail(userNum).then((response) => {
-        console.log("dddd", response.data);
         setFormData(response.data);
       });
     }
   }, [props.isAdmin, props.uNum]);
-
-  console.log("user=====>", formData);
 
   useEffect(() => {
     setFormData(user);
@@ -52,14 +48,13 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
   };
 
   const onSubmit = async (formdata: any) => {
-    console.log("formdata=========>");
     if (props.isAdmin) {
       Swal.fire({
-        title: "회원정보",
+        title: '회원정보',
         text: `회원정보를 수정하시겠습니까?`,
         showCancelButton: true,
-        cancelButtonText: "취소",
-        confirmButtonText: "수정",
+        cancelButtonText: '취소',
+        confirmButtonText: '수정',
         showLoaderOnConfirm: true,
         preConfirm: () => {
           dispatch(userupdateAdmin(formdata));
@@ -67,8 +62,8 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
       }).then((res) => {
         if (res.isConfirmed) {
           Swal.fire({
-            icon: "success",
-            text: "수정이 완료되었습니다.",
+            icon: 'success',
+            text: '수정이 완료되었습니다.',
           });
           // navigate("/admin/home");
           // props.setIsModalOpen && props.setIsModalOpen(false);
@@ -77,11 +72,11 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
       });
     } else {
       Swal.fire({
-        title: "회원정보",
+        title: '회원정보',
         text: `회원정보를 수정하시겠습니까?`,
         showCancelButton: true,
-        cancelButtonText: "취소",
-        confirmButtonText: "수정",
+        cancelButtonText: '취소',
+        confirmButtonText: '수정',
         showLoaderOnConfirm: true,
         preConfirm: () => {
           dispatch(userupdate(formdata));
@@ -89,23 +84,22 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
       }).then((res) => {
         if (res.isConfirmed) {
           Swal.fire({
-            icon: "success",
-            text: "수정이 완료되었습니다.",
+            icon: 'success',
+            text: '수정이 완료되었습니다.',
           });
-          navigate("/");
+          navigate('/');
         }
       });
     }
   };
 
   const onDel = async () => {
-    console.log("formdata=========>");
     Swal.fire({
-      title: "회원탈퇴",
+      title: '회원탈퇴',
       text: `정말 회원탈퇴를 하시겠습니까?`,
       showCancelButton: true,
-      cancelButtonText: "취소",
-      confirmButtonText: "확인",
+      cancelButtonText: '취소',
+      confirmButtonText: '확인',
       showLoaderOnConfirm: true,
       preConfirm: () => {
         dispatch(userdel(user));
@@ -116,10 +110,10 @@ const MyPageForm: React.FC<OwnProps> = (props) => {
     }).then((res) => {
       if (res.isConfirmed) {
         Swal.fire({
-          icon: "success",
-          text: "회원탈퇴가 완료되었습니다.",
+          icon: 'success',
+          text: '회원탈퇴가 완료되었습니다.',
         });
-        navigate("/");
+        navigate('/');
       }
     });
   };

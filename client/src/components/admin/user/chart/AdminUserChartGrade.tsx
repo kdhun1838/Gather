@@ -9,7 +9,6 @@ interface OwnProps {
 }
 
 const AdminUserChartGrade = (props: OwnProps) => {
-  console.log('ssss', props.data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 

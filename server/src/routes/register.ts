@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from 'express';
 const router = express.Router();
-import models from "../models";
-import { Op } from "sequelize";
-import cron from "node-cron";
-import { countVisitors } from "../middleware/countvisitor";
+import models from '../models';
+import { Op } from 'sequelize';
+import cron from 'node-cron';
+import { countVisitors } from '../middleware/countvisitor';
 
 type QueryData = {
   mainSort: string;
@@ -18,20 +18,20 @@ type DetailSort = {
   like: string;
 };
 
-router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
+router.get('/list', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data: QueryData = req.query.data as unknown as QueryData;
-    const mainSort: string = data.mainSort || "";
-    const search: string = data.search || "";
-    const recruit: string = data.recruit || "";
-    const time: string = data.detailSort?.time || "";
-    const view: string = data.detailSort?.view || "";
-    const like: string = data.detailSort?.like || "";
+    const mainSort: string = data.mainSort || '';
+    const search: string = data.search || '';
+    const recruit: string = data.recruit || '';
+    const time: string = data.detailSort?.time || '';
+    const view: string = data.detailSort?.view || '';
+    const like: string = data.detailSort?.like || '';
 
     let where: any = {};
-    let order: any = [["createdAt", "DESC"]];
+    let order: any = [['createdAt', 'DESC']];
 
-    if (mainSort && mainSort !== "전체") {
+    if (mainSort && mainSort !== '전체') {
       where.category = mainSort;
     }
 
@@ -41,24 +41,24 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
         { content: { [Op.like]: `%${search}` } },
       ];
     }
-    if (recruit === "true") {
+    if (recruit === 'true') {
       where.state = 1;
     } else {
       where.state < 3;
     }
 
-    if (time === "newset") {
-      order = [["createdAt", "DESC"]];
-    } else if (time === "latest") {
-      order = [["createdAt", "ASC"]];
-    } else if (view === "highest") {
-      order = [["view", "DESC"]];
-    } else if (view === "lowest") {
-      order = [["view", "ASC"]];
-    } else if (like === "highest") {
-      order = [["favorite", "DESC"]];
-    } else if (like === "lowest") {
-      order = [["favorite", "ASC"]];
+    if (time === 'newset') {
+      order = [['createdAt', 'DESC']];
+    } else if (time === 'latest') {
+      order = [['createdAt', 'ASC']];
+    } else if (view === 'highest') {
+      order = [['view', 'DESC']];
+    } else if (view === 'lowest') {
+      order = [['view', 'ASC']];
+    } else if (like === 'highest') {
+      order = [['favorite', 'DESC']];
+    } else if (like === 'lowest') {
+      order = [['favorite', 'ASC']];
     }
 
     const registerData = await models.registers.findAll({
@@ -68,12 +68,12 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json(registerData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "에러" });
+    res.status(500).json({ error: '에러' });
   }
 });
 
 router.get(
-  "/popularList",
+  '/popularList',
   countVisitors,
   async (req: Request, res: Response, next: NextFunction) => {
     const today = new Date();
@@ -82,21 +82,21 @@ router.get(
       const popularData = await models.registers.findAll({
         where: {
           period: {
-            [Op.gte]: today.toISOString().split("T")[0],
+            [Op.gte]: today.toISOString().split('T')[0],
           },
           state: 1,
         },
-        order: [["favorite", "DESC"]],
+        order: [['favorite', 'DESC']],
         limit: 10,
       });
       res.status(200).json(popularData);
     } catch (error) {
-      res.status(500).json({ error: "에러" });
+      res.status(500).json({ error: '에러' });
     }
   }
 );
 
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const {
     title,
     category,
@@ -129,7 +129,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.get(
-  "/post/:postId",
+  '/post/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.query;
     try {
@@ -139,7 +139,7 @@ router.get(
           {
             nest: true,
             model: models.users,
-            attribute: ["name"],
+            attribute: ['name'],
           },
         ],
       });
@@ -149,12 +149,12 @@ router.get(
           {
             nest: true,
             model: models.registers,
-            attribute: ["registerNum"],
+            attribute: ['registerNum'],
           },
           {
             nest: true,
             model: models.users,
-            attribute: ["name"],
+            attribute: ['name'],
           },
         ],
       });
@@ -168,7 +168,7 @@ router.get(
 );
 
 router.post(
-  "/close/:postId",
+  '/close/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
@@ -176,7 +176,7 @@ router.post(
         where: { registerNum: postId },
       });
       if (!post) {
-        return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
+        return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
       }
       if (post.state === 1) {
         await models.registers.update(
@@ -205,7 +205,7 @@ router.post(
 );
 
 router.post(
-  "/delete/:postId",
+  '/delete/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.body.postId; // req.params를 사용하여 URL 파라미터 가져옴
     try {
@@ -221,7 +221,7 @@ router.post(
 );
 
 router.post(
-  "/postComment/:postId",
+  '/postComment/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId, userNum, comment } = req.body;
     try {
@@ -237,7 +237,7 @@ router.post(
   }
 );
 
-router.post("/modifyForm/:postId", async (req: Request, res: Response) => {
+router.post('/modifyForm/:postId', async (req: Request, res: Response) => {
   const {
     title,
     category,
@@ -249,7 +249,6 @@ router.post("/modifyForm/:postId", async (req: Request, res: Response) => {
     content,
   } = req.body.form.form;
   const postId = req.body.postId;
-  console.log("modifyReq.Body??????????", req.body, title);
   try {
     const modifyForm = await models.registers.update(
       {
@@ -278,7 +277,7 @@ const updateExpiredStates = async () => {
       currentDate.getTime() + 9 * 60 * 60 * 1000
     )
       .toISOString()
-      .split("T")[0];
+      .split('T')[0];
     const expiredRegisters = await models.registers.findAll({
       where: {
         state: {
@@ -297,11 +296,11 @@ const updateExpiredStates = async () => {
       `${expiredRegisters.length}개의 레코드의 state가 2로 변경되었습니다.`
     );
   } catch (e) {
-    console.error("오류가 발생했습니다:", e);
+    console.error('오류가 발생했습니다:', e);
   }
 };
 
-cron.schedule("27 * * * *", () => {
+cron.schedule('27 * * * *', () => {
   updateExpiredStates();
 });
 

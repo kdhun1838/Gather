@@ -1,17 +1,17 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Register from "../../components/register/Register";
-import { RootState } from "../../modules";
-import { RegisterState } from "../../modules/register/type";
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Register from '../../components/register/Register';
+import { RootState } from '../../modules';
+import { RegisterState } from '../../modules/register/type';
 import {
   changeForm,
   getOriginalForm,
   modifyForm,
   postForm,
   unloadForm,
-} from "../../modules/register/action";
-import { useNavigate } from "react-router";
+} from '../../modules/register/action';
+import { useNavigate } from 'react-router';
 
 const RegisterContainer = () => {
   const [isPost, setIsPost] = useState(false);
@@ -32,16 +32,16 @@ const RegisterContainer = () => {
 
   const onIsPost = (e: FormEvent) => {
     if (
-      form.form.title === "" ||
-      form.form.category === "" ||
+      form.form.title === '' ||
+      form.form.category === '' ||
       form.form.personnel === 0 ||
-      form.form.online === "" ||
-      form.form.position === "" ||
-      form.form.contact === "" ||
-      form.form.content === ""
+      form.form.online === '' ||
+      form.form.position === '' ||
+      form.form.contact === '' ||
+      form.form.content === ''
     ) {
       e.preventDefault();
-      alert("내용을 입력하세요.");
+      alert('내용을 입력하세요.');
     } else {
       setIsPost(true);
     }
@@ -59,7 +59,7 @@ const RegisterContainer = () => {
     (form: RegisterState, userNum: number) => {
       dispatch(postForm(form, userNum));
       setIsPost(false);
-      navigate("/");
+      navigate('/');
     },
     [dispatch, form]
   );
@@ -67,9 +67,8 @@ const RegisterContainer = () => {
   const onModifyForm = useCallback(
     (form: RegisterState, postId: number) => {
       dispatch(modifyForm(form, postId));
-      console.log("what PostId ?????", postId)
       setIsPost(false);
-      navigate("/");
+      navigate('/');
     },
     [dispatch, form]
   );

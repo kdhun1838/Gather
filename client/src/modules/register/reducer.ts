@@ -1,4 +1,10 @@
-import { RegisterState, RegisterAction, ListDetailType, OriginalFormType, OriginalCommentType } from "./type";
+import {
+  RegisterState,
+  RegisterAction,
+  ListDetailType,
+  OriginalFormType,
+  OriginalCommentType,
+} from './type';
 import {
   CHANGE_DETAIL_SORT_FORM,
   CHANGE_FORM,
@@ -21,30 +27,30 @@ import {
   MODIFY_FORM_SUCCESS,
   MODIFY_FORM_FAILURE,
   GET_ORIGINAL_COMMENT,
-} from "./action";
+} from './action';
 
 const initialState: RegisterState = {
   form: {
-    title: "",
-    category: "",
+    title: '',
+    category: '',
     personnel: 0,
-    online: "",
-    position: "",
-    contact: "",
-    period: "",
-    content: "",
+    online: '',
+    position: '',
+    contact: '',
+    period: '',
+    content: '',
     originalPostId: NaN,
   },
   list: {
     popularList: [],
     sort: {
-      mainSort: "전체",
+      mainSort: '전체',
       detailSort: {
-        time: "",
-        view: "",
-        like: "",
+        time: '',
+        view: '',
+        like: '',
       },
-      search: "",
+      search: '',
       recruit: true,
     },
     mainList: null,
@@ -52,7 +58,7 @@ const initialState: RegisterState = {
   register: null,
   formData: {},
   registerComment: {
-    comment: "",
+    comment: '',
   },
 };
 
@@ -71,15 +77,15 @@ const register = (
           sort: {
             ...state.list.sort,
             detailSort: {
-              time: "",
-              view: "",
-              like: "",
+              time: '',
+              view: '',
+              like: '',
             },
           },
         },
       };
     case CHANGE_FORM:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           form: {
@@ -90,7 +96,7 @@ const register = (
       }
       return state;
     case CHANGE_SORT_FORM:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           list: {
@@ -104,7 +110,7 @@ const register = (
       }
       return state;
     case CHANGE_DETAIL_SORT_FORM:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           list: {
@@ -192,7 +198,7 @@ const register = (
     case `${POST_DELETE}_FAILURE`:
       return state;
     case CHANGE_COMMENT:
-      if ("key" in action.payload && "value" in action.payload) {
+      if ('key' in action.payload && 'value' in action.payload) {
         return {
           ...state,
           registerComment: {
@@ -234,21 +240,21 @@ const register = (
       return {
         ...state,
         form: {
-          ...state.form
-        }
-      }
+          ...state.form,
+        },
+      };
     case MODIFY_FORM_FAILURE:
       return state;
     case GET_ORIGINAL_COMMENT:
-      const originalComment: OriginalCommentType = action.payload as OriginalCommentType;
-      console.log("originalComment???", originalComment)
+      const originalComment: OriginalCommentType =
+        action.payload as OriginalCommentType;
       return {
         ...state,
         registerComment: {
           ...state.registerComment,
           comment: originalComment.commentItem.comment,
-        }
-      }
+        },
+      };
     default:
       return state;
   }

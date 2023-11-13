@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from "express";
-const { Op } = require("sequelize");
+import express, { Request, Response, NextFunction } from 'express';
+const { Op } = require('sequelize');
 const router = express.Router();
-import models from "../models";
-import { Users } from "../models/users";
+import models from '../models';
+import { Users } from '../models/users';
 
 type QueryData = {
   mainSort: string;
@@ -18,21 +18,21 @@ type DetailSort = {
 
 // 각각 req, res, next express에서 가저온 타입 넣어주기
 
-router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
+router.get('/list', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data: QueryData = req.query.data as QueryData;
-    const mainSort: string = data.mainSort || "";
-    const search: string = data.search || "";
+    const mainSort: string = data.mainSort || '';
+    const search: string = data.search || '';
 
-    const time: string = data.detailSort?.time || "";
-    const view: string = data.detailSort?.view || "";
-    const like: string = data.detailSort?.like || "";
+    const time: string = data.detailSort?.time || '';
+    const view: string = data.detailSort?.view || '';
+    const like: string = data.detailSort?.like || '';
 
     const whereCondition: any = {};
-    let orderCondition: any = [["createdAt", "DESC"]];
+    let orderCondition: any = [['createdAt', 'DESC']];
 
     // 큰틀의 정렬 값 where절에 넣기
-    if (mainSort && mainSort !== "전체") {
+    if (mainSort && mainSort !== '전체') {
       whereCondition.category = mainSort;
     }
 
@@ -46,16 +46,16 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
     }
 
     //디테일 정렬 버튼 값을 가져와서 order값에 넣고 정렬
-    if (time === "newset") {
-      orderCondition = [["createdAt", "DESC"]];
-    } else if (time === "latest") {
-      orderCondition = "";
+    if (time === 'newset') {
+      orderCondition = [['createdAt', 'DESC']];
+    } else if (time === 'latest') {
+      orderCondition = '';
     }
 
-    if (view === "highest") {
-      orderCondition.push(["view", "DESC"]);
-    } else if (view === "lowest") {
-      orderCondition.push(["view", "ASC"]);
+    if (view === 'highest') {
+      orderCondition.push(['view', 'DESC']);
+    } else if (view === 'lowest') {
+      orderCondition.push(['view', 'ASC']);
     }
     const getCommunityPosts = await models.communitys.findAll({
       where: whereCondition,
@@ -65,7 +65,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
         {
           nest: true,
           model: models.users,
-          attributes: ["userNum", "nick"],
+          attributes: ['userNum', 'nick'],
         },
       ],
     });
@@ -78,7 +78,7 @@ router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post(
-  "/create",
+  '/create',
   async (req: Request, res: Response, next: NextFunction) => {
     const { category, title, detail, content } = req.body.form.form;
     const { userId } = req.body;
@@ -91,7 +91,7 @@ router.post(
         userId,
       });
       res.status(200).json({
-        message: "성공적으로 저장되었습니다.",
+        message: '성공적으로 저장되었습니다.',
         data: newCommunityPost,
       });
     } catch (e) {
@@ -103,7 +103,7 @@ router.post(
 );
 
 router.get(
-  "/post/:postId",
+  '/post/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
 
@@ -114,7 +114,7 @@ router.get(
         });
 
         if (getPost) {
-          await getPost.increment("view", { by: 1 });
+          await getPost.increment('view', { by: 1 });
 
           // 모델 이름을 일관되게 사용합니다 (community)
           const updatedPost = await models.communitys.findOne({
@@ -124,14 +124,14 @@ router.get(
               {
                 nest: true,
                 model: models.users,
-                attributes: ["userNum", "nick"],
+                attributes: ['userNum', 'nick'],
               },
             ],
           });
 
           res.status(200).json(updatedPost);
         } else {
-          res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+          res.status(404).json({ message: '게시물을 찾을 수 없습니다.' });
         }
       } catch (e) {
         res.status(500).json(e);
@@ -143,14 +143,14 @@ router.get(
 );
 
 router.get(
-  "/edit/:postId",
+  '/edit/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
 
     if (postId) {
       try {
         const getPost = await models.communitys.findOne({
-          attributes: ["category", "detail", "title", "content"],
+          attributes: ['category', 'detail', 'title', 'content'],
           where: { communityNum: postId },
         });
 
@@ -165,9 +165,8 @@ router.get(
 );
 
 router.post(
-  "/editPost",
+  '/editPost',
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     const { category, detail, title, content } = req.body.form;
     const { postId } = req.body;
     try {
@@ -194,7 +193,7 @@ router.post(
 
 // 포스트 삭제 코드
 router.post(
-  "/delete",
+  '/delete',
   async (req: Request, res: Response, next: NextFunction) => {
     const communityNum = req.body.postId;
 
@@ -215,7 +214,7 @@ router.post(
 );
 
 router.get(
-  "/comment/:postId",
+  '/comment/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.params;
 
@@ -227,7 +226,7 @@ router.get(
             {
               nest: true,
               model: models.users,
-              attributes: ["nick"],
+              attributes: ['nick'],
             },
           ],
         });
@@ -243,7 +242,7 @@ router.get(
 );
 
 router.get(
-  "/reply/:postId",
+  '/reply/:postId',
   async (req: Request, res: Response, next: NextFunction) => {
     const { postId } = req.params;
 
@@ -255,7 +254,7 @@ router.get(
             {
               nest: true,
               model: models.users,
-              attributes: ["nick"],
+              attributes: ['nick'],
             },
           ],
         });
@@ -271,7 +270,7 @@ router.get(
 );
 
 router.get(
-  "/popularPosts",
+  '/popularPosts',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const today = new Date();
@@ -289,15 +288,13 @@ router.get(
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
-      console.log(startDate, endDate);
-
       const getPopularPost = await models.communitys.findAll({
         where: {
           createdAt: {
             [Op.between]: [startDate, endDate], // 이번 주의 시작일과 종료일 사이
           },
         },
-        order: [["view", "DESC"]],
+        order: [['view', 'DESC']],
         limit: 10,
       });
 
@@ -311,9 +308,8 @@ router.get(
 );
 
 router.post(
-  "/addComment",
+  '/addComment',
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body.comment);
     const { userId, postId, comment } = req.body.comment.data;
     try {
       const newCommunityComment = await models.communityComments.create({
@@ -331,7 +327,7 @@ router.post(
             {
               nest: true,
               model: models.users,
-              attributes: ["nick"],
+              attributes: ['nick'],
             },
           ],
         });
@@ -347,7 +343,7 @@ router.post(
 );
 
 router.post(
-  "/addReply",
+  '/addReply',
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
     try {
@@ -369,7 +365,7 @@ router.post(
             {
               nest: true,
               model: models.users,
-              attributes: ["nick"],
+              attributes: ['nick'],
             },
           ],
         });

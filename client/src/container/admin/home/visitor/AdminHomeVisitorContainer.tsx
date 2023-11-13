@@ -1,7 +1,7 @@
-import React from "react";
-import { getVisitor } from "../../../../lib/api/admin";
-import AdminHomeVisitor from "../../../../components/admin/home/visitor/AdminHomeVisitor";
-import styled from "styled-components";
+import React from 'react';
+import { getVisitor } from '../../../../lib/api/admin';
+import AdminHomeVisitor from '../../../../components/admin/home/visitor/AdminHomeVisitor';
+import styled from 'styled-components';
 
 const AdminHomeVisitorContainer = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -13,7 +13,6 @@ const AdminHomeVisitorContainer = () => {
       const response = await getVisitor();
       setData(response.data);
       setLoading(false);
-      // console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -22,8 +21,6 @@ const AdminHomeVisitorContainer = () => {
   React.useEffect(() => {
     getInfo();
   }, []);
-
-  console.log("data", data);
 
   return (
     <ChartWrapper>

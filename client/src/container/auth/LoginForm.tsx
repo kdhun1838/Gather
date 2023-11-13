@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../modules";
-import { changeField, initializeForm, login } from "../../modules/auth/action";
-import AuthForm from "../../components/auth/AuthForm";
-import { check, tempSetUser } from "../../modules/user/action";
-import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Loadinggif } from "../../images/loading.gif";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../modules';
+import { changeField, initializeForm, login } from '../../modules/auth/action';
+import AuthForm from '../../components/auth/AuthForm';
+import { check, tempSetUser } from '../../modules/user/action';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Loadinggif } from '../../images/loading.gif';
 
 const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
@@ -18,14 +18,14 @@ const LoginForm = () => {
       auth: state.auth.auth,
       authError: state.auth.authError,
       user: state.user.user,
-      loading: state.loading["auth/LOGIN"],
+      loading: state.loading['auth/LOGIN'],
     })
   );
 
   const onChange = (data: { key: string; value: string | number }) => {
     dispatch(
       changeField({
-        name: "login",
+        name: 'login',
         key: data.key,
         value: String(data.value),
       })
@@ -39,31 +39,26 @@ const LoginForm = () => {
     // 이 부분에서 로그인 처리를 수행할 수 있습니다.
   };
   useEffect(() => {
-    console.log("로딩", loading);
-  }, [loading]);
-  useEffect(() => {
     dispatch(initializeForm(form));
   }, [dispatch]);
 
   useEffect(() => {
     if (authError) {
-      console.log(authError);
-      setError("로그인 실패");
+      setError('로그인 실패');
       return;
     }
     if (auth) {
-      console.log("로그인 성공");
       dispatch(check(user));
     }
   }, [auth, authError, dispatch]);
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate('/');
       try {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {
-        console.log("localStorage is not working");
+        console.log('localStorage is not working');
       }
     }
   }, [navigate, user]);

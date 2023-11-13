@@ -56,7 +56,6 @@ router.post('/postMessages', (req, res) => __awaiter(void 0, void 0, void 0, fun
 router.post('/postDelete/:messageNum', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const messageNum = req.params.messageNum;
-        console.log('번호', messageNum);
         const deleteData = yield models_1.default.messages.update({ state: 1 }, {
             where: { messageNum },
         });
@@ -126,7 +125,6 @@ router.get('/topInfo', (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 router.get('/visitor', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('방문자백');
     try {
         const today = new Date();
         const oneWeekAgo = new Date(today);
@@ -238,7 +236,6 @@ router.post('/uploadImg', upload.single('file'), (req, res) => __awaiter(void 0,
         return res.status(400).send('업로드실패');
     }
     const { content, link, backgroundColor, textColor, onlyImg } = req.body;
-    // const newCarousel = await models.carousels.findAll({});
     const newUpload = yield models_1.default.carousels.create({
         content,
         href: link,
@@ -661,16 +658,16 @@ router.get('/getRegisterChart/day', (req, res) => __awaiter(void 0, void 0, void
     try {
         const currentDate = new Date();
         const oneWeekAgo = new Date(currentDate);
-        oneWeekAgo.setDate(currentDate.getDate() - 6); // 일주일 전부터 오늘까지
+        oneWeekAgo.setDate(currentDate.getDate() - 6);
         const dailyData = [];
         for (let day = 0; day < 7; day++) {
             const date = new Date(oneWeekAgo);
             date.setDate(oneWeekAgo.getDate() + day);
             const formattedDate = `${date.getMonth() + 1}월 ${date.getDate()}일(${getDayName(date)})`;
             const startDate = new Date(date);
-            startDate.setHours(0, 0, 0, 0); // 날짜의 시작 시간
+            startDate.setHours(0, 0, 0, 0);
             const endDate = new Date(date);
-            endDate.setHours(23, 59, 59, 999); // 날짜의 끝 시간
+            endDate.setHours(23, 59, 59, 999);
             const sportCount = yield models_1.default.registers.count({
                 where: {
                     createdAt: {
@@ -715,7 +712,6 @@ router.get('/getRegisterChart/day', (req, res) => __awaiter(void 0, void 0, void
                 기타: etcCount,
             });
         }
-        console.log('ddd', dailyData);
         res.status(200).json(dailyData);
     }
     catch (error) {
@@ -726,6 +722,52 @@ function getDayName(date) {
     const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
     return dayNames[date.getDay()];
 }
+router.get('/getRegisterChart/table', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield models_1.default.registers.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ['id', 'nick', 'name'],
+                },
+            ],
+            where: {
+                state: 1,
+            },
+            order: [['view', 'DESC']],
+            limit: 5,
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                category: item.category,
+                contact: item.contact,
+                content: item.content,
+                createdAt: item.createdAt,
+                favorite: item.favorite,
+                meeting: item.meeting,
+                period: item.period,
+                personnel: item.personnel,
+                position: item.position,
+                registerNum: item.registerNum,
+                state: item.state,
+                title: item.title,
+                updatedAt: item.updatedAt,
+                userNum: item.userNum,
+                view: item.view,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
+    }
+}));
 // 커뮤니티 관리
 router.get('/getCommunity', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -879,11 +921,47 @@ router.get('/getCommunityChart/day', (req, res) => __awaiter(void 0, void 0, voi
                 후기: reviewCount,
             });
         }
-        console.log('ddd', dailyData);
         res.status(200).json(dailyData);
     }
     catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
+    }
+}));
+router.get('/getCommunityChart/table', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield models_1.default.communitys.findAll({
+            include: [
+                {
+                    nest: true,
+                    model: models_1.default.users,
+                    attributes: ['id', 'nick', 'name'],
+                },
+            ],
+            order: [['view', 'DESC']],
+            limit: 5,
+        });
+        const transformedData = data.map((item) => {
+            const user = item.User;
+            const restOfData = {
+                communityNum: item.communityNum,
+                id: user.id,
+                nick: user.nick,
+                name: user.name,
+                userNum: item.userId,
+                title: item.title,
+                category: item.category,
+                content: item.content,
+                detail: item.detail,
+                view: item.view,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt,
+            };
+            return restOfData;
+        });
+        res.status(200).json(transformedData);
+    }
+    catch (error) {
+        res.status(500);
     }
 }));
 // 시간체크 후 자동마감함수

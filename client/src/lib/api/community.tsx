@@ -1,21 +1,21 @@
-import client from "./client";
+import client from './client';
 import {
   CommunityState,
   FormType,
   SortType,
-} from "../../modules/community/type";
-import { AxiosResponse } from "axios";
+} from '../../modules/community/type';
+import { AxiosResponse } from 'axios';
 
 // 포스트 관련
 export const getCommunityPosts = (data: SortType): Promise<AxiosResponse> => {
-  return client.get("/community/list", { params: data });
+  return client.get('/community/list', { params: data });
 };
 
 export const createCommunityPost = (form: {
   form: CommunityState;
   userId: string;
 }): Promise<AxiosResponse> => {
-  return client.post("/community/create", form);
+  return client.post('/community/create', form);
 };
 
 export const getPost = (postId: { postId: number }): Promise<AxiosResponse> => {
@@ -24,25 +24,24 @@ export const getPost = (postId: { postId: number }): Promise<AxiosResponse> => {
 };
 
 export const getPopularPosts = (): Promise<AxiosResponse> => {
-  return client.get("/community/popularPosts");
+  return client.get('/community/popularPosts');
 };
 
 // 포스트 수정 관련
 export const getEditPost = (
   postId: Record<string, string>
 ): Promise<AxiosResponse> => {
-  const id = postId["postId"];
-  console.log(id);
+  const id = postId['postId'];
   return client.get(`/community/edit/${id}`);
 };
 
 export const editPost = (data: { form: FormType; postId: string }) => {
-  return client.post("/community/editPost", data);
+  return client.post('/community/editPost', data);
 };
 
 //포스트 삭제 관련
 export const deletePost = (postId: number) => {
-  return client.post("/community/delete", postId);
+  return client.post('/community/delete', postId);
 };
 
 //포스트 댓글관련
@@ -61,7 +60,7 @@ export const getReplys = (postId: {
 };
 
 export const addComment = (comment: string): Promise<AxiosResponse> => {
-  return client.post("/community/addComment", { comment });
+  return client.post('/community/addComment', { comment });
 };
 
 export const addReply = (data: {
@@ -71,10 +70,10 @@ export const addReply = (data: {
   reply: string;
   isfirst: boolean;
 }): Promise<AxiosResponse> => {
-  return client.post("/community/addReply", { data });
+  return client.post('/community/addReply', { data });
 };
 
 //즐겨찾기
 export const addFavoritePost = (postId: number): Promise<AxiosResponse> => {
-  return client.post("/community/addFavorite", { postId });
+  return client.post('/community/addFavorite', { postId });
 };

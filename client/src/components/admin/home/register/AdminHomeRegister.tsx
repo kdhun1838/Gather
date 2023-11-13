@@ -12,7 +12,6 @@ interface OwnProps {
 }
 
 const AdminHomeRegister: React.FC<OwnProps> = (props) => {
-  // Define columns for the table
   const columns = [
     {
       title: "일자",
@@ -62,7 +61,7 @@ export const TableTitle = styled.h2`
   margin: 0 0 0 3rem;
 `;
 
-const MyTable = styled(Table)`
+export const MyTable = styled(Table)`
   th {
     text-align: center !important;
   }

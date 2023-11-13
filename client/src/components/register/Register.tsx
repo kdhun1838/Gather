@@ -1,13 +1,13 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import styled from "styled-components";
-import { RegisterState } from "../../modules/register/type";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { ko } from "date-fns/esm/locale"; //한국어 설정
-import HeaderContainer from "../../container/common/HeaderContainer";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { changeForm } from "../../modules/register/action";
+import React, { FormEvent, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { RegisterState } from '../../modules/register/type';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { ko } from 'date-fns/esm/locale'; //한국어 설정
+import HeaderContainer from '../../container/common/HeaderContainer';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeForm } from '../../modules/register/action';
 
 const H1 = styled.h1`
   font-size: 34px;
@@ -189,22 +189,21 @@ const Register: React.FC<RegisterProps> = ({
   const handlePostForm = (e: FormEvent) => {
     if (!userNum) {
       e.preventDefault();
-      alert("로그인이 필요합니다.");
-      navigate("/login");
+      alert('로그인이 필요합니다.');
+      navigate('/login');
     } else if (originalPostId) {
       onModifyForm(form, postId);
-      console.log("what???????", postId);
     } else {
       onPostForm(form, userNum);
     }
   };
   // const date = new Date();
   const formatDate = (date: any) => {
-    if (!date) return "";
+    if (!date) return '';
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 
@@ -217,7 +216,7 @@ const Register: React.FC<RegisterProps> = ({
           <input
             type="text"
             onChange={(e) =>
-              onChangeForm({ key: "title", value: e.target.value })
+              onChangeForm({ key: 'title', value: e.target.value })
             }
             value={title}
           />
@@ -227,7 +226,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>카테고리</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "category", value: e.target.value })
+                onChangeForm({ key: 'category', value: e.target.value })
               }
               value={category}
             >
@@ -242,7 +241,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>인원</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "personnel", value: e.target.value })
+                onChangeForm({ key: 'personnel', value: e.target.value })
               }
               value={personnel}
             >
@@ -259,7 +258,7 @@ const Register: React.FC<RegisterProps> = ({
             <h3>온·오프라인</h3>
             <select
               onChange={(e) =>
-                onChangeForm({ key: "online", value: e.target.value })
+                onChangeForm({ key: 'online', value: e.target.value })
               }
               value={online}
             >
@@ -273,7 +272,7 @@ const Register: React.FC<RegisterProps> = ({
             <input
               type="text"
               onChange={(e) =>
-                onChangeForm({ key: "position", value: e.target.value })
+                onChangeForm({ key: 'position', value: e.target.value })
               }
               value={position}
             />
@@ -283,7 +282,7 @@ const Register: React.FC<RegisterProps> = ({
             <input
               type="text"
               onChange={(e) =>
-                onChangeForm({ key: "contact", value: e.target.value })
+                onChangeForm({ key: 'contact', value: e.target.value })
               }
               value={contact}
             />
@@ -302,7 +301,7 @@ const Register: React.FC<RegisterProps> = ({
               onChange={(selectedDate) => {
                 setIsDate(selectedDate);
                 onChangeForm({
-                  key: "period",
+                  key: 'period',
                   value: formatDate(selectedDate),
                 });
               }}
@@ -315,7 +314,7 @@ const Register: React.FC<RegisterProps> = ({
             <textarea
               rows={25}
               onChange={(e) =>
-                onChangeForm({ key: "content", value: e.target.value })
+                onChangeForm({ key: 'content', value: e.target.value })
               }
               value={content}
             />

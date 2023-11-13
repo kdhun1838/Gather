@@ -13,23 +13,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
 const router = express_1.default.Router();
 const models_1 = __importDefault(require("../models"));
 // 각각 req, res, next express에서 가저온 타입 넣어주기
-router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/list', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     try {
         const data = req.query.data;
-        const mainSort = data.mainSort || "";
-        const search = data.search || "";
-        const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || "";
-        const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || "";
-        const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || "";
+        const mainSort = data.mainSort || '';
+        const search = data.search || '';
+        const time = ((_a = data.detailSort) === null || _a === void 0 ? void 0 : _a.time) || '';
+        const view = ((_b = data.detailSort) === null || _b === void 0 ? void 0 : _b.view) || '';
+        const like = ((_c = data.detailSort) === null || _c === void 0 ? void 0 : _c.like) || '';
         const whereCondition = {};
-        let orderCondition = [["createdAt", "DESC"]];
+        let orderCondition = [['createdAt', 'DESC']];
         // 큰틀의 정렬 값 where절에 넣기
-        if (mainSort && mainSort !== "전체") {
+        if (mainSort && mainSort !== '전체') {
             whereCondition.category = mainSort;
         }
         // 검색어가 있을 경우 where절에 입력값넣기
@@ -41,17 +41,17 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             ];
         }
         //디테일 정렬 버튼 값을 가져와서 order값에 넣고 정렬
-        if (time === "newset") {
-            orderCondition = [["createdAt", "DESC"]];
+        if (time === 'newset') {
+            orderCondition = [['createdAt', 'DESC']];
         }
-        else if (time === "latest") {
-            orderCondition = "";
+        else if (time === 'latest') {
+            orderCondition = '';
         }
-        if (view === "highest") {
-            orderCondition.push(["view", "DESC"]);
+        if (view === 'highest') {
+            orderCondition.push(['view', 'DESC']);
         }
-        else if (view === "lowest") {
-            orderCondition.push(["view", "ASC"]);
+        else if (view === 'lowest') {
+            orderCondition.push(['view', 'ASC']);
         }
         const getCommunityPosts = yield models_1.default.communitys.findAll({
             where: whereCondition,
@@ -61,7 +61,7 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 {
                     nest: true,
                     model: models_1.default.users,
-                    attributes: ["userNum", "nick"],
+                    attributes: ['userNum', 'nick'],
                 },
             ],
         });
@@ -72,7 +72,7 @@ router.get("/list", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         next(e);
     }
 }));
-router.post("/create", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/create', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { category, title, detail, content } = req.body.form.form;
     const { userId } = req.body;
     try {
@@ -84,7 +84,7 @@ router.post("/create", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             userId,
         });
         res.status(200).json({
-            message: "성공적으로 저장되었습니다.",
+            message: '성공적으로 저장되었습니다.',
             data: newCommunityPost,
         });
     }
@@ -94,7 +94,7 @@ router.post("/create", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next(e);
     }
 }));
-router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/post/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
     if (postId) {
         try {
@@ -102,7 +102,7 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                 where: { communityNum: postId },
             });
             if (getPost) {
-                yield getPost.increment("view", { by: 1 });
+                yield getPost.increment('view', { by: 1 });
                 // 모델 이름을 일관되게 사용합니다 (community)
                 const updatedPost = yield models_1.default.communitys.findOne({
                     where: { communityNum: postId },
@@ -111,14 +111,14 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
                         {
                             nest: true,
                             model: models_1.default.users,
-                            attributes: ["userNum", "nick"],
+                            attributes: ['userNum', 'nick'],
                         },
                     ],
                 });
                 res.status(200).json(updatedPost);
             }
             else {
-                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+                res.status(404).json({ message: '게시물을 찾을 수 없습니다.' });
             }
         }
         catch (e) {
@@ -128,12 +128,12 @@ router.get("/post/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
         }
     }
 }));
-router.get("/edit/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/edit/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params; // req.params를 사용하여 postId를 가져옵니다.
     if (postId) {
         try {
             const getPost = yield models_1.default.communitys.findOne({
-                attributes: ["category", "detail", "title", "content"],
+                attributes: ['category', 'detail', 'title', 'content'],
                 where: { communityNum: postId },
             });
             res.status(200).json(getPost);
@@ -145,8 +145,7 @@ router.get("/edit/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0
         }
     }
 }));
-router.post("/editPost", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+router.post('/editPost', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { category, detail, title, content } = req.body.form;
     const { postId } = req.body;
     try {
@@ -168,7 +167,7 @@ router.post("/editPost", (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 }));
 // 포스트 삭제 코드
-router.post("/delete", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/delete', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const communityNum = req.body.postId;
     if (communityNum) {
         try {
@@ -184,7 +183,7 @@ router.post("/delete", (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
     }
 }));
-router.get("/comment/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/comment/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params;
     if (postId) {
         try {
@@ -194,7 +193,7 @@ router.get("/comment/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
                     {
                         nest: true,
                         model: models_1.default.users,
-                        attributes: ["nick"],
+                        attributes: ['nick'],
                     },
                 ],
             });
@@ -207,7 +206,7 @@ router.get("/comment/:postId", (req, res, next) => __awaiter(void 0, void 0, voi
         }
     }
 }));
-router.get("/reply/:postId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/reply/:postId', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params;
     if (postId) {
         try {
@@ -217,7 +216,7 @@ router.get("/reply/:postId", (req, res, next) => __awaiter(void 0, void 0, void 
                     {
                         nest: true,
                         model: models_1.default.users,
-                        attributes: ["nick"],
+                        attributes: ['nick'],
                     },
                 ],
             });
@@ -230,7 +229,7 @@ router.get("/reply/:postId", (req, res, next) => __awaiter(void 0, void 0, void 
         }
     }
 }));
-router.get("/popularPosts", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/popularPosts', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const today = new Date();
         const startDate = new Date(today);
@@ -243,14 +242,13 @@ router.get("/popularPosts", (req, res, next) => __awaiter(void 0, void 0, void 0
         // 시작일과 종료일을 각각 주의 처음과 끝으로 설정
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(23, 59, 59, 999);
-        console.log(startDate, endDate);
         const getPopularPost = yield models_1.default.communitys.findAll({
             where: {
                 createdAt: {
                     [Op.between]: [startDate, endDate], // 이번 주의 시작일과 종료일 사이
                 },
             },
-            order: [["view", "DESC"]],
+            order: [['view', 'DESC']],
             limit: 10,
         });
         res.status(200).json(getPopularPost);
@@ -261,8 +259,7 @@ router.get("/popularPosts", (req, res, next) => __awaiter(void 0, void 0, void 0
         next(e);
     }
 }));
-router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body.comment);
+router.post('/addComment', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, postId, comment } = req.body.comment.data;
     try {
         const newCommunityComment = yield models_1.default.communityComments.create({
@@ -279,7 +276,7 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
                     {
                         nest: true,
                         model: models_1.default.users,
-                        attributes: ["nick"],
+                        attributes: ['nick'],
                     },
                 ],
             });
@@ -292,7 +289,7 @@ router.post("/addComment", (req, res, next) => __awaiter(void 0, void 0, void 0,
         next(e);
     }
 }));
-router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/addReply', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, postId, commentId, reply, isfirst } = req.body.data.data;
     try {
         const newCommentReply = yield models_1.default.communityReplys.create({
@@ -312,7 +309,7 @@ router.post("/addReply", (req, res, next) => __awaiter(void 0, void 0, void 0, f
                     {
                         nest: true,
                         model: models_1.default.users,
-                        attributes: ["nick"],
+                        attributes: ['nick'],
                     },
                 ],
             });

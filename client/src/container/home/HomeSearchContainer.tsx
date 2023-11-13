@@ -1,8 +1,8 @@
-import React, { KeyboardEvent, MouseEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../modules";
-import { changeSort, getList } from "../../modules/register/action";
-import HomeSearch from "../../components/home/HomeSearch";
+import React, { KeyboardEvent, MouseEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../modules';
+import { changeSort, getList } from '../../modules/register/action';
+import HomeSearch from '../../components/home/HomeSearch';
 
 const HomeSearchContainer = () => {
   const dispatch = useDispatch();
@@ -14,10 +14,9 @@ const HomeSearchContainer = () => {
       recruit: state.register.list.sort.recruit,
     })
   );
-  const [isClick, setIsClick] = React.useState("전체");
+  const [isClick, setIsClick] = React.useState('전체');
 
   React.useEffect(() => {
-    console.log("ㅇㅇㅇ", mainSort, detailSort, "sss", searchValue);
     dispatch(
       getList({
         mainSort,
@@ -38,7 +37,7 @@ const HomeSearchContainer = () => {
     mainSort,
     recruit,
   ]);
-  const searchTypes: string[] = ["전체", "운동", "게임", "스터디", "기타"];
+  const searchTypes: string[] = ['전체', '운동', '게임', '스터디', '기타'];
   const onClickSortButton = React.useCallback(
     (data: { key: string; value: string }, e: MouseEvent) => {
       e.preventDefault();
@@ -60,7 +59,7 @@ const HomeSearchContainer = () => {
       e: KeyboardEvent<HTMLInputElement>,
       data: { key: string; value: string }
     ) => {
-      if (e.key === "Enter") {
+      if (e.key === 'Enter') {
         dispatch(getList({ mainSort, search: data.value, recruit }));
       }
     },

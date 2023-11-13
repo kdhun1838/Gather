@@ -80,13 +80,9 @@ const RegisterForm = () => {
         setError('이미 존재하는 계정명입니다.');
         return;
       }
-      console.log('회원가입 오류');
-      console.log(authError);
       setError('회원가입 실패');
     }
     if (auth) {
-      console.log('회원가입 성공');
-      console.log(auth);
       dispatch(check(user));
     }
   }, [auth, authError, dispatch]);
@@ -99,8 +95,6 @@ const RegisterForm = () => {
       } catch (e) {
         console.log('localStorage is not working');
       }
-      console.log('check API 성공');
-      console.log(user);
     }
   }, [navigate, user]);
 

@@ -1,15 +1,14 @@
-import React from "react";
-import { ListDetailTypeWithUser } from "../../../modules/register/type";
-import { changeDate } from "../../community/Community";
-import CommentContainer from "../../../container/register/CommentContainer";
-import styled from "styled-components";
+import React from 'react';
+import { ListDetailTypeWithUser } from '../../../modules/register/type';
+import { changeDate } from '../../community/Community';
+import CommentContainer from '../../../container/register/CommentContainer';
+import styled from 'styled-components';
 
 interface OwnProps {
   data: ListDetailTypeWithUser | null;
 }
 
 const AdminRegisterModal: React.FC<OwnProps> = (props) => {
-  console.log("data--", props.data);
   return (
     <PostWrap>
       <PostContainer>

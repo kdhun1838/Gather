@@ -1,12 +1,12 @@
-import React from "react";
-import AdminHome from "../../../components/admin/home/AdminHome";
-import { getTopInfo } from "../../../lib/api/admin";
+import React from 'react';
+import AdminHome from '../../../components/admin/home/AdminHome';
+import { getTopInfo } from '../../../lib/api/admin';
 import {
   CarouselInfo,
   CommunityInfo,
   RegisterInfo,
   UserInfo,
-} from "../../../types/adminTypes";
+} from '../../../types/adminTypes';
 
 const AdminHomeContainer = () => {
   const [userInfo, setUserInfo] = React.useState<UserInfo>();
@@ -24,7 +24,6 @@ const AdminHomeContainer = () => {
       setCommunityInfo(response.data.communityData);
       setCarouselInfo(response.data.carouselData);
       setLoading(false);
-      // console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -33,7 +32,6 @@ const AdminHomeContainer = () => {
   React.useEffect(() => {
     getTopInfoData();
   }, []);
-  console.log(userInfo, registerInfo, communityInfo, carouselInfo);
   return (
     <div>
       <AdminHome

@@ -1,13 +1,14 @@
-import React from 'react';
-import { Col, Row } from 'antd';
-import { Box } from '../home/AdminHome';
+import React from "react";
+import { Col, Row } from "antd";
+import { Box } from "../home/AdminHome";
 import {
   TableTitle,
   TableTitleBlock,
-} from '../home/register/AdminHomeRegister';
-import AdminCommunityChartCategoryContainer from '../../../container/admin/community/chart/AdminCommunityChartCategoryContainer';
-import AdminCommunityChartMonthContainer from '../../../container/admin/community/chart/AdminCommunityChartMonthContainer';
-import AdminCommunityChartDayContainer from '../../../container/admin/community/chart/AdminCommunityChartDayContainer';
+} from "../home/register/AdminHomeRegister";
+import AdminCommunityChartCategoryContainer from "../../../container/admin/community/chart/AdminCommunityChartCategoryContainer";
+import AdminCommunityChartMonthContainer from "../../../container/admin/community/chart/AdminCommunityChartMonthContainer";
+import AdminCommunityChartDayContainer from "../../../container/admin/community/chart/AdminCommunityChartDayContainer";
+import AdminCommunityChartTableContainer from "../../../container/admin/community/chart/AdminCommunityChartTableContainer";
 const AdminCommunityChart = () => {
   return (
     <div>
@@ -25,6 +26,7 @@ const AdminCommunityChart = () => {
             <TableTitleBlock>
               <TableTitle>조회수 Top 게시글</TableTitle>
             </TableTitleBlock>
+            <AdminCommunityChartTableContainer />
           </Box>
         </Col>
       </Row>

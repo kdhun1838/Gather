@@ -15,7 +15,6 @@ export const getWeekRegister = (): Promise<AxiosResponse> => {
 };
 
 export const getMessages = (): Promise<AxiosResponse> => {
-  console.log('메시지API');
   return client.get('/admin/getMessages');
 };
 
@@ -23,7 +22,6 @@ export const postMessages = (
   text: string,
   userNum: number
 ): Promise<AxiosResponse> => {
-  console.log('포스트메시지 API');
   return client.post('/admin/postMessages', { text, userNum });
 };
 
@@ -93,11 +91,13 @@ export const getRegisterMonthChart = (): Promise<AxiosResponse> => {
 export const getRegisterDayChart = (): Promise<AxiosResponse> => {
   return client.get('/admin/getRegisterChart/day');
 };
+export const getRegisterTable = (): Promise<AxiosResponse> => {
+  return client.get('/admin/getRegisterChart/table');
+};
 
 // 커뮤니티게시판 관리
 
 export const getCommunityWithUser = (): Promise<AxiosResponse> => {
-  console.log('API');
   return client.get('/admin/getCommunity');
 };
 export const getCommunityChart = (): Promise<AxiosResponse> => {
@@ -108,4 +108,7 @@ export const getCommunityMonthChart = (): Promise<AxiosResponse> => {
 };
 export const getCommunityDayChart = (): Promise<AxiosResponse> => {
   return client.get('/admin/getCommunityChart/day');
+};
+export const getCommunityTable = (): Promise<AxiosResponse> => {
+  return client.get('/admin/getCommunityChart/table');
 };

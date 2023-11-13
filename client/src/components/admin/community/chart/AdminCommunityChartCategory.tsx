@@ -1,15 +1,14 @@
-import React from "react";
-import { ResponsivePie } from "@nivo/pie";
-import { useTheme } from "@mui/material";
-import { tokens } from "../../../../lib/styles/theme";
-import { styled } from "styled-components";
+import React from 'react';
+import { ResponsivePie } from '@nivo/pie';
+import { useTheme } from '@mui/material';
+import { tokens } from '../../../../lib/styles/theme';
+import { styled } from 'styled-components';
 
 interface OwnProps {
   data: any;
 }
 
 const AdminCommunityChartCategory = (props: OwnProps) => {
-  console.log("ssss", props.data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -51,35 +50,35 @@ const AdminCommunityChartCategory = (props: OwnProps) => {
         cornerRadius={3}
         activeOuterRadiusOffset={8}
         borderColor={{
-          from: "color",
-          modifiers: [["darker", 0.2]],
+          from: 'color',
+          modifiers: [['darker', 0.2]],
         }}
         arcLinkLabelsSkipAngle={10}
         arcLinkLabelsTextColor={colors.grey[100]}
         arcLinkLabelsThickness={2}
-        arcLinkLabelsColor={{ from: "color" }}
+        arcLinkLabelsColor={{ from: 'color' }}
         enableArcLabels={false}
         arcLabelsRadiusOffset={0.4}
         arcLabelsSkipAngle={7}
         arcLabelsTextColor={{
-          from: "color",
-          modifiers: [["darker", 2]],
+          from: 'color',
+          modifiers: [['darker', 2]],
         }}
         defs={[
           {
-            id: "dots",
-            type: "patternDots",
-            background: "inherit",
-            color: "rgba(255, 255, 255, 0.3)",
+            id: 'dots',
+            type: 'patternDots',
+            background: 'inherit',
+            color: 'rgba(255, 255, 255, 0.3)',
             size: 4,
             padding: 1,
             stagger: true,
           },
           {
-            id: "lines",
-            type: "patternLines",
-            background: "inherit",
-            color: "rgba(255, 255, 255, 0.3)",
+            id: 'lines',
+            type: 'patternLines',
+            background: 'inherit',
+            color: 'rgba(255, 255, 255, 0.3)',
             rotation: -45,
             lineWidth: 6,
             spacing: 10,
@@ -87,24 +86,24 @@ const AdminCommunityChartCategory = (props: OwnProps) => {
         ]}
         legends={[
           {
-            anchor: "bottom",
-            direction: "row",
+            anchor: 'bottom',
+            direction: 'row',
             justify: false,
             translateX: 0,
             translateY: 60,
             itemsSpacing: 0,
             itemWidth: 60,
             itemHeight: 18,
-            itemTextColor: "black",
-            itemDirection: "left-to-right",
+            itemTextColor: 'black',
+            itemDirection: 'left-to-right',
             itemOpacity: 1,
             symbolSize: 18,
-            symbolShape: "circle",
+            symbolShape: 'circle',
             effects: [
               {
-                on: "hover",
+                on: 'hover',
                 style: {
-                  itemTextColor: "#000",
+                  itemTextColor: '#000',
                 },
               },
             ],
